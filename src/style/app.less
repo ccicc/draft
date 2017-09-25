@@ -1,0 +1,62 @@
+/****************
+    全 局 样 式
+*****************/ 
+
+@import './variable.less';
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p,
+blockquote, pre, a, abbr, address, cite, code, del, dfn, em, img,
+ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, 
+ol, ul, li, fieldset, form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td{
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    font-size: inherit;
+    color: inherit;
+    vertical-align: baseline;
+}
+
+h1,h2,h3,h4,h5,h6{
+    font-weight: normal;
+}
+
+em,strong{
+    font-style: normal;
+}
+
+ul,ol,li{
+    list-style: none;
+}
+
+* {
+    box-sizing: @box-module;
+    &:before,
+    &:after{
+        box-sizing: @box-module;
+    }
+}
+
+html body{
+    font-family: @font-family-zh;
+    font-size: 14px;
+    line-height: 1.5;
+    color: @body-color;
+    background: @body-bgColor;
+}
+
+a{
+    text-decoration: none;
+    outline: none;
+    &:link,
+    &:hover,
+    &:focus{
+        text-decoration:none;
+    }
+}
+
+.text-overflow{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
