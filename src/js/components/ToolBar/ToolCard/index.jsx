@@ -30,17 +30,17 @@ export default class ToolCard extends React.Component {
                     <Row
                         type="flex"
                         gutter={5}
-                        justify="space-around"
+                        justify="space-between"
                         style={{ padding: '5px 0' }}
                     >
-                        <Col span={8}>
+                        <Col span={12}>
                             <FontFamily
                                 editorState={editorState}
                                 onEditorStateChange={onEditorStateChange}
                                 onFocusClick={onFocusClick}
                             />
                         </Col>
-                        <Col span={14}>
+                        <Col span={12}>
                             <FontSize
                                 editorState={editorState}
                                 onEditorStateChange={onEditorStateChange}
@@ -50,7 +50,7 @@ export default class ToolCard extends React.Component {
                     <Row
                         type="flex"
                         gutter={5}
-                        justify="space-around"
+                        justify="space-between"
                         style={{ padding: '5px 0' }}
                     >
                         <Col span={24}>

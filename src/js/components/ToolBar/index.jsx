@@ -21,7 +21,7 @@ export default class ToolBar extends React.Component {
                 >
                     <TabPane tab="编辑" key="1">
                         <Row>
-                            <Col span={10}>
+                            <Col span={8}>
                                 <ToolCard 
                                     editorState={editorState}
                                     onEditorStateChange={onEditorStateChange}

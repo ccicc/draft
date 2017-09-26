@@ -1,4 +1,4 @@
-export { default as CustomTag } from './CustomTag';
+export { default as CustomBtn } from './CustomBtn';
 
 export { default as FontFamily } from './FontFamily';
 

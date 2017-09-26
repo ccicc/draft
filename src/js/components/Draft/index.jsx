@@ -76,7 +76,6 @@ export default class Draft extends React.Component {
         return (
             <div
                 className={styles.root}
-                onClick={this.onHandleFocus}
             >
                 <Affix offsetTop={64}>
                     <div className={styles.toolbar}>
@@ -89,6 +88,7 @@ export default class Draft extends React.Component {
                 </Affix>
                 <div
                     className={styles.editorWrapper}
+                    onClick={this.onHandleFocus}
                 >
                     <Editor
                         editorState={editorState}

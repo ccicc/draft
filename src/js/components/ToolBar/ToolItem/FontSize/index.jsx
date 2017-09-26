@@ -86,7 +86,7 @@ export default class FontSize extends React.Component {
                 <Select
                     size="small"
                     defaultValue={selectFontSize}
-                    style={{ width: '55%', marginRight: '10px' }}
+                    style={{ width: '100%', marginRight: '10px' }}
                     onSelect={value => this.onToggleFontSize(value)}
                 >
                     {
