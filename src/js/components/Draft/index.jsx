@@ -1,7 +1,8 @@
 /*
     global
+    window: false
 */ 
-/* eslint-disable */ 
+
 import React from 'react';
 import { Affix } from 'antd';
 import {
@@ -29,14 +30,16 @@ export default class Draft extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
-        const contentState = window.localStorage.getItem('contentState');
-        if(
-            convertFromRaw(JSON.parse(contentState)).hasText()
-        ) {
-            this.state.editorState = EditorState.createWithContent(convertFromRaw(JSON.parse(contentState)));
-        } else {
-            this.state.editorState = EditorState.createWithContent(convertFromRaw(initState));
-        }
+        // const contentState = window.localStorage.getItem('contentState');
+        // if (
+        //     convertFromRaw(JSON.parse(contentState)).hasText()
+        // ) {
+        //     this.state.editorState = EditorState.createWithContent(
+        //         convertFromRaw(JSON.parse(contentState))
+        //     );
+        // } else {
+        this.state.editorState = EditorState.createWithContent(convertFromRaw(initState));
+        // }
     }
 
     onChange = (editorState) => {
