@@ -11,8 +11,7 @@ import {
     Icon
 } from 'antd';
 
-import CustomTag from './CustomTag';
-import FontFamily from './FontFamily';
+import { CustomTag, FontFamily } from './../ToolItem';
 
 import styles from './index.less';
 
@@ -26,7 +25,7 @@ export default class ToolCard extends React.Component {
 
     render() {
 
-        const { editorState, onEditorStateChange } = this.props;
+        const { editorState, onEditorStateChange, onFocusClick } = this.props;
 
         return (
             <div>
@@ -45,6 +44,7 @@ export default class ToolCard extends React.Component {
                             <FontFamily 
                                 editorState={editorState}
                                 onEditorStateChange={onEditorStateChange}
+                                onFocusClick={onFocusClick}
                             />
                         </Col>
                         <Col span={8}>

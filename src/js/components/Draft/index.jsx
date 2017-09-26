@@ -1,8 +1,7 @@
 /*
     global
-    window: false
 */ 
-
+/* eslint-disable */ 
 import React from 'react';
 import { Affix } from 'antd';
 import {
@@ -31,10 +30,10 @@ export default class Draft extends React.Component {
         super(props);
         this.state = {};
         const contentState = window.localStorage.getItem('contentState');
-        if (JSON.parse(contentState).blocks[0].text !== '') {
-            this.state.editorState = EditorState.createWithContent(
-                convertFromRaw(JSON.parse(contentState))
-            );
+        if(
+            convertFromRaw(JSON.parse(contentState)).hasText()
+        ) {
+            this.state.editorState = EditorState.createWithContent(convertFromRaw(JSON.parse(contentState)));
         } else {
             this.state.editorState = EditorState.createWithContent(convertFromRaw(initState));
         }
@@ -50,7 +49,10 @@ export default class Draft extends React.Component {
     }
 
     onSaveContent = (contentState) => {
-        window.localStorage.setItem('contentState', JSON.stringify(convertToRaw(contentState)));
+        window.localStorage.setItem(
+            'contentState',
+            JSON.stringify(convertToRaw(contentState))
+        );
     }
 
     onHandleFocus = () => {
@@ -71,18 +73,19 @@ export default class Draft extends React.Component {
         return (
             <div
                 className={styles.root}
+                onClick={this.onHandleFocus}
             >
                 <Affix offsetTop={64}>
                     <div className={styles.toolbar}>
                         <Toolbar
                             editorState={editorState}
                             onEditorStateChange={this.onChange}
+                            onFocusClick={this.onHandleFocus}
                         />
                     </div>
                 </Affix>
                 <div
                     className={styles.editorWrapper}
-                    onClick={this.onHandleFocus}
                 >
                     <Editor
                         editorState={editorState}

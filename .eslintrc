@@ -26,6 +26,8 @@
             "SwitchCase": 1,
             "flatTernaryExpressions": true
         }],
+        
+        "linebreak-style": [0],
 
         "comma-dangle": [1,"only-multiline"],
         "consistent-return": [0],

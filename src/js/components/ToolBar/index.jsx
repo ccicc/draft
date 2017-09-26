@@ -13,7 +13,7 @@ export default class ToolBar extends React.Component {
     }
 
     render() {
-        const { editorState, onEditorStateChange } = this.props;
+        const { editorState, onEditorStateChange, onFocusClick } = this.props;
         return (
             <div className={styles.root}>
                 <Tabs
@@ -25,6 +25,7 @@ export default class ToolBar extends React.Component {
                                 <ToolCard 
                                     editorState={editorState}
                                     onEditorStateChange={onEditorStateChange}
+                                    onFocusClick={onFocusClick}
                                 />
                             </Col>
                         </Row>
