@@ -35,6 +35,6 @@ export default {
   },
   colorPicker: {
     component: 'SelectColor',
-    options: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#00D084', '#8ED1FC', '#0693E3', '#333']
+    options: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#00D084', '#0693E3', '#fff', '#333']
   }
 };

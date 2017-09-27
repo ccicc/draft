@@ -5,12 +5,12 @@ import {
   Card,
 } from 'antd';
 
-import { FontFamily, FontSize, Inline } from './../ToolItem';
-
-// import styles from './index.less';
-
-// const Option = Select.Option;
-// const CheckableTag = Tag.CheckableTag;
+import {
+  FontFamily,
+  FontSize,
+  Inline,
+  SelectBgColor
+} from './../ToolItem';
 
 export default class ToolCard extends React.Component {
   render() {
@@ -34,7 +34,7 @@ export default class ToolCard extends React.Component {
             justify="space-between"
             style={{ padding: '5px 0' }}
           >
-            <Col span={12}>
+            <Col span={8}>
               <FontFamily
                 config={config}
                 editorState={editorState}
@@ -42,8 +42,15 @@ export default class ToolCard extends React.Component {
                 onFocusClick={onFocusClick}
               />
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <FontSize
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={8}>
+              <SelectBgColor
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}

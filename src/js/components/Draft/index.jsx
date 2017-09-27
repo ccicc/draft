@@ -11,15 +11,16 @@ import {
   convertFromRaw,
   convertToRaw
 } from 'draft-js';
-import { getCustomStyleMap } from 'draftjs-utils';
-// draft-js-plugin插件导入
 import Editor from 'draft-js-plugins-editor';
+
+// import getCustomStylesMap from './../../customUtils/getCustomStylesMap';
+import { getCustomStyleMap } from 'draftjs-utils';
 import { createContentBlockOnePlugin } from './../../draftPlugins';
 
 import config from './../../config/toolbar.config';
 import initState from './initState';
-import Toolbar from './../ToolBar';
 import styles from './index.less';
+import Toolbar from './../ToolBar';
 
 const textInputPlugin = createContentBlockOnePlugin();
 

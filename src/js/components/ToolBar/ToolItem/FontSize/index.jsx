@@ -22,7 +22,7 @@ export default class FontSize extends React.Component {
     };
   }
 
-  componentWillMount = () => {
+  componentWillMount() {
     const { editorState } = this.props;
     if (editorState) {
       this.setState({
@@ -34,24 +34,23 @@ export default class FontSize extends React.Component {
     }
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     const editorElm = document.querySelectorAll('.DraftEditor-root');
     if (editorElm && editorElm.length > 0) {
       const editorStyle = window.getComputedStyle(editorElm[0]);
       const defaultFontSize = editorStyle.getPropertyValue('font-size');
-      this.setState({
+      this.setState({  // eslint-disable-line
         defaultFontSize
       });
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    const { editorState } = this.props;
+  componentWillReceiveProps(nextProps) {
     if (nextProps.editorState &&
       (nextProps.editorState !== this.props.editorState)) {
       this.setState({
         currentFontSize: getSelectionCustomInlineStyle(
-          editorState,
+          nextProps.editorState,
           ['FONTSIZE']
         ).FONTSIZE
       });
