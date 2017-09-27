@@ -90,7 +90,7 @@ export default class TextInput extends React.Component {
 
     render() {
         const { data, isEditor, isLoading } = this.state;
-
+        const { config } = this.props;
         return (
             <div className={styles.root}>
                 <PopupMsg
@@ -98,6 +98,7 @@ export default class TextInput extends React.Component {
                     onEditorClick={this.onEditorClick}
                 />
                 <EditorModal
+                    config={config}
                     isEditor={isEditor}
                     isLoading={isLoading}
                     onConfirm={this.onHandleOk}

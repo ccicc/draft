@@ -9,16 +9,7 @@ export default class Inline extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentStyles: {},
-            options: [
-                { type: 'bold', title: '加粗' },
-                { type: 'italic', title: '斜体' },
-                { type: 'underline', title: '下划线' },
-                { type: 'strikethrough', title: '删除线' },
-                { type: 'subscript', title: '下标' },
-                { type: 'superscript', title: '上标' },
-                { type: 'code', title: '等宽字形' }
-            ]
+            currentStyles: {}
         };
     }
 
@@ -96,7 +87,9 @@ export default class Inline extends React.Component {
     }
 
     render() {
-        const { options, currentStyles } = this.state;
+        const { currentStyles } = this.state;
+        const { config } = this.props;
+        const options = config.inline.options;
 
         return (
             <Button.Group
@@ -113,7 +106,7 @@ export default class Inline extends React.Component {
                         >
                             <i
                                 className={classnames({
-                                    [`fa fa-${item.type} fa-lg`]: true
+                                    [`fa fa-${item.icon} fa-lg`]: true
                                 })}
                             />
                         </CustomBtn>

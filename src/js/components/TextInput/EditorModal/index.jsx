@@ -30,6 +30,7 @@ class EditorModal extends React.Component {
     render() {
         const {
             form,
+            config,
             isEditor,
             isLoading,
             onConfirm,
@@ -128,7 +129,10 @@ class EditorModal extends React.Component {
                                     {
                                         getFieldDecorator('fontColor', {
                                             valuePropName: 'fontColor'
-                                        })(<SelectColor onSelectFontColor={onSelectFontColor} />)
+                                        })(<SelectColor
+                                            config={config}
+                                            onSelectFontColor={onSelectFontColor}
+                                        />)
                                     }
                                 </FormItem>
                             </Col>

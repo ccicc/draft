@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { TextInput } from './../../components';
-
+import config from './../../config/toolbar.config';
 import styles from './index.less';
 
 /**
@@ -19,7 +19,10 @@ const ContentBlockOne = (props) => {
                 blockTextArr && blockTextArr.map((item, index) => {
                     return (
                         <span key={index}>
-                            <TextInput data={item} />
+                            <TextInput
+                                data={item}
+                                config={config}
+                            />
                         </span>
                     );
                 })

@@ -15,6 +15,7 @@ import { FontFamily, FontSize, Inline } from './../ToolItem';
 export default class ToolCard extends React.Component {
     render() {
         const {
+            config,
             editorState,
             onEditorStateChange,
             onFocusClick,
@@ -35,6 +36,7 @@ export default class ToolCard extends React.Component {
                     >
                         <Col span={12}>
                             <FontFamily
+                                config={config}
                                 editorState={editorState}
                                 onEditorStateChange={onEditorStateChange}
                                 onFocusClick={onFocusClick}
@@ -42,6 +44,7 @@ export default class ToolCard extends React.Component {
                         </Col>
                         <Col span={12}>
                             <FontSize
+                                config={config}
                                 editorState={editorState}
                                 onEditorStateChange={onEditorStateChange}
                             />
@@ -55,6 +58,7 @@ export default class ToolCard extends React.Component {
                     >
                         <Col span={24}>
                             <Inline
+                                config={config}
                                 editorState={editorState}
                                 onEditorStateChange={onEditorStateChange}
                             />

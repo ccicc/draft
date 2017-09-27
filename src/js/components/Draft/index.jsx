@@ -16,6 +16,7 @@ import { getCustomStyleMap } from 'draftjs-utils';
 import Editor from 'draft-js-plugins-editor';
 import { createContentBlockOnePlugin } from './../../draftPlugins';
 
+import config from './../../config/toolbar.config';
 import initState from './initState';
 import Toolbar from './../ToolBar';
 import styles from './index.less';
@@ -80,6 +81,7 @@ export default class Draft extends React.Component {
                 <Affix offsetTop={64}>
                     <div className={styles.toolbar}>
                         <Toolbar
+                            config={config}
                             editorState={editorState}
                             onEditorStateChange={this.onChange}
                             onFocusClick={this.onHandleFocus}

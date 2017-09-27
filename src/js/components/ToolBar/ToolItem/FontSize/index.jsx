@@ -18,8 +18,7 @@ export default class FontSize extends React.Component {
         super(props);
         this.state = {
             currentFontSize: undefined,
-            defaultFontSize: undefined,
-            fontSizes: ['12px', '14px', '16px', '18px', '20px', '22px', '24px', '36px']
+            defaultFontSize: undefined
         };
     }
 
@@ -72,8 +71,9 @@ export default class FontSize extends React.Component {
     }
 
     render() {
-        const { fontSizes } = this.state;
         const { currentFontSize, defaultFontSize } = this.state;
+        const { config } = this.props;
+        const options = config.fontSize.options;
         let selectFontSize;
         if (currentFontSize) {
             selectFontSize = currentFontSize.substring(9);
@@ -90,7 +90,7 @@ export default class FontSize extends React.Component {
                     onSelect={value => this.onToggleFontSize(value)}
                 >
                     {
-                        fontSizes.map(item => (
+                        options.map(item => (
                             <Option
                                 key={item}
                                 value={item}

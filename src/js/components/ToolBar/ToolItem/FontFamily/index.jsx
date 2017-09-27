@@ -18,8 +18,7 @@ export default class FontFamily extends React.Component {
         super(props);
         this.state = {
             currentFontFamily: undefined,
-            defaultFontFamily: undefined,
-            fontFamilys: ['宋体', '微软雅黑', '楷体', '隶书', '黑体']
+            defaultFontFamily: undefined
         };
     }
 
@@ -77,9 +76,10 @@ export default class FontFamily extends React.Component {
     }
 
     render() {
-        const { currentFontFamily, defaultFontFamily, fontFamilys } = this.state;
-        const { editorState, onEditorStateChange } = this.props;
+        const { currentFontFamily, defaultFontFamily } = this.state;
+        const { config, editorState, onEditorStateChange } = this.props;
         const fontFamily = currentFontFamily ? currentFontFamily.substring(11) : defaultFontFamily;
+        const options = config.fontFamily.options;
         return (
             <Select
                 size="small"
@@ -89,7 +89,7 @@ export default class FontFamily extends React.Component {
                 style={{ width: '100%' }}
             >
                 {
-                    fontFamilys.map(fontFamily => (
+                    options.map(fontFamily => (
                         <Option
                             key={fontFamily}
                             value={fontFamily}

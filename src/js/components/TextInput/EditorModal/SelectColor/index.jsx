@@ -24,15 +24,15 @@ export default class SelectColor extends React.Component {
     }
 
     render() {
+        const { config } = this.props;
+        const colors = config.colorPicker.options;
         return (
             <div style={{ marginTop: '10px' }}>
                 <TwitterPicker
                     width="100%"
                     color={this.props.fontColor}
                     onChangeComplete={this.onHandleChangeColor}
-                    colors={[
-                        '#FF6900', '#FCB900', '#EB144C','#F78DA7', '#7BDCB5', '#00D084', '#8ED1FC', '#0693E3', '#333'
-                    ]}
+                    colors={colors}
                 />
             </div>
         )
