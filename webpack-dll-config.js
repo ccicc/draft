@@ -4,49 +4,49 @@
  * 
  * 分离公共代码,加快构建速度
  * 
- * */ 
+ * */
 
- 
- const path = require('path');
- const webpack = require('webpack');
 
- const HtmlWebpackPlugin = require('html-webpack-plugin');
- const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
 
- module.exports = {
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-     entry: {
-         vendor: [ 
-             'antd', 
-             'react', 
-             'react-dom', 
-             'react-color', 
-             'draft-js',
-             'draft-js-plugins-editor', 
-             'draft-js-focus-plugin',
-             'draft-js-image-plugin',
-             'draft-js-resizeable-plugin',
-             'draft-js-static-toolbar-plugin',
-             'draft-js-drag-n-drop-plugin'
-        ]
-     },
+module.exports = {
 
-     output: {
-         publicPath: '',
-         path: path.resolve(__dirname, './dist'),
-         filename: 'js/[name].bundle.js',
-         library: '[name]',
-     },
+  entry: {
+    vendor: [
+      'antd',
+      'react',
+      'react-dom',
+      'react-color',
+      'draft-js',
+      'draft-js-plugins-editor',
+      'draft-js-focus-plugin',
+      'draft-js-image-plugin',
+      'draft-js-resizeable-plugin',
+      'draft-js-static-toolbar-plugin',
+      'draft-js-drag-n-drop-plugin'
+    ]
+  },
 
-     plugins: [
-         new webpack.DllPlugin({
-            context: __dirname,
-            path: './manifest.json',
-            name: '[name]'
-         }),
+  output: {
+    publicPath: '',
+    path: path.resolve(__dirname, './dist'),
+    filename: 'js/[name].bundle.js',
+    library: '[name]',
+  },
 
-         new ExtractTextPlugin({
-             filename: 'style/[name].css'
-         })
-     ]
- }
+  plugins: [
+    new webpack.DllPlugin({
+      context: __dirname,
+      path: './manifest.json',
+      name: '[name]'
+    }),
+
+    new ExtractTextPlugin({
+      filename: 'style/[name].css'
+    })
+  ]
+}

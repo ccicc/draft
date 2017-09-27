@@ -1,73 +1,73 @@
 /* 
     global
     document: false
-*/ 
+*/
 
 export default class ModalHandle {
-    callBacks = [];
-    suggestionCallback = undefined;
-    editorFlag = false;
-    suggestionFlag = false;
+  callBacks = [];
+  suggestionCallback = undefined;
+  editorFlag = false;
+  suggestionFlag = false;
 
-    closeAllModals = (event) => {
-        this.callbacks.forEach(callback => {
-            callback(event);
-        });
+  closeAllModals = (event) => {
+    this.callbacks.forEach(callback => {
+      callback(event);
+    });
+  }
+
+  init = (id) => {
+    const wrapper = document.getElementById(id);
+    if (wrapper) {
+      wrapper.addEventListener('click', () => {
+        this.editorFlag = true;
+      });
     }
-
-    init = (id) => {
-        const wrapper = document.getElementById(id);
-        if (wrapper) {
-            wrapper.addEventListener('click', () => {
-                this.editorFlag = true;
-            });
-        }
-        if (document) {
-            document.addEventListener('click', () => {
-                if (!this.editorFlag) {
-                    this.closeAllModals();
-                    if (this.suggestionCallback) {
-                        this.suggestionCallback();
-                    }
-                } else {
-                    this.editorFlag = false;
-                }
-            });
-
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape') {
-                    this.closeAllModals();
-                }
-            });
-        }
-    }
-
-    onEditorClick = () => {
-        this.closeModals();
-        if (!this.callBacks.suggestion && this.suggestionCallback) {
+    if (document) {
+      document.addEventListener('click', () => {
+        if (!this.editorFlag) {
+          this.closeAllModals();
+          if (this.suggestionCallback) {
             this.suggestionCallback();
+          }
         } else {
-            this.suggestionFlag = false;
+          this.editorFlag = false;
         }
-    }
+      });
 
-    registerCallback = (callBack) => {
-        this.callBacks.push(callBack);
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          this.closeAllModals();
+        }
+      });
     }
+  }
 
-    deregisterCallback = (callBack) => {
-        this.callBacks.filter(cb => cb !== callBack);
+  onEditorClick = () => {
+    this.closeModals();
+    if (!this.callBacks.suggestion && this.suggestionCallback) {
+      this.suggestionCallback();
+    } else {
+      this.suggestionFlag = false;
     }
+  }
 
-    setSuggestionCallback = (callBack) => {
-        this.suggestionCallback = callBack;
-    }
+  registerCallback = (callBack) => {
+    this.callBacks.push(callBack);
+  }
 
-    removeSuggestionCallback = () => {
-        this.suggestionCallback = undefined;
-    }
+  deregisterCallback = (callBack) => {
+    this.callBacks.filter(cb => cb !== callBack);
+  }
 
-    onSuggestionClick = () => {
-        this.suggestionFlag = true;
-    }
+  setSuggestionCallback = (callBack) => {
+    this.suggestionCallback = callBack;
+  }
+
+  removeSuggestionCallback = () => {
+    this.suggestionCallback = undefined;
+  }
+
+  onSuggestionClick = () => {
+    this.suggestionFlag = true;
+  }
 }

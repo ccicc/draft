@@ -22,7 +22,7 @@
 
         // stylisitc issues
 
-        "indent": [1, 4, {
+        "indent": [1, 2, {
             "SwitchCase": 1,
             "flatTernaryExpressions": true
         }],
@@ -46,7 +46,7 @@
 
         // react
         "react/jsx-indent": [0],
-        "react/jsx-indent-props": [1,4],
+        "react/jsx-indent-props": [1,2],
         "react/require-default-props": [0],
         "react/forbid-prop-types": [0],
         "react/prop-types": [0],
