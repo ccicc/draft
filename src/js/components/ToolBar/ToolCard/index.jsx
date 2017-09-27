@@ -8,7 +8,7 @@ import {
 import {
   FontFamily,
   FontSize,
-  Inline,
+  InlineTool,
   SelectBgColor
 } from './../ToolItem';
 
@@ -64,7 +64,7 @@ export default class ToolCard extends React.Component {
             style={{ padding: '5px 0' }}
           >
             <Col span={24}>
-              <Inline
+              <InlineTool
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}

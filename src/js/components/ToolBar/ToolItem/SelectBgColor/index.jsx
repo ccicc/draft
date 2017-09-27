@@ -1,15 +1,12 @@
-/* eslint-disable */ 
-
 import React from 'react';
 import {
   Popover,
   Button
 } from 'antd';
-import { 
+import {
   toggleCustomInlineStyle,
   getSelectionCustomInlineStyle,
 } from 'draftjs-utils';
-import {RichUtils} from 'draft-js';
 
 import SelectColor from './../../../TextInput/EditorModal/SelectColor';
 
@@ -23,7 +20,7 @@ export default class SelectBgColor extends React.Component {
   }
 
   componentWillMount() {
-    const {editorState} = this.props;
+    const { editorState } = this.props;
     if (editorState) {
       this.setState({
         bgColor: getSelectionCustomInlineStyle(
@@ -31,9 +28,10 @@ export default class SelectBgColor extends React.Component {
           ['bgcolor']
         ).bgcolor
       });
-    } 
+    }
   }
 
+  /* eslint-disable */ 
   comonentDidMount() {
     const editorElm = document.querySelectorAll('.DraftEditor-root');
     if (editorElm && editorElm.length > 0) {
@@ -44,7 +42,8 @@ export default class SelectBgColor extends React.Component {
       });
     }
   }
-  
+  /* eslint-enable */ 
+
   componentWillReceiveProps(nextProps) {
     const { editorState } = this.props;
     if (nextProps.editorState &&
@@ -72,7 +71,7 @@ export default class SelectBgColor extends React.Component {
   }
 
   render() {
-    const { config, editorState } = this.props;
+    const { config } = this.props;
     const { bgColor, defaultBgColor } = this.state;
     let selectColor;
     if (bgColor) {
@@ -90,19 +89,19 @@ export default class SelectBgColor extends React.Component {
       <Popover
         trigger="click"
         placement="bottom"
-        content={ <SelectColor 
+        content={<SelectColor
           isToolbar
           bgColor={selectColor}
           config={config}
           onSelectBgColor={this.onToggleBgColor}
-        /> }
+        />}
       >
-        <Button 
+        <Button
           size="small"
           title="字体背景"
           style={btnStyle}
-        ></Button>
+        />
       </Popover>
-    )
+    );
   }
 }

@@ -5,7 +5,7 @@ import { getSelectionInlineStyle } from 'draftjs-utils';
 import { RichUtils, EditorState, Modifier } from 'draft-js';
 import CustomBtn from './../CustomBtn';
 
-export default class Inline extends React.Component {
+export default class InlineTool extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

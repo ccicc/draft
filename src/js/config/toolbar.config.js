@@ -25,6 +25,19 @@ export default {
       { type: 'code', icon: 'code', title: '等宽字形' }
     ]
   },
+  block: {
+    component: 'Block',
+    options: [
+      { type: 'Normal', style: 'unstyled' },
+      { type: 'H1', style: 'header-one' },
+      { type: 'H2', style: 'header-two' },
+      { type: 'H3', style: 'header-three' },
+      { type: 'h4', style: 'header-four' },
+      { type: 'H5', style: 'header-five' },
+      { type: 'H6', style: 'header-six' },
+      { type: 'Blockquote', style: 'blockquote' }
+    ]
+  },
   fontFamily: {
     component: 'FontFamily',
     options: ['宋体', '微软雅黑', '楷体', '隶书', '黑体']

@@ -4,6 +4,6 @@ export { default as FontFamily } from './FontFamily';
 
 export { default as FontSize } from './FontSize';
 
-export { default as Inline } from './Inline';
+export { default as InlineTool } from './Inline';
 
 export { default as SelectBgColor } from './SelectBgColor';
