@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import { Button } from 'antd';
 import {
@@ -6,12 +5,14 @@ import {
   setBlockData
 } from 'draftjs-utils';
 
+import './index.less';
+
 export default class TextAlign extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       currentTextAlignment: undefined
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -30,7 +31,7 @@ export default class TextAlign extends React.Component {
     if (currentTextAlignment !== value) {
       newState = setBlockData(editorState, { 'text-align': value });
     } else {
-      newState = setBlockData(editorState, {'text-align': null});
+      newState = setBlockData(editorState, { 'text-align': null });
     }
     if (newState) {
       onEditorStateChange(newState);
@@ -38,7 +39,7 @@ export default class TextAlign extends React.Component {
   }
 
   render() {
-    const { config, editorState } = this.props;
+    const { config } = this.props;
     const { currentTextAlignment } = this.state;
     const options = config.textAlign.options;
     console.log(this.state.currentTextAlignment);
@@ -48,6 +49,7 @@ export default class TextAlign extends React.Component {
           options.map(item => (
             <Button
               key={item.type}
+              className={item.classname}
               ghost={currentTextAlignment === item.type}
               type={currentTextAlignment === item.type ? 'primary' : 'default'}
               size="small"
@@ -59,6 +61,6 @@ export default class TextAlign extends React.Component {
           ))
         }
       </Button.Group>
-    )
+    );
   }
 }

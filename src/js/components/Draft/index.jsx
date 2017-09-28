@@ -17,6 +17,7 @@ import Editor from 'draft-js-plugins-editor';
 import { getCustomStyleMap } from 'draftjs-utils';
 import { createContentBlockOnePlugin } from './../../draftPlugins';
 
+import blockStyleFn from './../../customUtils/blockStyleFn';
 import config from './../../config/toolbar.config';
 import initState from './initState';
 import styles from './index.less';
@@ -97,9 +98,10 @@ export default class Draft extends React.Component {
             editorState={editorState}
             onChange={this.onChange}
             handleKeyCommand={this.handleKeyCommand}
-            ref={element => this.domEditor = element}
             customStyleMap={getCustomStyleMap()}
+            blockStyleFn={blockStyleFn}
             plugins={plugins}
+            ref={element => this.domEditor = element}
           />
         </div>
       </div>
