@@ -21,9 +21,6 @@ em,strong{
     font-style: normal;
 }
 
-ul,ol,li{
-    list-style: none;
-}
 
 * {
     box-sizing: @box-module;
@@ -39,6 +36,12 @@ html body{
     line-height: 1.5;
     color: @body-color;
     background: @body-bgColor;
+    ul {
+      list-style: disc;
+    }
+    ol{
+      list-style: disc;
+    }
 }
 
 a{

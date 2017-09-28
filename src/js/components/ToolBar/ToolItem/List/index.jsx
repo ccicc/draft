@@ -1,20 +1,22 @@
-/* eslint-disable */
-
 import React from 'react';
-import { Button } from 'antd';
-import { RichUtils } from 'draft-js';
+import { RichUtils, EditorState, Modifier } from 'draft-js';
 import {
   changeDepth,
-  getBlockBeforeSelectedBlocj,
+  getSelectedBlocksMetadata,
+  // setBlockData,
   getSelectedBlock,
-  isListBlock
 } from 'draftjs-utils';
+
+import ListTypeComponent from './ListTypeComponent';
+
+import './index.less';
 
 export default class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentBlock: undefined
+      currentBlock: undefined,
+      currentBlockData: undefined
     };
   }
 
@@ -22,28 +24,69 @@ export default class List extends React.Component {
     const { editorState } = this.props;
     if (editorState) {
       this.setState({
-        currentBlock: getSelectedBlock(editorState)
+        currentBlock: getSelectedBlock(editorState),
+        currentBlockData: getSelectedBlocksMetadata(editorState).get('list-style-type')
       });
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { editorState } = this.props;
+    const { editorState } = nextProps;
     if (editorState && editorState !== this.props.editorState) {
       this.setState({
-        currentBlock: getSelectedBlock(editorState)
+        currentBlock: getSelectedBlock(editorState),
+        currentBlockData: getSelectedBlocksMetadata(editorState).get('list-style-type')
       });
     }
   }
 
-  onToggleBlockType = (blockType) => {
+  /**
+   * 
+   * 更改contentBlock类型为列表类型并自定义list-style-type
+   * 
+   * */ 
+  onToggleBlockType = (blockType, blockData) => {
     const { editorState, onEditorStateChange } = this.props;
-    const newState = RichUtils.toggleBlockType(
+    const { currentBlockData } = this.state;
+    console.log(blockType);
+    let newState = RichUtils.toggleBlockType(
       editorState,
       blockType
     );
+
+    if (currentBlockData !== blockData) {
+      this.setState({
+        currentBlockData: blockData
+      });
+      const contentState = Modifier.setBlockData(
+        newState.getCurrentContent(),
+        newState.getSelection(),
+        { 'list-style-type': blockData }
+      );
+      newState = EditorState.push(newState, contentState, 'change-block-data');
+    } else if (currentBlockData === blockData) {
+      const contentState = Modifier.setBlockData(
+        newState.getCurrentContent(),
+        newState.getSelection(),
+        { 'list-style-type': undefined }
+      );
+      newState = EditorState.push(newState, contentState, 'change-block-data');
+    }
+
     if (newState) {
       onEditorStateChange(newState);
+    }
+  }
+
+  onHandleChange = (value, blockData) => {
+    if (value === 'unordered') {
+      this.onToggleBlockType('unordered-list-item', blockData);
+    } else if (value === 'ordered') {
+      this.onToggleBlockType('ordered-list-item', blockData);
+    } else if (value === 'indent') {
+      this.adjustDepth(1);
+    } else if (value === 'outdent') {
+      this.adjustDepth(-1);
     }
   }
 
@@ -59,36 +102,32 @@ export default class List extends React.Component {
     }
   }
 
-  onHandleChange = (value) => {
-    if (value === 'unordered') {
-      this.onToggleBlockType('unordered-list-item');
-    } else if (value === 'ordered') {
-      this.onToggleBlockType('ordered-list-item');
-    } else if(value === 'indent') {
-      this.adjustDepth(1);
-    } else if(value === 'outdent'){
-      this.adjustDepth(-1);
-    }
-  }
-
   render() {
-    const { config, editorState, onEditorStateChange } = this.props;
+    const { config } = this.props;
     const { currentBlock } = this.state;
-    const { list } = config.list.component;
-    let listType;
-    if (currentBlock.getType() === 'unordered-list-item'){
+    const ordered = config.list.options.ordered;
+    const unordered = config.list.options.unordered;
+
+    let listType;  // eslint-disable-line
+    if (currentBlock.getType() === 'unordered-list-item') {
       listType = 'unordered';
-    } else if (currentBlock.getType() === 'ordered-list-item') {
+    }
+
+    if (currentBlock.getType() === 'ordered-list-item') {
       listType = 'ordered';
     }
 
-
     return (
-      <div
-        title="头绪列表"
-      >
-      
+      <div>
+        <ListTypeComponent
+          listType={ordered}
+          onChange={this.onHandleChange}
+        />
+        <ListTypeComponent
+          listType={unordered}
+          onChange={this.onHandleChange}
+        />
       </div>
-    )
+    );
   }
 }

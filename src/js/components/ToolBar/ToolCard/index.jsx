@@ -11,7 +11,8 @@ import {
   InlineTool,
   BlockTool,
   SelectBgColor,
-  TextAlign
+  TextAlign,
+  List
 } from './../ToolItem';
 
 export default class ToolCard extends React.Component {
@@ -70,7 +71,7 @@ export default class ToolCard extends React.Component {
             gutter={5}
             style={{ padding: '5px 0' }}
           >
-            <Col span={7}>
+            <Col span={8}>
               <InlineTool
                 config={config}
                 editorState={editorState}
@@ -79,6 +80,13 @@ export default class ToolCard extends React.Component {
             </Col>
             <Col span={2}>
               <SelectBgColor
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={5}>
+              <List
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}

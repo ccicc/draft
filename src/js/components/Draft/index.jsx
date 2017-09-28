@@ -86,7 +86,6 @@ export default class Draft extends React.Component {
               config={config}
               editorState={editorState}
               onEditorStateChange={this.onChange}
-              onFocusClick={this.onHandleFocus}
             />
           </div>
         </Affix>
