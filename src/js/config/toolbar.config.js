@@ -57,6 +57,13 @@ export default {
       { type: 'center', icon: 'align-center', title: '居中对齐' },
       { type: 'right', icon: 'align-right', title: '向右对齐' },
       { type: 'flex', icon: 'align-justify', title: '两端对齐' }
-    ]
+    ],
+    list: {
+      component: 'List',
+      options: [
+        { type: 'unordered', icon: 'unordered', title: '有序列表', items: [] },
+        { type: 'ordered', icon: 'ordered', title: '无序列表', items: [] }
+      ]
+    }
   }
 };

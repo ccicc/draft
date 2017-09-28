@@ -42,14 +42,13 @@ export default class TextAlign extends React.Component {
     const { config } = this.props;
     const { currentTextAlignment } = this.state;
     const options = config.textAlign.options;
-    console.log(this.state.currentTextAlignment);
+
     return (
       <Button.Group>
         {
           options.map(item => (
             <Button
               key={item.type}
-              className={item.classname}
               ghost={currentTextAlignment === item.type}
               type={currentTextAlignment === item.type ? 'primary' : 'default'}
               size="small"
