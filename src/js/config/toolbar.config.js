@@ -7,7 +7,7 @@
 export default {
   options: [
     'inline',
-    'blockType',
+    'block',
     'fontSize',
     'fontFamily',
     'list',
@@ -32,7 +32,7 @@ export default {
       { type: 'H1', style: 'header-one' },
       { type: 'H2', style: 'header-two' },
       { type: 'H3', style: 'header-three' },
-      { type: 'h4', style: 'header-four' },
+      { type: 'H4', style: 'header-four' },
       { type: 'H5', style: 'header-five' },
       { type: 'H6', style: 'header-six' },
       { type: 'Blockquote', style: 'blockquote' }
@@ -49,5 +49,14 @@ export default {
   colorPicker: {
     component: 'SelectColor',
     options: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#00D084', '#0693E3', '#fff', '#333']
+  },
+  textAlign: {
+    component: 'TextAlign',
+    options: [
+      { type: 'left', icon: 'align-left', title: '向左对齐' },
+      { type: 'center', icon: 'align-center', title: '居中对齐' },
+      { type: 'right', icon: 'align-right', title: '向右对齐' },
+      { type: 'flex', icon: 'align-justify', title: '两端对齐' }
+    ]
   }
 };

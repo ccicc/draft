@@ -9,7 +9,9 @@ import {
   FontFamily,
   FontSize,
   InlineTool,
-  SelectBgColor
+  BlockTool,
+  SelectBgColor,
+  TextAlign
 } from './../ToolItem';
 
 export default class ToolCard extends React.Component {
@@ -31,10 +33,9 @@ export default class ToolCard extends React.Component {
           <Row
             type="flex"
             gutter={5}
-            justify="space-between"
             style={{ padding: '5px 0' }}
           >
-            <Col span={8}>
+            <Col span={3}>
               <FontFamily
                 config={config}
                 editorState={editorState}
@@ -42,15 +43,22 @@ export default class ToolCard extends React.Component {
                 onFocusClick={onFocusClick}
               />
             </Col>
-            <Col span={8}>
+            <Col span={3}>
               <FontSize
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
               />
             </Col>
-            <Col span={8}>
-              <SelectBgColor
+            <Col span={3}>
+              <BlockTool
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={5}>
+              <TextAlign
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
@@ -60,11 +68,17 @@ export default class ToolCard extends React.Component {
           <Row
             type="flex"
             gutter={5}
-            justify="space-between"
             style={{ padding: '5px 0' }}
           >
-            <Col span={24}>
+            <Col span={7}>
               <InlineTool
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={2}>
+              <SelectBgColor
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}

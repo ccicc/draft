@@ -6,4 +6,8 @@ export { default as FontSize } from './FontSize';
 
 export { default as InlineTool } from './Inline';
 
+export { default as BlockTool } from './BlockTool';
+
 export { default as SelectBgColor } from './SelectBgColor';
+
+export { default as TextAlign } from './TextAlign';

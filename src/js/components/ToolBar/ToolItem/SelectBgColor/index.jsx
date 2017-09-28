@@ -82,7 +82,7 @@ export default class SelectBgColor extends React.Component {
     }
 
     const btnStyle = {
-      width: '30%',
+      width: '100%',
       backgroundColor: `${selectColor}`
     };
     return (
