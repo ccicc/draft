@@ -15,3 +15,5 @@ export { default as TextAlign } from './TextAlign';
 export { default as List } from './List';
 
 export { default as Remove } from './Remove';
+
+export { default as History } from './History';

@@ -79,5 +79,12 @@ export default {
       icon: 'eraser',
       title: '清楚格式'
     }
+  },
+  history: {
+    component: 'History',
+    options: [
+      { type: 'undo', icon: 'undo', title: '撤销' },
+      { type: 'redo', icon: 'repeat', title: '重做' }
+    ]
   }
 };

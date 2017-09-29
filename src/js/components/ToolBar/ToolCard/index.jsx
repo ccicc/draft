@@ -13,7 +13,8 @@ import {
   SelectBgColor,
   TextAlign,
   List,
-  Remove
+  Remove,
+  History
 } from './../ToolItem';
 
 export default class ToolCard extends React.Component {
@@ -95,6 +96,13 @@ export default class ToolCard extends React.Component {
             </Col>
             <Col span={5}>
               <List
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={3}>
+              <History
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
