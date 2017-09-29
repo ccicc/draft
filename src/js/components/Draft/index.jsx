@@ -13,7 +13,6 @@ import {
 } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 
-// import getCustomStylesMap from './../../customUtils/getCustomStylesMap';
 import { getCustomStyleMap } from 'draftjs-utils';
 import { createContentBlockOnePlugin } from './../../draftPlugins';
 

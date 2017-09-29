@@ -29,14 +29,12 @@ export default {
     component: 'Block',
     options: [
       { type: 'Normal', style: 'unstyled' },
-      { type: 'Normal', style: 'ordered-list-item' },
-      { type: 'Normal', style: 'unordered-list-item' },
       { type: 'H1', style: 'header-one' },
       { type: 'H2', style: 'header-two' },
       { type: 'H3', style: 'header-three' },
       { type: 'H4', style: 'header-four' },
-      { type: 'H5', style: 'header-five' },
-      { type: 'H6', style: 'header-six' }
+      { type: 'list-ul', style: 'unordered-list-item' },
+      { type: 'list-ol', style: 'ordered-list-item' }
     ]
   },
   fontFamily: {
@@ -62,28 +60,11 @@ export default {
   },
   list: {
     component: 'List',
-    options: {
-      unordered: {
-        type: 'unordered',
-        icon: 'list-ul',
-        title: '无序列表',
-        styles: [
-          { type: 'disc', text: '● 实心项目符号' },
-          { type: 'circle', text: '○ 空心项目符号' },
-          { type: 'square', text: '■ 方形项目符号' }
-        ]
-      },
-      ordered: {
-        type: 'ordered',
-        icon: 'list-ol',
-        title: '有序列表',
-        styles: [
-          { type: 'decimal', text: '1, 2, 4, 4' },
-          { type: 'upper-latin', text: 'A, B, C, D' },
-          { type: 'lower-roman', text: 'i, ii, iii, iv' },
-          { type: 'upper-roman', text: 'I, II, III, IV' }
-        ]
-      }
-    }
+    options: [
+      { type: 'ordered', icon: 'list-ol', title: '有序列表' },
+      { type: 'unordered', icon: 'list-ul', title: '无序列表' },
+      { type: 'indent', icon: 'indent', title: '向右缩进(仅适用于列表)' },
+      { type: 'outdent', icon: 'outdent', title: '向左缩进(仅适用于列表)' }
+    ]
   }
 };

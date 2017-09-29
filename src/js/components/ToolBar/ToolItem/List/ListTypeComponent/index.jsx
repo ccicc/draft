@@ -1,45 +1,36 @@
-/* eslint-disable */
-
 import React from 'react';
-import { Menu, Dropdown, Button } from 'antd';
+import { Button } from 'antd';
 
 export default class ListTypeComponent extends React.Component {
-  constructor(props) {
-    super(props);
+  onHandleClick = () => {
+    const { type, onChange } = this.props;
+    console.log(type);
+    onChange(type);
   }
 
-  onHandleClick = (e) => {
-    const { listType, onChange } = this.props;
-    const { key } = e;
-    onChange(listType.type, key);
+  isDisable = () => {
+    const { type, isIndent, isOutdent } = this.props;
+    if (
+      (isIndent && type === 'indent') ||
+      (isOutdent && type === 'outdent')
+    ) {
+      return true;
+    }
+    return false;
   }
 
   render() {
-    const {listType} = this.props;
-    const dropMenu = (
-      <Menu onClick={this.onHandleClick}>
-        {
-          listType.styles.map(item => (
-            <Menu.Item
-              key={item.type}
-            >
-              {item.text}
-            </Menu.Item>
-          ))
-        }
-      </Menu>
-    );
-
+    const { title, icon } = this.props;
+    const disabled = this.isDisable();
     return (
-      <Dropdown.Button
+      <Button
+        disabled={disabled}
         size="small"
-        placement="bottomCenter"
-        title={listType.title}
-        overlay={dropMenu}
+        title={title}
         onClick={this.onHandleClick}
       >
-        <i className={`fa fa-${listType.icon} fa-lg`}></i>
-      </Dropdown.Button>
-    )
+        <i className={`fa fa-${icon} fa-lg`} />
+      </Button>
+    );
   }
 }

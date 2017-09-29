@@ -71,7 +71,7 @@ export default class ToolCard extends React.Component {
             gutter={5}
             style={{ padding: '5px 0' }}
           >
-            <Col span={8}>
+            <Col span={7}>
               <InlineTool
                 config={config}
                 editorState={editorState}

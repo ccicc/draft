@@ -1,9 +1,10 @@
 import React from 'react';
-import { RichUtils, EditorState, Modifier } from 'draft-js';
+import { Button } from 'antd';
+import { RichUtils } from 'draft-js';
 import {
   changeDepth,
-  getSelectedBlocksMetadata,
-  // setBlockData,
+  getBlockBeforeSelectedBlock,
+  isListBlock,
   getSelectedBlock,
 } from 'draftjs-utils';
 
@@ -16,7 +17,6 @@ export default class List extends React.Component {
     super(props);
     this.state = {
       currentBlock: undefined,
-      currentBlockData: undefined
     };
   }
 
@@ -24,8 +24,7 @@ export default class List extends React.Component {
     const { editorState } = this.props;
     if (editorState) {
       this.setState({
-        currentBlock: getSelectedBlock(editorState),
-        currentBlockData: getSelectedBlocksMetadata(editorState).get('list-style-type')
+        currentBlock: getSelectedBlock(editorState)
       });
     }
   }
@@ -34,55 +33,28 @@ export default class List extends React.Component {
     const { editorState } = nextProps;
     if (editorState && editorState !== this.props.editorState) {
       this.setState({
-        currentBlock: getSelectedBlock(editorState),
-        currentBlockData: getSelectedBlocksMetadata(editorState).get('list-style-type')
+        currentBlock: getSelectedBlock(editorState)
       });
     }
   }
 
-  /**
-   * 
-   * 更改contentBlock类型为列表类型并自定义list-style-type
-   * 
-   * */ 
-  onToggleBlockType = (blockType, blockData) => {
+  onToggleBlockType = (blockType) => {
     const { editorState, onEditorStateChange } = this.props;
-    const { currentBlockData } = this.state;
-    console.log(blockType);
-    let newState = RichUtils.toggleBlockType(
+    const newState = RichUtils.toggleBlockType(
       editorState,
       blockType
     );
-
-    if (currentBlockData !== blockData) {
-      this.setState({
-        currentBlockData: blockData
-      });
-      const contentState = Modifier.setBlockData(
-        newState.getCurrentContent(),
-        newState.getSelection(),
-        { 'list-style-type': blockData }
-      );
-      newState = EditorState.push(newState, contentState, 'change-block-data');
-    } else if (currentBlockData === blockData) {
-      const contentState = Modifier.setBlockData(
-        newState.getCurrentContent(),
-        newState.getSelection(),
-        { 'list-style-type': undefined }
-      );
-      newState = EditorState.push(newState, contentState, 'change-block-data');
-    }
 
     if (newState) {
       onEditorStateChange(newState);
     }
   }
 
-  onHandleChange = (value, blockData) => {
+  onHandleChange = (value) => {
     if (value === 'unordered') {
-      this.onToggleBlockType('unordered-list-item', blockData);
+      this.onToggleBlockType('unordered-list-item');
     } else if (value === 'ordered') {
-      this.onToggleBlockType('ordered-list-item', blockData);
+      this.onToggleBlockType('ordered-list-item');
     } else if (value === 'indent') {
       this.adjustDepth(1);
     } else if (value === 'outdent') {
@@ -92,42 +64,75 @@ export default class List extends React.Component {
 
   adjustDepth = (adjustment) => {
     const { onEditorStateChange, editorState } = this.props;
+    console.log(adjustment);
     const newState = changeDepth(
       editorState,
       adjustment,
-      5
+      4
     );
     if (newState) {
       onEditorStateChange(newState);
     }
   }
 
+  isIndentDisable = () => {
+    const { editorState } = this.props;
+    const { currentBlock } = this.state;
+
+    const prevBlock = getBlockBeforeSelectedBlock(editorState);
+    if (
+      !prevBlock || !isListBlock(currentBlock) ||
+      prevBlock.getType() !== currentBlock.getType() ||
+      prevBlock.getDepth() < currentBlock.getDepth()
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  isOutdentDisable = () => {
+    const { currentBlock } = this.state;
+    if (
+      !currentBlock ||
+      !isListBlock(currentBlock) ||
+      currentBlock.getDepth() <= 0
+    ) return true;
+  }
+
   render() {
     const { config } = this.props;
     const { currentBlock } = this.state;
-    const ordered = config.list.options.ordered;
-    const unordered = config.list.options.unordered;
+    const items = config.list.options;
 
     let listType;  // eslint-disable-line
     if (currentBlock.getType() === 'unordered-list-item') {
       listType = 'unordered';
     }
-
     if (currentBlock.getType() === 'ordered-list-item') {
       listType = 'ordered';
     }
 
+    const isIndent = this.isIndentDisable();
+    const isOutdent = this.isOutdentDisable();
+
     return (
-      <div>
-        <ListTypeComponent
-          listType={ordered}
-          onChange={this.onHandleChange}
-        />
-        <ListTypeComponent
-          listType={unordered}
-          onChange={this.onHandleChange}
-        />
-      </div>
+      <Button.Group>
+        {
+          items.map((item, index) => {
+            return (
+              <ListTypeComponent
+                isIndent={isIndent}
+                isOutdent={isOutdent}
+                key={index}
+                type={item.type}
+                title={item.title}
+                icon={item.icon}
+                onChange={this.onHandleChange}
+              />
+            );
+          })
+        }
+      </Button.Group>
     );
   }
 }
