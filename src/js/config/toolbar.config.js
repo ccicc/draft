@@ -66,5 +66,18 @@ export default {
       { type: 'indent', icon: 'indent', title: '向右缩进(仅适用于列表)' },
       { type: 'outdent', icon: 'outdent', title: '向左缩进(仅适用于列表)' }
     ]
+  },
+  remove: {
+    component: 'Remove',
+    options: {
+      buildInStyles: [
+        'BOLD', 'ITALIC', 'UNDERLINE', 'MONOSPACE', 'SUPERSCRIPT', 'SUBSCRIPT', 'STRIKETHROUGH'
+      ],
+      customStyles: [
+        'FONTSIZE', 'FONTFAMILY', 'COLOR', 'BGCOLOR'
+      ],
+      icon: 'eraser',
+      title: '清楚格式'
+    }
   }
 };

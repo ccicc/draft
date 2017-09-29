@@ -12,7 +12,8 @@ import {
   BlockTool,
   SelectBgColor,
   TextAlign,
-  List
+  List,
+  Remove
 } from './../ToolItem';
 
 export default class ToolCard extends React.Component {
@@ -60,6 +61,13 @@ export default class ToolCard extends React.Component {
             </Col>
             <Col span={5}>
               <TextAlign
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={1}>
+              <Remove
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
