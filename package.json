@@ -4,14 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "clean:dist": "rimraf dist",
     "webpack:server": "webpack-dev-server --config webpack-dev-config.js --open",
     "webpack:dll": "webpack --config webpack-dll-config.js --color --progress",
-    "start": "npm-run-all webpack:dll webpack:server",
+    "webapck:build": "webpack --config webpack-pro-config.js --color --progress",
+    "start": "npm-run-all clean:dist webpack:dll webpack:server",
+    "build": "npm-run-all clean:dist webpack:dll webapck:build",
     "eslint": "eslint --ext .js,.jsx src/"
   },
   "author": "lq",
   "license": "ISC",
   "devDependencies": {
+    "assets-webpack-plugin": "^3.5.1",
     "autoprefixer": "^7.1.4",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",

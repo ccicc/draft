@@ -4,12 +4,12 @@
  * 
  * */
 
-
 const path = require('path');
 const webpack = require('webpack');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const bundleConfig = require('./dist/config/bundleConfig.json');
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
@@ -52,7 +52,7 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new ExtractTextPlugin({
-      filename: 'style/[name].css'
+      filename: 'style/[name].bundle.css'
     }),
     new HtmlWebpackPlugin({
       title: 'development',
@@ -60,6 +60,8 @@ module.exports = {
       template: path.resolve(__dirname, './src/index.html'),
       hash: true,
       inject: 'body',
+      vendorJsName: bundleConfig.vendor.js,
+      vendorCssName: bundleConfig.vendor.css,
       minify: {
         removeComments: true,
         collapseWhitespace: true
@@ -68,7 +70,7 @@ module.exports = {
 
     new webpack.DllReferencePlugin({
       context: __dirname,
-      manifest: require('./manifest.json')
+      manifest: require('./dist/config/vendor-manifest.json')
     })
   ],
 
@@ -88,7 +90,7 @@ module.exports = {
         exclude: path.resolve(__dirname, './node_modules')
       },
 
-
+      
       // 组件私有样式 module_css
       {
         test: /\.(css|less)$/,
