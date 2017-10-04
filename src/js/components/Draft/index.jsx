@@ -14,19 +14,12 @@ import {
 import Editor from 'draft-js-plugins-editor';
 
 import { getCustomStyleMap } from 'draftjs-utils';
-import { createContentBlockOnePlugin } from './../../draftPlugins';
 
 import blockStyleFn from './../../customUtils/blockStyleFn';
 import config from './../../config/toolbar.config';
 import initState from './initState';
 import styles from './index.less';
 import Toolbar from './../ToolBar';
-
-const textInputPlugin = createContentBlockOnePlugin();
-
-const plugins = [
-  textInputPlugin,
-];
 
 export default class Draft extends React.Component {
   constructor(props) {
@@ -98,7 +91,6 @@ export default class Draft extends React.Component {
             handleKeyCommand={this.handleKeyCommand}
             customStyleMap={getCustomStyleMap()}
             blockStyleFn={blockStyleFn}
-            plugins={plugins}
             ref={element => this.domEditor = element}
           />
         </div>

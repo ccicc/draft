@@ -46,8 +46,12 @@ export default {
     options: ['12px', '14px', '16px', '20px', '22px', '24px', '36px']
   },
   colorPicker: {
-    component: 'SelectColor',
-    options: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#ccc', '#0693E3', '#fff', '#333']
+    component: 'ColorPicker',
+    options: {
+      fontColors: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#ccc', '#0693E3', '#666', '#333', '#363'],
+      entityColors: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#ccc', '#0693E3', '#666', '#333'],
+      bgColors: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#ccc', '#0693E3', '#f5f5f5', '#333', '#363']
+    }
   },
   textAlign: {
     component: 'TextAlign',

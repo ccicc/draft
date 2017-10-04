@@ -16,46 +16,47 @@ const initState = {
     data: {}
   }, {
     key: 'ov7r',
-    text: JSON.stringify(
-      {
-        department: {
-          controlID: 'department',
-          controlName: '科室',
-          defaultVal: '骨伤科',
-          describeVal: '请输入科室',
-          dataType: 'string',
-          tag: [1, 2, 3],
-          fontColor: '#333'
-        },
-        bedNum: {
-          controlID: 'bedNum',
-          controlName: '床号',
-          defaultVal: 'AE86',
-          describeVal: '请输入床号',
-          dataType: 'string',
-          tag: [],
-          fontColor: '#333'
-        },
-        userName: {
-          controlID: 'userName',
-          controlName: '姓名',
-          defaultVal: '小明',
-          describeVal: '请输入患者姓名',
-          dataType: 'string',
-          tag: [],
-          fontColor: '#333'
-        },
-        hospitalNum: {
-          controlID: 'hospitalNum',
-          controlName: '住院号',
-          defaultVal: '10086',
-          describeVal: '请输入患者床号',
-          dataType: 'string',
-          tag: [],
-          fontColor: '#333'
-        },
-      }
-    ),
+    text: '',
+    // text: JSON.stringify(
+    //   {
+    //     department: {
+    //       controlID: 'department',
+    //       controlName: '科室',
+    //       defaultVal: '骨伤科',
+    //       describeVal: '请输入科室',
+    //       dataType: 'string',
+    //       tag: [1, 2, 3],
+    //       fontColor: '#333'
+    //     },
+    //     bedNum: {
+    //       controlID: 'bedNum',
+    //       controlName: '床号',
+    //       defaultVal: 'AE86',
+    //       describeVal: '请输入床号',
+    //       dataType: 'string',
+    //       tag: [],
+    //       fontColor: '#333'
+    //     },
+    //     userName: {
+    //       controlID: 'userName',
+    //       controlName: '姓名',
+    //       defaultVal: '小明',
+    //       describeVal: '请输入患者姓名',
+    //       dataType: 'string',
+    //       tag: [],
+    //       fontColor: '#333'
+    //     },
+    //     hospitalNum: {
+    //       controlID: 'hospitalNum',
+    //       controlName: '住院号',
+    //       defaultVal: '10086',
+    //       describeVal: '请输入患者床号',
+    //       dataType: 'string',
+    //       tag: [],
+    //       fontColor: '#333'
+    //     },
+    //   }
+    // ),
     type: 'atomic',
     depth: 0,
     inlineStyleRanges: [],

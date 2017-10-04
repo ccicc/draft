@@ -1,20 +1,26 @@
 import React from 'react';
 import {
   Popover,
-  Button
+  Button,
+  Tabs
 } from 'antd';
+
 import {
   toggleCustomInlineStyle,
   getSelectionCustomInlineStyle,
 } from 'draftjs-utils';
 
-import SelectColor from './../../../TextInput/EditorModal/SelectColor';
+import { ColorPicker } from './../../../Common';
+
+const TabPane = Tabs.TabPane;
 
 export default class SelectBgColor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      fontColor: undefined,
       bgColor: undefined,
+      defaultFontColor: undefined,
       defaultBgColor: undefined
     };
   }
@@ -26,7 +32,11 @@ export default class SelectBgColor extends React.Component {
         bgColor: getSelectionCustomInlineStyle(
           editorState,
           ['bgcolor']
-        ).bgcolor
+        ).bgcolor,
+        fontColor: getSelectionCustomInlineStyle(
+          editorState,
+          ['color']
+        ).color
       });
     }
   }
@@ -37,13 +47,15 @@ export default class SelectBgColor extends React.Component {
     if (editorElm && editorElm.length > 0) {
       const editorStyle = window.getComputedStyle(editorElm[0]);
       const defaultBgColor = editorStyle.getPropertyValue('background-color');
+      const defaultFontColor = editorStyle.getPropertyValue('color');
       this.setState({
-        defaultBgColor
+        defaultBgColor,
+        defaultFontColor
       });
     }
   }
-  /* eslint-enable */ 
 
+  /* eslint-enable */ 
   componentWillReceiveProps(nextProps) {
     const { editorState } = this.props;
     if (nextProps.editorState &&
@@ -53,7 +65,11 @@ export default class SelectBgColor extends React.Component {
         bgColor: getSelectionCustomInlineStyle(
           nextProps.editorState,
           ['bgcolor']
-        ).bgcolor
+        ).bgcolor,
+        fontColor: getSelectionCustomInlineStyle(
+          nextProps.editorState,
+          ['color']
+        ).color
       });
     }
   }
@@ -70,36 +86,64 @@ export default class SelectBgColor extends React.Component {
     }
   }
 
+  onToggleFontColor = (fontColor) => {
+    console.log(fontColor);
+    const { editorState, onEditorStateChange } = this.props;
+    const newState = toggleCustomInlineStyle(
+      editorState,
+      'color',
+      fontColor
+    );
+
+    if (newState) {
+      onEditorStateChange(newState);
+    }
+  }
+
   render() {
     const { config } = this.props;
-    const { bgColor, defaultBgColor } = this.state;
-    let selectColor;
-    if (bgColor) {
-      console.log(bgColor);
-      selectColor = bgColor.substring(8);
-    } else {
-      selectColor = defaultBgColor || '#fff';
-    }
+    const { bgColor, defaultBgColor, fontColor, defaultFontColor } = this.state;
 
-    const btnStyle = {
-      width: '100%',
-      backgroundColor: `${selectColor}`
-    };
+    const selectedBgColor = bgColor ? bgColor.substring(8) : defaultBgColor || '#f5f5f5';
+    const selectedFontColor = fontColor ? fontColor.substring(6) : defaultFontColor || '#333';
+
+    const content = (
+      <Tabs
+        defaultActiveKey="1"
+        size="small"
+      >
+        <TabPane tab="字体颜色" key="1">
+          <ColorPicker
+            isFontColor
+            fontColor={selectedFontColor}
+            config={config}
+            onSelectFontColor={this.onToggleFontColor}
+          />
+        </TabPane>
+        <TabPane tab="背景颜色" key="2">
+          <ColorPicker
+            isBgColor
+            bgColor={selectedBgColor}
+            config={config}
+            onSelectBgColor={this.onToggleBgColor}
+          />
+        </TabPane>
+      </Tabs>
+    );
+
     return (
       <Popover
         trigger="click"
         placement="bottom"
-        content={<SelectColor
-          isToolbar
-          bgColor={selectColor}
-          config={config}
-          onSelectBgColor={this.onToggleBgColor}
-        />}
+        content={content}
+        overlayStyle={{
+          width: '202px'
+        }}
       >
         <Button
           size="small"
-          title="字体背景"
-          style={btnStyle}
+          title="颜色设置"
+          style={{ width: '100%' }}
         />
       </Popover>
     );

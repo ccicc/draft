@@ -9,7 +9,7 @@ import {
   Col
 } from 'antd';
 import SelectType from './SelectType';
-import SelectColor from './SelectColor';
+import { ColorPicker } from './../../Common';
 
 const FormItem = Form.Item;
 
@@ -21,6 +21,7 @@ class EditorModal extends React.Component {
     };
   }
 
+  // 动态获取校验规则
   getRules = (rules) => {
     this.setState({
       rules
@@ -126,9 +127,10 @@ class EditorModal extends React.Component {
                   {
                     getFieldDecorator('fontColor', {
                       valuePropName: 'fontColor'
-                    })(<SelectColor
+                    })(<ColorPicker
+                      isEntityColor
                       config={config}
-                      onSelectFontColor={onSelectFontColor}
+                      onSelectEntityColor={onSelectFontColor}
                     />)
                   }
                 </FormItem>
