@@ -35,7 +35,7 @@ export default class ToolCard extends React.Component {
         >
           <Row
             type="flex"
-            gutter={5}
+            gutter={10}
             style={{ padding: '5px 0' }}
           >
             <Col span={3}>
@@ -60,33 +60,6 @@ export default class ToolCard extends React.Component {
                 onEditorStateChange={onEditorStateChange}
               />
             </Col>
-            <Col span={5}>
-              <TextAlign
-                config={config}
-                editorState={editorState}
-                onEditorStateChange={onEditorStateChange}
-              />
-            </Col>
-            <Col span={1}>
-              <Remove
-                config={config}
-                editorState={editorState}
-                onEditorStateChange={onEditorStateChange}
-              />
-            </Col>
-          </Row>
-          <Row
-            type="flex"
-            gutter={5}
-            style={{ padding: '5px 0' }}
-          >
-            <Col span={8}>
-              <InlineTool
-                config={config}
-                editorState={editorState}
-                onEditorStateChange={onEditorStateChange}
-              />
-            </Col>
             <Col span={2}>
               <SelectBgColor
                 config={config}
@@ -94,8 +67,8 @@ export default class ToolCard extends React.Component {
                 onEditorStateChange={onEditorStateChange}
               />
             </Col>
-            <Col span={5}>
-              <List
+            <Col span={1.5}>
+              <Remove
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
@@ -108,6 +81,35 @@ export default class ToolCard extends React.Component {
                 onEditorStateChange={onEditorStateChange}
               />
             </Col>
+          </Row>
+          <Row
+            type="flex"
+            gutter={10}
+            style={{ padding: '5px 0' }}
+            justify="start"
+          >
+            <Col span={7.5}>
+              <InlineTool
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={4.5}>
+              <TextAlign
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={4.5}>
+              <List
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+
           </Row>
         </Card>
       </div>

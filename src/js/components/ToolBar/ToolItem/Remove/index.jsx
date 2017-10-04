@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import { Button } from 'antd';
 import { EditorState, Modifier } from 'draft-js';
 import { getSelectionCustomInlineStyle } from 'draftjs-utils';
@@ -50,7 +51,12 @@ export default class Remove extends React.Component {
         title={options.title}
         onClick={this.removeInlineStyle}
       >
-        <i className={`fa fa-${options.icon} fa-lg`} />
+        <i
+          className={classnames({
+            [`fa fa-${options.icon} fa-lg`]: true,
+            'iconFont': true
+          })}
+        />
       </Button>
     );
   }

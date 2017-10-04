@@ -9,9 +9,10 @@ export default class CustomBtn extends React.Component {
   }
 
   render() {
-    const { title } = this.props;
+    const { title, type, currentStyles } = this.props;
     return (
       <Button
+        type={currentStyles[type] ? 'primary' : ''}
         title={title}
         size="small"
         onClick={this.onHandleClick}

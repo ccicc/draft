@@ -104,7 +104,7 @@ export default class List extends React.Component {
     const { currentBlock } = this.state;
     const items = config.list.options;
 
-    let listType;  // eslint-disable-line
+    let listType;
     if (currentBlock.getType() === 'unordered-list-item') {
       listType = 'unordered';
     }
@@ -121,6 +121,7 @@ export default class List extends React.Component {
           items.map((item, index) => {
             return (
               <ListTypeComponent
+                listType={listType}
                 isIndent={isIndent}
                 isOutdent={isOutdent}
                 key={index}

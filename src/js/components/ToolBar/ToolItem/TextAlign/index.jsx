@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
+import classnames from 'classnames';
 import {
   getSelectedBlocksMetadata,
   setBlockData
@@ -49,13 +50,17 @@ export default class TextAlign extends React.Component {
           options.map(item => (
             <Button
               key={item.type}
-              ghost={currentTextAlignment === item.type}
               type={currentTextAlignment === item.type ? 'primary' : 'default'}
               size="small"
               title={item.title}
               onClick={() => this.onSetBlockAlignmentData(item.type)}
             >
-              <i className={`fa fa-${item.icon} fa-lg`} />
+              <i
+                className={classnames({
+                  [`fa fa-${item.icon} fa-lg`]: true,
+                  'iconFont': true
+                })}
+              />
             </Button>
           ))
         }

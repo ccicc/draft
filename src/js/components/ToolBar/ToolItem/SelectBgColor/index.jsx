@@ -144,7 +144,9 @@ export default class SelectBgColor extends React.Component {
           size="small"
           title="颜色设置"
           style={{ width: '100%' }}
-        />
+        >
+          <i className="fa fa-paint-brush fa-lg" />
+        </Button>
       </Popover>
     );
   }

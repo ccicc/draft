@@ -106,7 +106,8 @@ export default class InlineTool extends React.Component {
             >
               <i
                 className={classnames({
-                  [`fa fa-${item.icon} fa-lg`]: true
+                  [`fa fa-${item.icon} fa-lg`]: true,
+                  'iconFont': true
                 })}
               />
             </CustomBtn>

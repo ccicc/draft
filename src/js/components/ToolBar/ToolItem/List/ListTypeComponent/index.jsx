@@ -1,10 +1,10 @@
 import React from 'react';
+import classnames from 'classnames';
 import { Button } from 'antd';
 
 export default class ListTypeComponent extends React.Component {
   onHandleClick = () => {
     const { type, onChange } = this.props;
-    console.log(type);
     onChange(type);
   }
 
@@ -20,16 +20,22 @@ export default class ListTypeComponent extends React.Component {
   }
 
   render() {
-    const { title, icon } = this.props;
+    const { title, icon, type, listType } = this.props;
     const disabled = this.isDisable();
     return (
       <Button
+        type={type === listType ? 'primary' : ''}
         disabled={disabled}
         size="small"
         title={title}
         onClick={this.onHandleClick}
       >
-        <i className={`fa fa-${icon} fa-lg`} />
+        <i
+          className={classnames({
+            [`fa fa-${icon} fa-lg`]: true,
+            'iconFont': true
+          })}
+        />
       </Button>
     );
   }
