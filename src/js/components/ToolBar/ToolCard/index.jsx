@@ -14,7 +14,8 @@ import {
   TextAlign,
   List,
   Remove,
-  History
+  History,
+  Link
 } from './../ToolItem';
 
 export default class ToolCard extends React.Component {
@@ -74,8 +75,15 @@ export default class ToolCard extends React.Component {
                 onEditorStateChange={onEditorStateChange}
               />
             </Col>
-            <Col span={3}>
+            <Col span={2.5}>
               <History
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={2.5}>
+              <Link
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
@@ -109,7 +117,6 @@ export default class ToolCard extends React.Component {
                 onEditorStateChange={onEditorStateChange}
               />
             </Col>
-
           </Row>
         </Card>
       </div>

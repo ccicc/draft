@@ -1,60 +1,74 @@
-/*
-    global
-    window: false
-*/
-
 import React from 'react';
 import { Affix } from 'antd';
 import {
   EditorState,
   RichUtils,
   convertFromRaw,
-  convertToRaw
+  convertToRaw,
+  CompositeDecorator
 } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
+import {
+  getCustomStyleMap,
+  extractInlineStyle
+} from 'draftjs-utils';
 
-import { getCustomStyleMap } from 'draftjs-utils';
-
-import blockStyleFn from './../../customUtils/blockStyleFn';
-import config from './../../config/toolbar.config';
-import initState from './initState';
 import styles from './index.less';
+
+// 自定义块级样式
+import blockStyleFn from './../../customUtils/blockStyleFn';
+// toolbar配置
+import config from './../../config/toolbar.config';
+// editorState初始化
+import initState from './initState';
+// toolbar组件
 import Toolbar from './../ToolBar';
 
+// 装饰器
+import {
+  linkDecorator
+} from './../../decorators';
+
+
+// draftEditor组件
 export default class Draft extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    // const contentState = window.localStorage.getItem('contentState');
-    // if (
-    //     convertFromRaw(JSON.parse(contentState)).hasText()
-    // ) {
-    //     this.state.editorState = EditorState.createWithContent(
-    //         convertFromRaw(JSON.parse(contentState))
-    //     );
-    // } else {
-    this.state.editorState = EditorState.createWithContent(convertFromRaw(initState));
-    // }
+    this.state = {
+      editorState: this.createEditorState(this.getCompositeDecorator())
+    };
   }
 
-  onChange = (editorState) => {
-    const contentState = editorState.getCurrentContent();
-    console.log(convertToRaw(contentState));
-    this.onSaveContent(contentState);
+  componentWillMount() {
+    this.compositeDecorator = this.getCompositeDecorator();
+    const editorState = this.createEditorState(this.compositeDecorator);
+    extractInlineStyle(editorState);
     this.setState({
       editorState
     });
   }
 
-  onSaveContent = (contentState) => {
-    window.localStorage.setItem(
-      'contentState',
-      JSON.stringify(convertToRaw(contentState))
-    );
+  onChange = (editorState) => {
+    const contentState = editorState.getCurrentContent();
+    console.log(convertToRaw(contentState));
+    this.setState({
+      editorState
+    });
   }
 
   onHandleFocus = () => {
     this.domEditor.focus();
+  }
+
+  getCompositeDecorator = () => {
+    const decorators = [linkDecorator()];
+    return new CompositeDecorator(decorators);
+  }
+
+  createEditorState = (compositeDecorator) => {
+    const contentState = convertFromRaw(initState);
+    const editorState = EditorState.createWithContent(contentState, compositeDecorator);
+    return editorState;
   }
 
   handleKeyCommand = (command, editorState) => {

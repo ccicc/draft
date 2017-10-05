@@ -90,5 +90,12 @@ export default {
       { type: 'undo', icon: 'undo', title: '撤销' },
       { type: 'redo', icon: 'repeat', title: '重做' }
     ]
+  },
+  link: {
+    component: 'Link',
+    options: {
+      link: { icon: 'link', title: '添加链接', target: '_blank' },
+      unlink: { icon: 'unlink', title: '移除链接' }
+    }
   }
 };
