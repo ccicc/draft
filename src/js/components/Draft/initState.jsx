@@ -1,11 +1,5 @@
 const initState = {
-  entityMap: {
-    0: {
-      type: 'textInputBlock',
-      mutability: 'IMMUTABLE',
-      data: {}
-    }
-  },
+  entityMap: {},
   blocks: [{
     key: '9gm3s',
     text: '入  院  记  录',
@@ -74,6 +68,16 @@ const initState = {
     inlineStyleRanges: [],
     entityRanges: [],
     data: {}
+  }, {
+    key: 'fqhjh',
+    text: 'hello,world',
+    type: 'unstyled',
+    depth: 0,
+    entityRanges: [{
+      offset: 0,
+      length: 11,
+      key: 0
+    }]
   }]
 };
 

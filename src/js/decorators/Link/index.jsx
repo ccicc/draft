@@ -1,35 +1,80 @@
 /*
   global
   window: false
-*/ 
+*/
 
 import React from 'react';
+import classnames from 'classnames';
 import styles from './index.less';
 
 class Link extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowIcon: false
+    };
+  }
+
+  onMouseEnter = () => {
+    this.setState({
+      isShowIcon: true
+    });
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      isShowIcon: false
+    });
+  }
+
   openLink = () => {
     const { entityKey, contentState } = this.props;
-    const { url } = contentState.getEntity(entityKey).getData();
-    const linkTab = window.open(url, 'blank');
-    linkTab.focus();
+    const { url, target } = contentState.getEntity(entityKey).getData();
+    let linkTab;
+    if (target === '_self') {
+      window.location.assign(url);
+    } else if (target === '_blank') {
+      linkTab = window.open(url, 'blank');
+    }
+    linkTab && linkTab.focus();
   }
+
   render() {
+    const { isShowIcon } = this.state;
     const { entityKey, contentState, children } = this.props;
     const { url, target } = contentState.getEntity(entityKey).getData();
     return (
-      <a
-        className={styles.link}
-        href={url}
-        target={target}
+      <span
+        className={styles.root}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
       >
-        {children}
-      </a>
+        <a
+          href={url}
+          target={target}
+          className={styles.link}
+        >
+          {children}
+        </a>
+        {
+          isShowIcon &&
+          <i
+            title={url}
+            onClick={this.openLink}
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
+            className={classnames({
+              'fa fa-external-link fa-lg': true,
+              [`${styles.icon}`]: true
+            })}
+          />
+        }
+      </span>
     );
   }
 }
 
 function findLinkEntities(contentBlock, callback, contentState) {
-  console.log(JSON.stringify(contentBlock));
   contentBlock.findEntityRanges(
     (character) => {
       const entityKey = character.getEntity();
@@ -38,7 +83,7 @@ function findLinkEntities(contentBlock, callback, contentState) {
         contentState.getEntity(entityKey).getType() === 'LINK'
       );
     },
-    callback,
+    callback
   );
 }
 

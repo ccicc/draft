@@ -9,6 +9,7 @@ import {
 } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import {
+  changeDepth,
   getCustomStyleMap,
   extractInlineStyle
 } from 'draftjs-utils';
@@ -24,7 +25,7 @@ import initState from './initState';
 // toolbar组件
 import Toolbar from './../ToolBar';
 
-// 装饰器
+// 装饰器导入
 import {
   linkDecorator
 } from './../../decorators';
@@ -35,7 +36,7 @@ export default class Draft extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: this.createEditorState(this.getCompositeDecorator())
+      editorState: undefined
     };
   }
 
@@ -52,12 +53,20 @@ export default class Draft extends React.Component {
     const contentState = editorState.getCurrentContent();
     console.log(convertToRaw(contentState));
     this.setState({
-      editorState
+      editorState: EditorState.set(editorState, { decorator: this.getCompositeDecorator() })
     });
   }
 
-  onHandleFocus = () => {
+  onEditorFocus = () => {
     this.domEditor.focus();
+  }
+
+  onTab = (event) => {
+    const editorState = changeDepth(this.state.editorState, event.shiftKey ? -1 : 1, 4);
+    if (editorState && editorState !== this.state.editorState) {
+      this.onChange(editorState);
+      event.preventDefault();
+    }
   }
 
   getCompositeDecorator = () => {
@@ -97,9 +106,10 @@ export default class Draft extends React.Component {
         </Affix>
         <div
           className={styles.editorWrapper}
-          onClick={this.onHandleFocus}
+          onClick={this.onEditorFocus}
         >
           <Editor
+            onTab={this.onTab}
             editorState={editorState}
             onChange={this.onChange}
             handleKeyCommand={this.handleKeyCommand}

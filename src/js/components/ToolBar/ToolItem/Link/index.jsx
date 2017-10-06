@@ -1,7 +1,5 @@
-/* eslint-disable */
-
 import React from 'react';
-import { RichUtils, EditorState, Modifier, convertFromRaw } from 'draft-js';
+import { RichUtils, EditorState, Modifier } from 'draft-js';
 import {
   getSelectionText,
   getSelectionEntity,
@@ -55,12 +53,11 @@ export default class Link extends React.Component {
       const entityRange = getEntityRange(editorState, currentEntity);
       currentValues.link.url = contentState.getEntity(currentEntity).getData().url;
       currentValues.link.target = contentState.getEntity(currentEntity).getData().target;
-      currentValues.link.title = entityRange.title;
+      currentValues.link.title = entityRange.text;
     }
     currentValues.selectionText = getSelectionText(editorState);
     return currentValues;
   }
-
 
   addLink = (link) => {
     const { editorState, onEditorStateChange } = this.props;
@@ -91,7 +88,8 @@ export default class Link extends React.Component {
     let newEditorState = EditorState.push(editorState, contentState, 'insert-characters');
 
     // 在链接后插入空格
-    selectionState = newEditorState.getSelection().merge({
+    selectionState = newEditorState.getSelection();
+    selectionState = selectionState.merge({
       anchorOffset: selectionState.getAnchorOffset() + link.title.length,
       focusOffset: selectionState.getFocusOffset() + link.title.length
     });
@@ -104,9 +102,7 @@ export default class Link extends React.Component {
       newEditorState.getCurrentInlineStyle(),
       undefined
     );
-
-    newEditorState = EditorState.push(newEditorState, contentState, 'insert-characters');
-    onEditorStateChange(newEditorState);
+    onEditorStateChange(EditorState.push(newEditorState, contentState, 'insert-characters'));
   }
 
   removeLink = () => {
