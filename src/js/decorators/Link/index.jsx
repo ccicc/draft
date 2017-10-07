@@ -4,10 +4,17 @@
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import styles from './index.less';
 
 class Link extends React.Component {
+  static propTypes = {
+    entityKey: PropTypes.string.isRequired,
+    children: PropTypes.array,
+    contentState: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
     this.state = {

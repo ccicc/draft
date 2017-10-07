@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Popover,
   Button,
@@ -8,6 +9,15 @@ import classnames from 'classnames';
 import WrapperLinkInput from './LinkInput';
 
 export default class LinkComponent extends React.Component {
+  static propTypes = {
+    config: PropTypes.object.isRequired,
+    onHandleChange: PropTypes.func.isRequired,
+    currentState: PropTypes.shape({
+      link: PropTypes.object,
+      selectionText: PropTypes.string
+    })
+  };
+
   constructor(props) {
     super(props);
     this.state = {

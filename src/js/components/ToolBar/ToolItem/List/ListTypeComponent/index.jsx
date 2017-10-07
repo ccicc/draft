@@ -1,8 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Button } from 'antd';
 
 export default class ListTypeComponent extends React.Component {
+  static propTypes = {
+    listType: PropTypes.string,
+    isIndent: PropTypes.bool,
+    isOutdent: PropTypes.bool,
+    type: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired
+  };
   onHandleClick = () => {
     const { type, onChange } = this.props;
     onChange(type);

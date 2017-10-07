@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { RichUtils, EditorState, Modifier } from 'draft-js';
 import {
   getSelectionText,
@@ -8,6 +9,12 @@ import {
 import LinkComponent from './LinkComponent';
 
 export default class Link extends React.Component {
+  static propTypes = {
+    config: PropTypes.object.isRequired,
+    editorState: PropTypes.object.isRequired,
+    onEditorStateChange: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {

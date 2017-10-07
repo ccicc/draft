@@ -1,16 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Button } from 'antd';
 import { EditorState, Modifier } from 'draft-js';
 import { getSelectionCustomInlineStyle } from 'draftjs-utils';
 
 export default class Remove extends React.Component {
+  static propTypes = {
+    config: PropTypes.object.isRequired,
+    editorState: PropTypes.object.isRequired,
+    onEditorStateChange: PropTypes.func.isRequired
+  };
+
   removeAllInlineStyles = (editorState) => {
     const { config } = this.props;
     let contentState = editorState.getCurrentContent();
     const buildInStyles = config.remove.options.buildInStyles;
     const customStyles = config.remove.options.customStyles;
-    console.log(buildInStyles);
     buildInStyles.forEach(style => {
       contentState = Modifier.removeInlineStyle(
         contentState,

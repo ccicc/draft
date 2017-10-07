@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Row,
   Col,
@@ -19,12 +20,17 @@ import {
 } from './../ToolItem';
 
 export default class ToolCard extends React.Component {
+  static propTypes = {
+    config: PropTypes.object.isRequired,
+    editorState: PropTypes.object.isRequired,
+    onEditorStateChange: PropTypes.func.isRequired
+  };
+
   render() {
     const {
       config,
       editorState,
       onEditorStateChange,
-      onFocusClick,
     } = this.props;
 
     return (
@@ -44,7 +50,6 @@ export default class ToolCard extends React.Component {
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
-                onFocusClick={onFocusClick}
               />
             </Col>
             <Col span={3}>

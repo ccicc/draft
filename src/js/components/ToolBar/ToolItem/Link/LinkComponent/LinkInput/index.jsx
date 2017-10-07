@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Form,
@@ -9,6 +10,12 @@ import {
 const FormItem = Form.Item;
 
 class LinkInput extends React.Component {
+  static propTypes = {
+    onHandleConfirm: PropTypes.func.isRequired,
+    onHandleCancel: PropTypes.func.isRequired,
+    form: PropTypes.object.isRequired
+  };
+
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
     const { onHandleConfirm, onHandleCancel } = this.props;

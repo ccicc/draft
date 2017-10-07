@@ -1,7 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { TwitterPicker, BlockPicker } from 'react-color';
 
 export default class ColorPicker extends React.Component {
+  static propTypes = {
+    config: PropTypes.object.isRequired,
+    isFontColor: PropTypes.bool,
+    isBgColor: PropTypes.bool,
+    onSelectFontColor: PropTypes.func,
+    onSelectEntityColor: PropTypes.func,
+    onSelectBgColor: PropTypes.func
+  };
+
   constructor(props) {
     super(props);
     this.state = {
