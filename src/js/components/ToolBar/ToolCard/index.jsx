@@ -16,7 +16,8 @@ import {
   List,
   Remove,
   History,
-  Link
+  Link,
+  Copy
 } from './../ToolItem';
 
 export default class ToolCard extends React.Component {
@@ -89,6 +90,13 @@ export default class ToolCard extends React.Component {
             </Col>
             <Col span={2.5}>
               <Link
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={3.5}>
+              <Copy
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}

@@ -81,7 +81,7 @@ export default {
         'FONTSIZE', 'FONTFAMILY', 'COLOR', 'BGCOLOR'
       ],
       icon: 'eraser',
-      title: '清楚格式'
+      title: '清除格式'
     }
   },
   history: {
@@ -96,6 +96,14 @@ export default {
     options: {
       link: { icon: 'link', title: '添加链接', target: '_blank' },
       unlink: { icon: 'unlink', title: '移除链接' }
+    }
+  },
+  copy: {
+    component: 'Copy',
+    options: {
+      copy: { icon: 'copy', title: '复制' },
+      cut: { icon: 'cut', title: '剪切' },
+      paste: { icon: 'paste', title: '粘贴' }
     }
   }
 };

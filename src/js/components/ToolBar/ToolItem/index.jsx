@@ -19,3 +19,5 @@ export { default as Remove } from './Remove';
 export { default as History } from './History';
 
 export { default as Link } from './Link';
+
+export { default as Copy } from './Copy';

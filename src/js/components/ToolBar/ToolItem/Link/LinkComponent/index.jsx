@@ -99,6 +99,7 @@ export default class LinkComponent extends React.Component {
       <Button.Group>
 
         <Popover
+          title="插 入 链 接"
           content={content}
           trigger="click"
           visible={visible}

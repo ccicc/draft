@@ -89,6 +89,10 @@ export default class Draft extends React.Component {
     return false;
   }
 
+  handlePastedText = () => {
+    return true;
+  }
+
   render() {
     const { editorState } = this.state;
     return (
@@ -112,10 +116,11 @@ export default class Draft extends React.Component {
             onTab={this.onTab}
             editorState={editorState}
             onChange={this.onChange}
-            handleKeyCommand={this.handleKeyCommand}
             customStyleMap={getCustomStyleMap()}
             blockStyleFn={blockStyleFn}
             ref={element => this.domEditor = element}
+            handleKeyCommand={this.handleKeyCommand}
+            handlePastedText={this.handlePastedText}
           />
         </div>
       </div>
