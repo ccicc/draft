@@ -7,13 +7,17 @@ import {
   convertToRaw,
   CompositeDecorator
 } from 'draft-js';
-import Editor from 'draft-js-plugins-editor';
 import {
   changeDepth,
   getCustomStyleMap,
   extractInlineStyle
 } from 'draftjs-utils';
 
+// draft-js-plugin导入
+import Editor from 'draft-js-plugins-editor';
+import createImagePlugin from 'draft-js-image-plugin';
+
+import 'draft-js-image-plugin/lib/plugin.css';
 import styles from './index.less';
 
 // 自定义块级样式
@@ -30,6 +34,8 @@ import {
   linkDecorator
 } from './../../decorators';
 
+const imagePlugin = createImagePlugin();
+const plugins = [imagePlugin];
 
 // draftEditor组件
 export default class Draft extends React.Component {
@@ -105,6 +111,7 @@ export default class Draft extends React.Component {
               config={config}
               editorState={editorState}
               onEditorStateChange={this.onChange}
+              imagePlugin={imagePlugin}
             />
           </div>
         </Affix>
@@ -121,6 +128,7 @@ export default class Draft extends React.Component {
             ref={element => this.domEditor = element}
             handleKeyCommand={this.handleKeyCommand}
             handlePastedText={this.handlePastedText}
+            plugins={plugins}
           />
         </div>
       </div>

@@ -21,3 +21,5 @@ export { default as History } from './History';
 export { default as Link } from './Link';
 
 export { default as Copy } from './Copy';
+
+export { default as Image } from './Image';
