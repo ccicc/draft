@@ -1,6 +1,7 @@
 import React from 'react';
 import { Affix } from 'antd';
 import {
+  Editor,
   EditorState,
   RichUtils,
   convertFromRaw,
@@ -13,11 +14,6 @@ import {
   extractInlineStyle
 } from 'draftjs-utils';
 
-// draft-js-plugin导入
-import Editor from 'draft-js-plugins-editor';
-import createImagePlugin from 'draft-js-image-plugin';
-
-import 'draft-js-image-plugin/lib/plugin.css';
 import styles from './index.less';
 
 // 自定义块级样式
@@ -34,8 +30,8 @@ import {
   linkDecorator
 } from './../../decorators';
 
-const imagePlugin = createImagePlugin();
-const plugins = [imagePlugin];
+// 自定义的块级组件
+import getBlockRenderFunc from './../../renderer';
 
 // draftEditor组件
 export default class Draft extends React.Component {
@@ -44,6 +40,9 @@ export default class Draft extends React.Component {
     this.state = {
       editorState: undefined
     };
+    this.blockRenderFn = getBlockRenderFunc({
+      getEditorState: this.getEditorState
+    });
   }
 
   componentWillMount() {
@@ -59,7 +58,7 @@ export default class Draft extends React.Component {
     const contentState = editorState.getCurrentContent();
     console.log(convertToRaw(contentState));
     this.setState({
-      editorState: EditorState.set(editorState, { decorator: this.getCompositeDecorator() })
+      editorState
     });
   }
 
@@ -74,6 +73,8 @@ export default class Draft extends React.Component {
       event.preventDefault();
     }
   }
+
+  getEditorState = () => this.state.editorState;
 
   getCompositeDecorator = () => {
     const decorators = [linkDecorator()];
@@ -111,7 +112,6 @@ export default class Draft extends React.Component {
               config={config}
               editorState={editorState}
               onEditorStateChange={this.onChange}
-              imagePlugin={imagePlugin}
             />
           </div>
         </Affix>
@@ -128,7 +128,7 @@ export default class Draft extends React.Component {
             ref={element => this.domEditor = element}
             handleKeyCommand={this.handleKeyCommand}
             handlePastedText={this.handlePastedText}
-            plugins={plugins}
+            blockRendererFn={this.blockRenderFn}
           />
         </div>
       </div>

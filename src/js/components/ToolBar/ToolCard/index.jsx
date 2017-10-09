@@ -33,7 +33,6 @@ export default class ToolCard extends React.Component {
       config,
       editorState,
       onEditorStateChange,
-      imagePlugin
     } = this.props;
 
     return (
@@ -134,7 +133,6 @@ export default class ToolCard extends React.Component {
             </Col>
             <Col span={1.5}>
               <Image
-                imagePlugin={imagePlugin}
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}

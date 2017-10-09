@@ -10,7 +10,6 @@ export default class ToolBar extends React.Component {
   static propTypes = {
     config: PropTypes.object.isRequired,
     editorState: PropTypes.object.isRequired,
-    imagePlugin: PropTypes.object.isRequired,
     onEditorStateChange: PropTypes.func.isRequired
   };
 
@@ -19,7 +18,6 @@ export default class ToolBar extends React.Component {
       editorState,
       onEditorStateChange,
       config,
-      imagePlugin
     } = this.props;
 
     return (
@@ -31,7 +29,6 @@ export default class ToolBar extends React.Component {
             <Row>
               <Col span={24}>
                 <ToolCard
-                  imagePlugin={imagePlugin}
                   config={config}
                   editorState={editorState}
                   onEditorStateChange={onEditorStateChange}

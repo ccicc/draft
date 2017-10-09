@@ -1,36 +1,35 @@
-/* eslint-disable */
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import {
   Button,
   Popover
 } from 'antd';
 
-import WrapperUpload from './ImageUpload';
+import ImageUpload from './ImageUpload';
 
 export default class ImageComponent extends React.Component {
+  static propTypes = {
+    onAddImage: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       isVisible: false
-    }
-  }
-
-  onHandleClick = () => {
-    this.setState(nextState => ({
-      isVisible: !nextState.isVisible
-    }))
+    };
   }
 
   onHandleVisibleChange = (visible) => {
     this.setState({
       isVisible: visible
-    })
+    });
   }
 
   onHandleConfirm = (err, changeFields) => {
     const { onAddImage } = this.props;
+    if (err) return false;
+    console.log(changeFields);
     this.setState({
       isVisible: false
     });
@@ -41,7 +40,7 @@ export default class ImageComponent extends React.Component {
   onHandleCancel = () => {
     this.setState({
       isVisible: false
-    })
+    });
   }
 
   render() {
@@ -49,35 +48,35 @@ export default class ImageComponent extends React.Component {
 
     const content = (
       <div style={{ width: '230px' }}>
-        <WrapperUpload
+        <ImageUpload
           onHandleConfirm={this.onHandleConfirm}
           onHandleCancel={this.onHandleCancel}
         />
       </div>
-    )
+    );
 
     return (
-      <Button.Group>
-        <Popover
-          placement="bottom"
-          content={content}
-          trigger="click"
-          visible={isVisible}
-          onVisibleChange={this.onHandleVisibleChange}
+      <Popover
+        placement="bottom"
+        content={content}
+        trigger="click"
+        visible={isVisible}
+        onVisibleChange={this.onHandleVisibleChange}
+      >
+        <Button
+          size="small"
+          onClick={() => this.setState(nextState => ({
+            isVisible: !nextState.isVisible
+          }))}
         >
-          <Button
-            size="small"
-            onClick={this.onHandleClick}
-          >
-            <i
-              className={classnames({
-                "fa fa-image fa-lg": true,
-                iconFont: true
-              })}
-            />
-          </Button>
-        </Popover>
-      </Button.Group>
-    )
+          <i
+            className={classnames({
+              'fa fa-image fa-lg': true,
+              iconFont: true
+            })}
+          />
+        </Button>
+      </Popover>
+    );
   }
 }

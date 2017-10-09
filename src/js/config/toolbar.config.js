@@ -105,8 +105,5 @@ export default {
       cut: { icon: 'cut', title: '剪切' },
       paste: { icon: 'paste', title: '粘贴' }
     }
-  },
-  image: {
-    component: 'Image'
   }
 };

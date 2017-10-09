@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { AtomicBlockUtils } from 'draft-js';
@@ -13,20 +11,20 @@ export default class Image extends React.Component {
   };
 
   onAddImage = (imageData) => {
-    console.log(imageData);
     const { editorState, onEditorStateChange } = this.props;
+    console.log(imageData);
     const entityKey = editorState
       .getCurrentContent()
-      .createEntity('image', 'IMMUTABLE', imageData)
+      .createEntity('IMAGE', 'IMMUTABLE', imageData)
       .getLastCreatedEntityKey();
-    
+
     const newState = AtomicBlockUtils.insertAtomicBlock(
       editorState,
       entityKey,
       ' '
     );
 
-    if(newState) {
+    if (newState) {
       onEditorStateChange(newState);
     }
   }
@@ -38,6 +36,6 @@ export default class Image extends React.Component {
         config={config}
         onAddImage={this.onAddImage}
       />
-    )
+    );
   }
 }

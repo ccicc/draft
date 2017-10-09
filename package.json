@@ -56,6 +56,7 @@
     "draft-js-alignment-plugin": "^2.0.0-beta1",
     "draft-js-buttons": "^2.0.0-beta6",
     "draft-js-drag-n-drop-plugin": "^2.0.0-beta10",
+    "draft-js-emoji-plugin": "^2.0.0-rc2",
     "draft-js-focus-plugin": "^2.0.0-beta1",
     "draft-js-image-plugin": "^2.0.0-rc8",
     "draft-js-plugins-editor": "^2.0.0-rc8",
