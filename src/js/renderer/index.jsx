@@ -1,5 +1,3 @@
-/* eslint-disable */ 
-
 import ImageComponent from './Image';
 
 const getBlockRenderFunc = (options) => (contentBlock) => {
@@ -19,6 +17,6 @@ const getBlockRenderFunc = (options) => (contentBlock) => {
     }
   }
   return undefined;
-}
+};
 
 export default getBlockRenderFunc;

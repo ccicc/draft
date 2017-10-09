@@ -64,6 +64,7 @@ export default class ImageComponent extends React.Component {
         onVisibleChange={this.onHandleVisibleChange}
       >
         <Button
+          title="插入图片"
           size="small"
           onClick={() => this.setState(nextState => ({
             isVisible: !nextState.isVisible

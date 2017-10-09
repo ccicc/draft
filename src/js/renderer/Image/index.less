@@ -1,4 +1,37 @@
 .imageWrapper{
-  display: inline-block;
+  display: flex;
   cursor: pointer;
+  z-index: 100;
+}
+
+.imageAlignLeft{
+  display: flex;
+  justify-content: flex-start;
+}
+
+.imageAlignCenter{
+  display: flex;
+  justify-content: center;
+}
+
+.imageAlignRight{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.imageEncircleLeft{
+  position: relative;
+  float: left;
+  margin: 10px 10px 10px 0;
+}
+
+.imageEncircleRight{
+  position: relative;
+  float: right;
+  margin: 10px 0 10px 10px;
+}
+
+.image{
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px #ccc;
 }

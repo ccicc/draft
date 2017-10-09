@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Tabs
 } from 'antd';
@@ -9,6 +10,11 @@ import WrapperLocalImage from './LocalImage';
 const TabPane = Tabs.TabPane;
 
 export default class ImageUpload extends React.Component {
+  static propTypes = {
+    onHandleConfirm: PropTypes.func.isRequired,
+    onHandleCancel: PropTypes.func.isRequired
+  };
+
   render() {
     const { onHandleConfirm, onHandleCancel } = this.props;
 

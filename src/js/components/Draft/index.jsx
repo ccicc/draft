@@ -30,7 +30,7 @@ import {
   linkDecorator
 } from './../../decorators';
 
-// 自定义的块级组件
+// 自定义块级组件导入
 import getBlockRenderFunc from './../../renderer';
 
 // draftEditor组件
@@ -40,8 +40,10 @@ export default class Draft extends React.Component {
     this.state = {
       editorState: undefined
     };
+
     this.blockRenderFn = getBlockRenderFunc({
-      getEditorState: this.getEditorState
+      getEditorState: this.getEditorState,
+      onEditorStateChange: this.onChange
     });
   }
 

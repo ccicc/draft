@@ -22,7 +22,9 @@ class LinkImage extends React.Component {
       <Form>
         <FormItem>
           {
-            getFieldDecorator('imageUrl')(
+            getFieldDecorator('imageUrl', {
+              rules: [{ required: true, message: '图片链接不能为空' }]
+            })(
               <Input
                 placeholder="图片链接地址"
                 prefix={<i className="fa fa-link fa-lg" />}

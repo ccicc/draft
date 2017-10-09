@@ -18,9 +18,7 @@ class LocalImage extends React.Component {
     onHandleConfirm: PropTypes.func.isRequired,
     onHandleCancel: PropTypes.func.isRequired
   };
-  onChange = (file) => {
-    console.log(file);
-  }
+
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
     const { onHandleConfirm, onHandleCancel } = this.props;
@@ -29,12 +27,13 @@ class LocalImage extends React.Component {
       <Form layout="horizontal">
         <FormItem>
           {
-            getFieldDecorator('imageUrl')(
+            getFieldDecorator('imageUrl', {
+              rules: [{ required: true, message: '请选择上传的图片' }]
+            })(
               <div style={{ marginTop: '10px' }}>
                 <Dragger
                   name="image"
                   action="//jsonplaceholder.typicode.com/posts/"
-                  onChange={this.onChange}
                 >
                   <p className={styles.icon}>
                     <i className="fa fa-image" />
