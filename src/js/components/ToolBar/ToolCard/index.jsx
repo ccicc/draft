@@ -18,7 +18,8 @@ import {
   History,
   Link,
   Copy,
-  Image
+  Image,
+  Postil
 } from './../ToolItem';
 
 export default class ToolCard extends React.Component {
@@ -136,6 +137,13 @@ export default class ToolCard extends React.Component {
                 config={config}
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={1.5}>
+              <Postil
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+                config={config}
               />
             </Col>
           </Row>

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import {
   Popover,
   Button,
@@ -110,7 +111,7 @@ export default class SelectBgColor extends React.Component {
   render() {
     const { config } = this.props;
     const { bgColor, defaultBgColor, fontColor, defaultFontColor } = this.state;
-
+    const options = config.colorPicker.options;
     const selectedBgColor = bgColor ? bgColor.substring(8) : defaultBgColor || '#f5f5f5';
     const selectedFontColor = fontColor ? fontColor.substring(6) : defaultFontColor || '#333';
 
@@ -152,7 +153,12 @@ export default class SelectBgColor extends React.Component {
           title="颜色设置"
           style={{ width: '100%' }}
         >
-          <i className="fa fa-paint-brush fa-lg" />
+          <i
+            className={classnames({
+              [`fa fa-${options.icon} fa-lg`]: true,
+              iconFont: true
+            })}
+          />
         </Button>
       </Popover>
     );

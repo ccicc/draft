@@ -48,6 +48,7 @@ export default {
   colorPicker: {
     component: 'ColorPicker',
     options: {
+      icon: 'eyedropper',
       fontColors: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#ccc', '#0693E3', '#666', '#333', '#363'],
       entityColors: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#ccc', '#0693E3', '#666', '#333'],
       bgColors: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#ccc', '#0693E3', '#f5f5f5', '#333', '#363']
@@ -104,6 +105,13 @@ export default {
       copy: { icon: 'copy', title: '复制' },
       cut: { icon: 'cut', title: '剪切' },
       paste: { icon: 'paste', title: '粘贴' }
+    }
+  },
+  postil: {
+    component: 'Postil',
+    options: {
+      addPostil: { icon: 'commenting', title: '添加批注' },
+      removePostil: { icon: 'comment-o', title: '移除批注' }
     }
   }
 };
