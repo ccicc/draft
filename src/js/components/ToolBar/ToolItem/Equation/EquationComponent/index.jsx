@@ -1,5 +1,3 @@
-/* eslint-disable */ 
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -11,30 +9,40 @@ import {
 import EquationInput from './EquationInput';
 
 export default class EquationComponent extends React.Component {
+  static propTypes = {
+    onAddEquation: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      isVisible: false
-    }
+      isVisible: false,
+      equationData: ''
+    };
   }
 
   onHandleClick = () => {
     const { isVisible } = this.state;
     this.setState({
       isVisible: !isVisible
-    })
+    });
   }
 
   onHandleVisibleChange = (visible) => {
     this.setState({
       isVisible: visible
-    })
+    });
   }
 
-  onHandleConfirm = () => {
+  onHandleConfirm = (err, changeFields) => {
+    const { onAddEquation } = this.props;
+    if (err) return false;
     this.setState({
-      isVisible: false
+      isVisible: false,
+      equationData: changeFields.customEquation
     });
+
+    setTimeout(() => onAddEquation(this.state.equationData), 0);
   }
 
   onHandleCancel = () => {
@@ -48,7 +56,7 @@ export default class EquationComponent extends React.Component {
 
     const content = (
       <div style={{ width: '250px' }}>
-        <EquationInput 
+        <EquationInput
           onHandleConfirm={this.onHandleConfirm}
           onHandleCancel={this.onHandleCancel}
         />
@@ -70,11 +78,12 @@ export default class EquationComponent extends React.Component {
           onClick={this.onHandleClick}
         >
           <i className={classnames({
-            'fa fa-etsy fa-lg':true,
-            iconFont:true
-          })}/>
+            'fa fa-etsy fa-lg': true,
+            iconFont: true
+          })}
+          />
         </Button>
       </Popover>
-    )
+    );
   }
 }

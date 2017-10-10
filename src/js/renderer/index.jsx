@@ -1,4 +1,5 @@
 import ImageComponent from './Image';
+import EquationComponent from './Equation';
 
 const getBlockRenderFunc = (options) => (contentBlock) => {
   const type = contentBlock.getType();
@@ -9,6 +10,14 @@ const getBlockRenderFunc = (options) => (contentBlock) => {
     if (entity && entity.getType() === 'IMAGE') {
       return {
         component: ImageComponent,
+        editable: false,
+        props: {
+          options
+        }
+      };
+    } else if (entity && entity.getType() === 'EQUATION') {
+      return {
+        component: EquationComponent,
         editable: false,
         props: {
           options

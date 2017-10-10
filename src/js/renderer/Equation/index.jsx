@@ -4,12 +4,13 @@ import {
   Button
 } from 'antd';
 import { EditorState } from 'draft-js';
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import katex from 'katex';
 
 import styles from './index.less';
 
-export default class ImageComponent extends React.Component {
+export default class EquationComponent extends React.Component {
   static propTypes = {
     block: PropTypes.object.isRequired,
     contentState: PropTypes.object.isRequired,
@@ -20,14 +21,30 @@ export default class ImageComponent extends React.Component {
     super(props);
     this.state = {
       isVisible: false,
-      imageAlign: undefined
+      equationAlign: undefined
     };
+    this.timer = null;
+  }
+
+  componentDidMount() {
+    this.renderEquation();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.block !== this.props.block) {
+      this.renderEquation();
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+    this.timer = null;
   }
 
   onHandleClick = () => {
-    this.setState({
-      isVisible: true
-    });
+    this.setState(nextState => ({
+      isVisible: !nextState.isVisible
+    }));
   }
 
   onHandleVisibleChange = (visible) => {
@@ -62,21 +79,38 @@ export default class ImageComponent extends React.Component {
     const editorState = getEditorState();
     const entityKey = block.getEntityAt(0);
     contentState.mergeEntityData(
-      entityKey, {
-        imageAlign: value
-      }
+      entityKey,
+      { equationAlign: value }
     );
+
     onEditorStateChange(EditorState.push(editorState, contentState, 'change-block-data'));
     this.setState({
-      imageAlign: value
+      equationAlign: value
     });
+  }
+
+  renderEquation = () => {
+    const { block, contentState } = this.props;
+    const entity = contentState.getEntity(block.getEntityAt(0));
+    const { equationData } = entity.getData();
+
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    this.timer = setTimeout(() => {
+      katex.render(
+        equationData,
+        this.equationContainer
+      );
+    }, 0);
   }
 
   render() {
     const { isVisible } = this.state;
     const { block, contentState } = this.props;
     const entity = contentState.getEntity(block.getEntityAt(0));
-    const { imageUrl, imageAlt, imageWidth, imageHeight, imageAlign } = entity.getData();
+    const { equationAlign } = entity.getData();
 
     const content = (
       <Button.Group>
@@ -121,31 +155,27 @@ export default class ImageComponent extends React.Component {
     return (
       <span
         className={classnames({
-          [styles.imageWrapper]: true,
-          [styles.imageAlignLeft]: imageAlign === 'left',
-          [styles.imageAlignCenter]: !imageAlign || imageAlign === 'center',
-          [styles.imageAlignRight]: imageAlign === 'right',
-          [styles.imageEncircleLeft]: imageAlign === 'encircleLeft',
-          [styles.imageEncircleRight]: imageAlign === 'encircleRight'
+          [styles.equationAlignWrapper]: true,
+          [styles.equationAlignLeft]: equationAlign === 'left',
+          [styles.equationAlignCenter]: !equationAlign || equationAlign === 'center',
+          [styles.equationAlignRight]: equationAlign === 'right',
+          [styles.equationEncircleLeft]: equationAlign === 'encircleLeft',
+          [styles.equationEncircleRight]: equationAlign === 'encircleRight'
         })}
       >
         <Popover
-          content={content}
           placement="bottom"
+          content={content}
           trigger="click"
-          visible={isVisible}
           onVisibleChange={this.onHandleVisibleChange}
         >
-          <img
+          <span
             className={classnames({
-              [styles.image]: isVisible
+              [styles.equation]: true,
+              [styles.equationAction]: isVisible
             })}
-            src={imageUrl}
-            alt={imageAlt}
-            style={{
-              width: `${imageWidth}px`,
-              height: `${imageHeight}px`
-            }}
+            ref={element => this.equationContainer = element}
+            onClick={this.onHandleClick}
           />
         </Popover>
       </span>

@@ -1,37 +1,44 @@
-.imageWrapper{
+.equationAlignWrapper{
   display: flex;
   cursor: pointer;
   z-index: 100;
 }
 
-.imageAlignLeft{
+.equationAlignLeft{
   display: flex;
   justify-content: flex-start;
 }
 
-.imageAlignCenter{
+.equationAlignCenter{
   display: flex;
   justify-content: center;
 }
 
-.imageAlignRight{
+.equationAlignRight{
   display: flex;
   justify-content: flex-end;
 }
 
-.imageEncircleLeft{
-  position: relative;
+.equationEncircleLeft{
   float: left;
   margin: 10px 10px 10px 0;
 }
 
-.imageEncircleRight{
-  position: relative;
+.equationEncircleRight{
   float: right;
   margin: 10px 0 10px 10px;
 }
 
-.image{
+.equation{
+  display: inline-block;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  background: #fff;
   border-radius: 3px;
+}
+
+.equationAction{
   box-shadow: 0 0 3px #49a9ee;
 }

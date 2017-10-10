@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -10,9 +8,10 @@ import {
 
 const FormItem = Form.Item;
 class CustomEquation extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  static propTypes = {
+    onHandleConfirm: PropTypes.func.isRequired,
+    onHandleCancel: PropTypes.func.isRequired
+  };
 
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
@@ -31,7 +30,7 @@ class CustomEquation extends React.Component {
         </FormItem>
         <Button
           type="primary"
-          onClick={onHandleConfirm}
+          onClick={() => validateFields({ force: true }, onHandleConfirm)}
         >
           确定
         </Button>
@@ -42,7 +41,7 @@ class CustomEquation extends React.Component {
           取消
         </Button>
       </Form>
-    )
+    );
   }
 }
 
