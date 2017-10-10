@@ -25,3 +25,5 @@ export { default as Copy } from './Copy';
 export { default as Image } from './Image';
 
 export { default as Postil } from './Postil';
+
+export { default as Equation } from './Equation';

@@ -8,6 +8,7 @@ import {
   convertToRaw,
   CompositeDecorator
 } from 'draft-js';
+
 import {
   changeDepth,
   getCustomStyleMap,

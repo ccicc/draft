@@ -1,40 +1,39 @@
+/* eslint-disable */
+
 import React from 'react';
 import PropTypes from 'prop-types';
+import katex from 'katex';
 import { AtomicBlockUtils } from 'draft-js';
-import ImageComponent from './ImageComponent';
 
-export default class Image extends React.Component {
-  static propTypes = {
-    config: PropTypes.object.isRequired,
-    editorState: PropTypes.object.isRequired,
-    onEditorStateChange: PropTypes.func.isRequired,
-  };
+import EquationComponent from './EquationComponent';
 
-  onAddImage = (imageData) => {
+export default class Equation extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  onAddEquation = (equationData) => {
     const { editorState, onEditorStateChange } = this.props;
     const entityKey = editorState
       .getCurrentContent()
-      .createEntity('IMAGE', 'IMMUTABLE', imageData)
+      .createEntity('EQUATION', 'IMMUABLE', equationData)
       .getLastCreatedEntityKey();
-
+    
     const newState = AtomicBlockUtils.insertAtomicBlock(
       editorState,
       entityKey,
       ' '
     );
-
     if (newState) {
       onEditorStateChange(newState);
     }
   }
 
   render() {
-    const { config } = this.props;
     return (
-      <ImageComponent
-        config={config}
-        onAddImage={this.onAddImage}
+      <EquationComponent 
+        onAddEquation={this.onAddEquation}
       />
-    );
+    )
   }
 }

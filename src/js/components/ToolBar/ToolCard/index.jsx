@@ -19,7 +19,8 @@ import {
   Link,
   Copy,
   Image,
-  Postil
+  Postil,
+  Equation
 } from './../ToolItem';
 
 export default class ToolCard extends React.Component {
@@ -144,6 +145,13 @@ export default class ToolCard extends React.Component {
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
                 config={config}
+              />
+            </Col>
+            <Col span={1.5}>
+              <Equation
+                editorState={editorState}
+                config={config}
+                onEditorStateChange={onEditorStateChange}
               />
             </Col>
           </Row>
