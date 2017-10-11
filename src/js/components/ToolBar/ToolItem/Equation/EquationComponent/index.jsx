@@ -34,6 +34,16 @@ export default class EquationComponent extends React.Component {
   //   });
   // }
 
+  onExistingEquationConfirm = (equationData) => {
+    const { onAddEquation } = this.props;
+    this.setState({
+      isVisible: false,
+      equationData
+    });
+
+    setTimeout(() => onAddEquation(this.state.equationData), 0);
+  }
+
   onCustomEquationConfirm = (err, changeFields) => {
     const { onAddEquation } = this.props;
     if (err) return false;
@@ -58,6 +68,7 @@ export default class EquationComponent extends React.Component {
       <div style={{ width: '350px' }}>
         <EquationInput
           onCustomEquationConfirm={this.onCustomEquationConfirm}
+          onExistingEquationConfirm={this.onExistingEquationConfirm}
           onHandleCancel={this.onHandleCancel}
         />
       </div>

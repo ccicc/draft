@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import {
   Form,
@@ -8,7 +6,7 @@ import {
   Col,
   DatePicker
 } from 'antd';
-import PropTypes from 'prop-types';
+import styles from './index.less';
 
 const FormItem = Form.Item;
 
@@ -20,7 +18,7 @@ class Menstrual extends React.Component {
       { label: '经期(天)', field: 'menstrualPeriod' },
       { label: '周期(天)', field: 'menstrualCycle' },
     ];
-    let children = [];
+    const children = [];
     fields.forEach((item, index) => {
       children.push(
         <Col
@@ -31,7 +29,9 @@ class Menstrual extends React.Component {
             label={item.label}
           >
             {
-              getFieldDecorator(`${item.field}`)(
+              getFieldDecorator(`${item.field}`, {
+                rules: [{ required: true, message: '该字段不能为空' }]
+              })(
                 <Input size="small" />
               )
             }
@@ -43,9 +43,9 @@ class Menstrual extends React.Component {
   }
 
   render() {
-    const { getFieldDecorator, validateFields } = this.props.form;
+    const { getFieldDecorator } = this.props.form;
     return (
-      <Form>
+      <Form className={styles.root}>
         <Row gutter={20}>
           {this.getFields()}
           <Col
@@ -66,7 +66,7 @@ class Menstrual extends React.Component {
           </Col>
         </Row>
       </Form>
-    )
+    );
   }
 }
 
@@ -85,7 +85,7 @@ const WrapperMenstrual = Form.create({
       lastMenstrual: {
         value: props.lastMenstrual.value
       }
-    }
+    };
   },
   onFieldsChange(props, fields) {
     props.onChange(fields);

@@ -1,15 +1,8 @@
-/* eslint-disable */
-
 import React from 'react';
 import katex from 'katex';
 import moment from 'moment';
-import PropTypes from 'prop-types';
 import {
-  Form,
-  Row,
-  Col,
   Collapse,
-  Input,
   Button
 } from 'antd';
 import 'moment/locale/zh-cn';
@@ -20,7 +13,6 @@ moment.locale('zh-cn');
 
 const Panel = Collapse.Panel;
 export default class ExistingEquation extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -46,14 +38,14 @@ export default class ExistingEquation extends React.Component {
   }
 
   onEquationDataChange = () => {
-    const { 
-      menarcheAge, 
-      menstrualPeriod, 
-      menstrualCycle, 
+    const {
+      menarcheAge,
+      menstrualPeriod,
+      menstrualCycle,
       lastMenstrual,
     } = this.state.menstrualData;
 
-    const equationData =`
+    const equationData = `
       ${menarcheAge.value || ''}
       \\dfrac{${menstrualPeriod.value || ''}}{${menstrualCycle.value || ''}}
       ${moment(lastMenstrual.value).format('YYYY-MM-DD') || ''}
@@ -62,10 +54,22 @@ export default class ExistingEquation extends React.Component {
       equationData,
       this.equationContainer
     );
+    this.setState({
+      equationData
+    });
+  }
+
+  onHandleConfirm = () => {
+    const { onExistingEquationConfirm } = this.props;
+    const { equationData } = this.state;
+
+    if (equationData) {
+      onExistingEquationConfirm(equationData);
+    }
   }
 
   render() {
-    const { onHandleConfirm, onHandleCancel } = this.props;
+    const { onHandleCancel } = this.props;
     const { menstrualData } = this.state;
     return (
       <div>
@@ -73,7 +77,7 @@ export default class ExistingEquation extends React.Component {
           bordered={false}
         >
           <Panel header="月经史公式" key="1">
-            <WrapperMenstrual 
+            <WrapperMenstrual
               {...menstrualData}
               onChange={this.onMenstrualDataChange}
             />
@@ -81,11 +85,21 @@ export default class ExistingEquation extends React.Component {
         </Collapse>
         <div
           ref={element => this.equationContainer = element}
-          className={styles.equationPreview} 
-        ></div>
-        <Button type="primary">确定</Button>
-        <Button style={{ marginLeft: '10px' }}>取消</Button>
+          className={styles.equationPreview}
+        />
+        <Button
+          type="primary"
+          onClick={this.onHandleConfirm}
+        >
+          确定
+        </Button>
+        <Button
+          style={{ marginLeft: '10px' }}
+          onClick={onHandleCancel}
+        >
+          取消
+        </Button>
       </div>
-    )
+    );
   }
 }
