@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import {
   Tooltip
@@ -17,7 +15,7 @@ class Postil extends React.Component {
 
   render() {
     const { entityKey, contentState, children } = this.props;
-    const { entityText, postilText } = contentState.getEntity(entityKey).getData();
+    const { postilText } = contentState.getEntity(entityKey).getData();
 
     return (
       <Tooltip
@@ -26,7 +24,7 @@ class Postil extends React.Component {
       >
         <span className={styles.text}>{children}</span>
       </Tooltip>
-    )
+    );
   }
 }
 
@@ -37,7 +35,7 @@ function findPostilEntities(contentBlock, callback, contentState) {
       return (
         entityKey !== null &&
         contentState.getEntity(entityKey).getType() === 'POSTIL'
-      )
+      );
     },
     callback
   );

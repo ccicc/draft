@@ -9,13 +9,13 @@ import {
 const FormItem = Form.Item;
 class CustomEquation extends React.Component {
   static propTypes = {
-    onHandleConfirm: PropTypes.func.isRequired,
+    onCustomEquationConfirm: PropTypes.func.isRequired,
     onHandleCancel: PropTypes.func.isRequired
   };
 
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
-    const { onHandleConfirm, onHandleCancel } = this.props;
+    const { onCustomEquationConfirm, onHandleCancel } = this.props;
 
     return (
       <Form>
@@ -30,7 +30,7 @@ class CustomEquation extends React.Component {
         </FormItem>
         <Button
           type="primary"
-          onClick={() => validateFields({ force: true }, onHandleConfirm)}
+          onClick={() => validateFields({ force: true }, onCustomEquationConfirm)}
         >
           确定
         </Button>

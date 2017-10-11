@@ -28,13 +28,13 @@ export default class EquationComponent extends React.Component {
     });
   }
 
-  onHandleVisibleChange = (visible) => {
-    this.setState({
-      isVisible: visible
-    });
-  }
+  // onHandleVisibleChange = (visible) => {
+  //   this.setState({
+  //     isVisible: visible
+  //   });
+  // }
 
-  onHandleConfirm = (err, changeFields) => {
+  onCustomEquationConfirm = (err, changeFields) => {
     const { onAddEquation } = this.props;
     if (err) return false;
     this.setState({
@@ -55,9 +55,9 @@ export default class EquationComponent extends React.Component {
     const { isVisible } = this.state;
 
     const content = (
-      <div style={{ width: '250px' }}>
+      <div style={{ width: '350px' }}>
         <EquationInput
-          onHandleConfirm={this.onHandleConfirm}
+          onCustomEquationConfirm={this.onCustomEquationConfirm}
           onHandleCancel={this.onHandleCancel}
         />
       </div>
@@ -70,7 +70,7 @@ export default class EquationComponent extends React.Component {
         content={content}
         visible={isVisible}
         trigger="click"
-        onVisibleChange={this.onHandleVisibleChange}
+        // onVisibleChange={this.onHandleVisibleChange}
       >
         <Button
           title="插入公式"

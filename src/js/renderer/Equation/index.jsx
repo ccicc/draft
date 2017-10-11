@@ -1,12 +1,12 @@
 import React from 'react';
+import katex from 'katex';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import { EditorState, Modifier, SelectionState } from 'draft-js'; // eslint-disable-line
 import {
   Popover,
   Button
 } from 'antd';
-import { EditorState } from 'draft-js';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
-import katex from 'katex';
 
 import styles from './index.less';
 
@@ -21,7 +21,8 @@ export default class EquationComponent extends React.Component {
     super(props);
     this.state = {
       isVisible: false,
-      equationAlign: undefined
+      equationAlign: undefined,
+      removeEquation: false
     };
     this.timer = null;
   }
@@ -88,6 +89,32 @@ export default class EquationComponent extends React.Component {
       equationAlign: value
     });
   }
+
+  // removeEquation = () => {
+  //   const { block, contentState } = this.props;
+  //   const { getEditorState, onEditorStateChange } = this.props.blockProps.options;
+
+  //   const editorState = getEditorState();
+  //   const entityKey = block.getEntityAt(0);
+  //   const blockKey = block.getKey();
+  //   const targetRange = new SelectionState({
+  //     anchorKey: blockKey,
+  //     anchorOffset: 0,
+  //     focusKey: blockKey,
+  //     focusOffset: block.getLength()
+  //   });
+
+  //   const newContentState = Modifier.removeRange(
+  //     contentState,
+  //     targetRange,
+  //     'backward'
+  //   );
+
+  //   const newState = EditorState.push(editorState, newContentState, 'remove-range');
+  //   if (newState) {
+  //     onEditorStateChange(newState);
+  //   }
+  // }
 
   renderEquation = () => {
     const { block, contentState } = this.props;
