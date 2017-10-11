@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AtomicBlockUtils } from 'draft-js';
+import { Modifier, EditorState } from 'draft-js';
 
 import EquationComponent from './EquationComponent';
 
@@ -12,18 +12,38 @@ export default class Equation extends React.Component {
 
   onAddEquation = (equationData) => {
     const { editorState, onEditorStateChange } = this.props;
+    let selectionState = editorState.getSelection();
     const entityKey = editorState
       .getCurrentContent()
-      .createEntity('EQUATION', 'IMMUTABLE', { equationData })
+      .createEntity('EQUATION', 'MUTABLE', { equationData })
       .getLastCreatedEntityKey();
-    const newState = AtomicBlockUtils.insertAtomicBlock(
-      editorState,
-      entityKey,
-      ' '
+
+    let contentState = Modifier.replaceText(
+      editorState.getCurrentContent(),
+      selectionState,
+      ' ',
+      editorState.getCurrentInlineStyle(),
+      entityKey
     );
-    if (newState) {
-      onEditorStateChange(newState);
-    }
+
+    let newEditorState = EditorState.push(editorState, contentState, 'insert-characters');
+
+    // 插入空格
+    selectionState = newEditorState.getSelection();
+    selectionState = selectionState.merge({
+      anchorOffset: selectionState.getAnchorOffset(),
+      focusOffset: selectionState.getFocusOffset()
+    });
+
+    newEditorState = EditorState.acceptSelection(newEditorState, selectionState);
+    contentState = Modifier.insertText(
+      newEditorState.getCurrentContent(),
+      selectionState,
+      ' ',
+      newEditorState.getCurrentInlineStyle(),
+      undefined
+    );
+    onEditorStateChange(EditorState.push(newEditorState, contentState, 'insert-characters'));
   }
 
   render() {

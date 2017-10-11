@@ -5,6 +5,8 @@ import {
   Input,
   Button
 } from 'antd';
+import katex from 'katex';
+import styles from './index.less';
 
 const FormItem = Form.Item;
 class CustomEquation extends React.Component {
@@ -12,6 +14,14 @@ class CustomEquation extends React.Component {
     onCustomEquationConfirm: PropTypes.func.isRequired,
     onHandleCancel: PropTypes.func.isRequired
   };
+
+  onPreviewEquation = (e) => {
+    const equationData = `${e.target.value}`;
+    katex.render(
+      equationData,
+      this.equationContainer
+    );
+  }
 
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
@@ -24,10 +34,17 @@ class CustomEquation extends React.Component {
             getFieldDecorator('customEquation', {
               rules: [{ required: true, message: '输入的公式不能为空' }]
             })(
-              <Input.TextArea rows={4} />
+              <Input.TextArea
+                rows={4}
+                onChange={this.onPreviewEquation}
+              />
             )
           }
         </FormItem>
+        <div
+          ref={element => this.equationContainer = element}
+          className={styles.equationPreview}
+        />
         <Button
           type="primary"
           onClick={() => validateFields({ force: true }, onCustomEquationConfirm)}

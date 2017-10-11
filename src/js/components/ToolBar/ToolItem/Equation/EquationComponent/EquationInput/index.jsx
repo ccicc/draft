@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Tabs
 } from 'antd';
@@ -8,6 +9,12 @@ import ExistingEquation from './ExistingEquation';
 
 const TabPane = Tabs.TabPane;
 export default class EquationInput extends React.Component {
+  static propTypes = {
+    onCustomEquationConfirm: PropTypes.func.isRequired,
+    onExistingEquationConfirm: PropTypes.func.isRequired,
+    onHandleCancel: PropTypes.func.isRequired
+  };
+
   render() {
     const { onCustomEquationConfirm, onExistingEquationConfirm, onHandleCancel } = this.props;
     return (

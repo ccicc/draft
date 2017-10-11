@@ -90,32 +90,6 @@ export default class EquationComponent extends React.Component {
     });
   }
 
-  // removeEquation = () => {
-  //   const { block, contentState } = this.props;
-  //   const { getEditorState, onEditorStateChange } = this.props.blockProps.options;
-
-  //   const editorState = getEditorState();
-  //   const entityKey = block.getEntityAt(0);
-  //   const blockKey = block.getKey();
-  //   const targetRange = new SelectionState({
-  //     anchorKey: blockKey,
-  //     anchorOffset: 0,
-  //     focusKey: blockKey,
-  //     focusOffset: block.getLength()
-  //   });
-
-  //   const newContentState = Modifier.removeRange(
-  //     contentState,
-  //     targetRange,
-  //     'backward'
-  //   );
-
-  //   const newState = EditorState.push(editorState, newContentState, 'remove-range');
-  //   if (newState) {
-  //     onEditorStateChange(newState);
-  //   }
-  // }
-
   renderEquation = () => {
     const { block, contentState } = this.props;
     const entity = contentState.getEntity(block.getEntityAt(0));

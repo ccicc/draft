@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import katex from 'katex';
 import moment from 'moment';
 import {
@@ -13,6 +14,11 @@ moment.locale('zh-cn');
 
 const Panel = Collapse.Panel;
 export default class ExistingEquation extends React.Component {
+  static propTypes = {
+    onExistingEquationConfirm: PropTypes.func.isRequired,
+    onHandleCancel: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
