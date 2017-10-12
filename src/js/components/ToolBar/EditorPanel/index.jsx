@@ -23,7 +23,7 @@ import {
   Equation
 } from './../ToolItem';
 
-export default class ToolCard extends React.Component {
+export default class EditorPanel extends React.Component {
   static propTypes = {
     config: PropTypes.object.isRequired,
     editorState: PropTypes.object.isRequired,
