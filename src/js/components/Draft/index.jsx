@@ -30,7 +30,8 @@ import Toolbar from './../ToolBar';
 import {
   linkDecorator,
   postilDecorator,
-  equationDecorator
+  equationDecorator,
+  strikeThroughDecorator
 } from './../../decorators';
 
 // 自定义块级组件导入
@@ -82,7 +83,12 @@ export default class Draft extends React.Component {
   getEditorState = () => this.state.editorState;
 
   getCompositeDecorator = () => {
-    const decorators = [linkDecorator(), postilDecorator(), equationDecorator()];
+    const decorators = [
+      linkDecorator(),
+      postilDecorator(),
+      equationDecorator(),
+      strikeThroughDecorator()
+    ];
     return new CompositeDecorator(decorators);
   }
 

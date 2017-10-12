@@ -1,0 +1,26 @@
+.root{
+  position: relative;
+  opacity: 1;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.45);
+  :before{
+    content: '';
+    position: absolute;
+    display: block;
+    top: 30%;
+    left: -2px;
+    width: calc(100% + 3px);
+    height: 1px;
+    background: #c30;
+  }
+  :after{
+    content: '';
+    position: absolute;
+    display: block;
+    bottom: 30%;
+    left: -2px;
+    width: calc(100% + 3px);
+    height: 1px;
+    background: #c30;
+  }
+}

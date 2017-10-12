@@ -18,11 +18,11 @@ export default {
     options: [
       { type: 'bold', icon: 'bold', title: '字体加粗' },
       { type: 'italic', icon: 'italic', title: '斜体' },
-      { type: 'underline', icon: 'underline', title: '下划线' },
-      { type: 'strikethrough', icon: 'strikethrough', title: '删除线' },
+      // { type: 'strikethrough', icon: 'strikethrough', title: '删除线' },
       { type: 'subscript', icon: 'subscript', title: '下标' },
       { type: 'superscript', icon: 'superscript', title: '上标' },
-      { type: 'code', icon: 'code', title: '等宽字形' }
+      { type: 'code', icon: 'code', title: '等宽字形' },
+      { type: 'underline', icon: 'underline', title: '下划线' },
     ]
   },
   block: {

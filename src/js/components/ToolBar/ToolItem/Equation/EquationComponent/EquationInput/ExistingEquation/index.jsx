@@ -6,11 +6,9 @@ import {
   Collapse,
   Button
 } from 'antd';
-import 'moment/locale/zh-cn';
+
 import WrapperMenstrual from './Menstrual';
 import styles from './index.less';
-
-moment.locale('zh-cn');
 
 const Panel = Collapse.Panel;
 export default class ExistingEquation extends React.Component {
@@ -56,6 +54,7 @@ export default class ExistingEquation extends React.Component {
       \\dfrac{${menstrualPeriod.value || ''}}{${menstrualCycle.value || ''}}
       ${moment(lastMenstrual.value).format('YYYY-MM-DD') || ''}
     `;
+
     katex.render(
       equationData,
       this.equationContainer

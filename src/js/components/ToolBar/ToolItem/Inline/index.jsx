@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import { getSelectionInlineStyle } from 'draftjs-utils';
 import { RichUtils, EditorState, Modifier } from 'draft-js';
 import CustomBtn from './../CustomBtn';
+import CustomStrikeThrough from './CustomStrikeThrough';
 
 export default class InlineTool extends React.Component {
   static propTypes = {
@@ -95,7 +96,7 @@ export default class InlineTool extends React.Component {
 
   render() {
     const { currentStyles } = this.state;
-    const { config } = this.props;
+    const { config, editorState, onEditorStateChange } = this.props;
     const options = config.inline.options;
 
     return (
@@ -120,6 +121,10 @@ export default class InlineTool extends React.Component {
             </CustomBtn>
           ))
         }
+        <CustomStrikeThrough
+          editorState={editorState}
+          onEditorStateChange={onEditorStateChange}
+        />
       </Button.Group>
     );
   }

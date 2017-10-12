@@ -1,11 +1,11 @@
 import React from 'react';
-
 import { Layout } from 'antd';
-
+import moment from 'moment';
+import 'moment/locale/zh-cn';
 import { Draft } from './../../components';
-
 import './index.less';
 
+moment.locale('zh-cn');
 const { Header, Content } = Layout;
 
 const App = () => {
