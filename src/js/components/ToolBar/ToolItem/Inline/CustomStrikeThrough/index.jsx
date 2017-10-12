@@ -120,9 +120,17 @@ export default class CustomStrikeThrough extends React.Component {
 
   render() {
     const { currentEntity } = this.state;
+    const { editorState } = this.props;
+    const contentState = editorState.getCurrentContent();
+    let type; // eslint-disable-line
+    if (currentEntity && contentState.getEntity(currentEntity).getType() === 'CUSTOMTHROUGH') {
+      type = 'primary';
+    } else {
+      type = '';
+    }
     return (
       <Button
-        type={currentEntity ? 'primary' : ''}
+        type={type}
         size="small"
         onClick={this.onChange}
       >
