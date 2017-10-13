@@ -40,7 +40,8 @@ module.exports = {
     ],
     alias: {
       styles: path.resolve(__dirname, './src/style'),
-      app: path.resolve(__dirname, './src/js')
+      app: path.resolve(__dirname, './src/js'),
+      customUtils: path.resolve(__dirname, './src/js/customUtils')
     }
   },
 

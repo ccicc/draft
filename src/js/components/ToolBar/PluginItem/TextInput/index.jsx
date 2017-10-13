@@ -1,8 +1,5 @@
-/* eslint-disable */
-
 import React from 'react';
-import PropTypes from 'prop-types';
-import { EditorState, Modifier } from 'draft-js'
+import { EditorState, Modifier } from 'draft-js';
 import {
   getSelectionText,
   getSelectionEntity,
@@ -38,6 +35,7 @@ export default class TextInput extends React.Component {
 
   onHandleChange = (value, textInput) => {
     if (value === 'textInput') {
+      console.log('onHnadleChange', textInput);
       this.addTextInput(textInput);
     } else {
       this.removeTextInput();
@@ -50,18 +48,16 @@ export default class TextInput extends React.Component {
     const contentState = editorState.getCurrentContent();
     const currentValues = {};
 
-    if (currentEntity && contentState.getEntity(currentEntity).getType() === 'TextInput') {
+    if (currentEntity && contentState.getEntity(currentEntity).getType() === 'TEXTINPUT') {
+      console.log(currentEntity);
       currentValues.textInput = {};
-      const entityRange = getEntityRange(editorState, currentEntity);
       currentValues.textInput.controlID = contentState.getEntity(currentEntity).getData().controlID;
-      currentValues.textInput.controlName = contentState.getEntity(currentEntity).getData().controlName;
-      currentValues.textInput.defaultVal = contentState.getEntity(currentEntity).getData().defaultVal;
-      currentValues.textInput.describeVal = contentState.getEntity(currentEntity).getData().describeVal;
+      currentValues.textInput.controlName = contentState.getEntity(currentEntity).getData().controlName; // eslint-disable-line
+      currentValues.textInput.defaultVal = contentState.getEntity(currentEntity).getData().defaultVal; // eslint-disable-line
+      currentValues.textInput.describeVal = contentState.getEntity(currentEntity).getData().describeVal; // eslint-disable-line
       currentValues.textInput.dataType = contentState.getEntity(currentEntity).getData().dataType;
-      currentValues.textInput.fontColor = contentState.getEntity(currentEntity).getData().fontColor;
-      currentValues.TextInput.tags = contentState.getEntity(currentEntity).getData().tages;
+      currentValues.textInput.tags = contentState.getEntity(currentEntity).getData().tages;
     }
-
     currentValues.selectionText = getSelectionText(editorState);
     return currentValues;
   }
@@ -81,16 +77,15 @@ export default class TextInput extends React.Component {
     const entityKey = editorState
       .getCurrentContent()
       .createEntity('TEXTINPUT', 'IMMUTABLE', {
-        controlID: textInput.controlID,
-        controlName: TextInput.controlName,
+        controlID: textInput.controlId,
+        controlName: textInput.controlName,
         defaultVal: textInput.defaultVal,
-        describeVal: TextInput.describeVal,
+        describeVal: textInput.describeVal,
         dataType: textInput.dataType,
-        fontColor: TextInput.fontColor,
         tags: textInput.tags
       })
       .getLastCreatedEntityKey();
-    const text = `${textInput.controlName}: [${textInput.defaultVal}]`;
+    const text = `${textInput.controlName}: [ ${textInput.defaultVal} ]`;
     let contentState = Modifier.replaceText(
       editorState.getCurrentContent(),
       selectionState,
@@ -99,6 +94,8 @@ export default class TextInput extends React.Component {
       entityKey
     );
     let newEditorState = EditorState.push(editorState, contentState, 'insert-characters');
+
+    // 添加空格
     selectionState = newEditorState.getSelection();
     selectionState = selectionState.merge({
       anchorOffset: selectionState.getAnchorOffset() + text.length,
@@ -117,7 +114,8 @@ export default class TextInput extends React.Component {
 
   removeTextInput = () => {
     const { editorState, onEditorStateChange } = this.props;
-    const { currentEntity } = this.props;
+    const { currentEntity } = this.state;
+    let selectionState = editorState.getSelection();
 
     if (currentEntity) {
       const entityRange = getEntityRange(editorState, currentEntity);
@@ -129,18 +127,18 @@ export default class TextInput extends React.Component {
     const contentState = Modifier.replaceText(
       editorState.getCurrentContent(),
       selectionState,
-      entityRange.text,
-      editorState.getCurrentInlineStyle(),
-      undefined
+      ' ',
+      editorState.getCurrentInlineStyle()
     );
-    const newEditorState = EditorState.push(editorState, contentState, 'insert-characters');
+
+    const newEditorState = EditorState.push(editorState, contentState, 'insert-character');
     onEditorStateChange(newEditorState);
   }
 
   render() {
     const { selectionText, textInput } = this.getCurrentValues();
     const { currentEntity } = this.state;
-    const { config } = this.props;;
+    const { config } = this.props;
 
     return (
       <TextInputComponent
@@ -150,6 +148,6 @@ export default class TextInput extends React.Component {
         selectionText={selectionText}
         onChange={this.onHandleChange}
       />
-    )
+    );
   }
 }

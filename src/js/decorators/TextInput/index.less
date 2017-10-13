@@ -1,0 +1,40 @@
+.root {
+  display: inline-block;
+}
+
+.controlName{
+  font-weight: bold;
+  padding-right: 5px;
+  cursor: text;
+}
+
+.controlVal{
+  position:relative;
+  padding-left: 5px;
+  color: #333;
+  cursor: pointer;
+}
+
+.rim{
+  font-style: normal;
+  color: #00f;
+}
+
+.popupName{
+  padding-right: 10px;
+  font-size: 15px;
+  color: #666;
+}
+
+.editorBtn{
+  padding-left: 10px;
+  color: #093;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.deleteBtn{
+  &:extend(.editorBtn);
+  color: #f00;
+  padding-left: 10px;
+}

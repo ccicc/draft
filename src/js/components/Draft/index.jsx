@@ -31,7 +31,8 @@ import {
   linkDecorator,
   postilDecorator,
   equationDecorator,
-  strikeThroughDecorator
+  strikeThroughDecorator,
+  textInputDecorator
 } from './../../decorators';
 
 // 自定义块级组件导入
@@ -87,7 +88,8 @@ export default class Draft extends React.Component {
       linkDecorator(),
       postilDecorator(),
       equationDecorator(),
-      strikeThroughDecorator()
+      strikeThroughDecorator(),
+      textInputDecorator()
     ];
     return new CompositeDecorator(decorators);
   }

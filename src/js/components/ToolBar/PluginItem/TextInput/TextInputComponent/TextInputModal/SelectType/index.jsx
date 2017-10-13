@@ -10,7 +10,6 @@ export default class SelectType extends React.Component {
   }
 
   onHandleChange = (typeVal) => {
-    this.props.onSelectType(typeVal);
     const { checkRules } = this.state;
     switch (typeVal) {
       case 'string':

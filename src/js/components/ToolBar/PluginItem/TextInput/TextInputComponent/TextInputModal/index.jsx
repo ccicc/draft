@@ -11,6 +11,7 @@ import {
   Select
 } from 'antd';
 import SelectType from './SelectType';
+import ColorPicker from './../../../../../Common/ColorPicker';
 
 const FormItem = Form.Item;
 
@@ -18,22 +19,24 @@ class TextInputModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rules: []
+      dataTypeRules: []
     }
   }
 
   // 动态获取校验规则
-  getRules = (rules) => {
-    this.setState({rules});
+  getRules = (dataTypeRules) => {
+    this.setState({dataTypeRules});
   }
 
   render() {
-    const { 
+    const {
+      config,
       isVisible,
+      entityColor,
       onModalConfirm,
-      onModalCancel 
+      onModalCancel,
     } = this.props;
-
+    const { dataTypeRules } = this.state;
     const { getFieldDecorator, validateFields } = this.props.form;
 
     const footer = [
@@ -67,11 +70,11 @@ class TextInputModal extends React.Component {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="控件名称">
+              <FormItem label="控件名称" >
                 {
                   getFieldDecorator('controlName', {
-                    rules: [{ required: true, message: '必须填写控件值' }]
-                  })(<Input placement="请输入控件名称" />)
+                    rules: [{ required: true, message: '必须填写控件值' }],
+                  })(<Input placeholder="请输入控件名称"/>)
                 }
               </FormItem>
             </Col>
@@ -95,7 +98,7 @@ class TextInputModal extends React.Component {
             </Col>
             <Col span={12}>
               <FormItem label="控件描述">
-                { getFieldDecorator('describeVal')(<Input placement="请输入控件描述" />) }
+                { getFieldDecorator('describeVal')(<Input placeholder="请输入与控件描述信息"/>) }
               </FormItem>
             </Col>
           </Row>
@@ -116,7 +119,9 @@ class TextInputModal extends React.Component {
             <Col span={12}>
               <FormItem label="控件值">
                 {
-                  getFieldDecorator('defaultVal')(<Input placement="请输入控件值"/>)
+                  getFieldDecorator('defaultVal', {
+                    rules: dataTypeRules
+                  })(<Input placeholder="请输入控件值" />)
                 }
               </FormItem>
             </Col>
@@ -128,7 +133,7 @@ class TextInputModal extends React.Component {
 }
 
 export default Form.create({
-  mapPropsTofields(props) {
+  mapPropsToFields(props) {
     return {
       controlId: {
         value: props.controlId
@@ -144,9 +149,6 @@ export default Form.create({
       },
       dataType: {
         value: props.dataType
-      },
-      fontColor: {
-        value: props.fontColor
       }
     }
   }
