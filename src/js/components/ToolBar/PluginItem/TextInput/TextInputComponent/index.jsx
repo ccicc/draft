@@ -1,10 +1,8 @@
-/* eslint-disable */
-
 import React from 'react';
 import {
   Button
 } from 'antd';
-import eventProxy from 'customUtils/eventProxy';
+import eventProxy from 'customUtils/eventProxy';  //eslint-disable-line
 import TextInputModal from './TextInputModal';
 
 export default class TextInputComponent extends React.Component {
@@ -17,11 +15,13 @@ export default class TextInputComponent extends React.Component {
         defaultVal: '',
         describeVal: '',
         dataType: '',
-        tags: []
+        tags: [],
+        isRequired: true,
+        isReadOnly: false
       },
       selectionText: '',
       isVisible: false
-    }
+    };
   }
 
   componentDidMount() {
@@ -29,7 +29,8 @@ export default class TextInputComponent extends React.Component {
     eventProxy.on('textInputDelete', this.onRemoveTextInput);
   }
 
-  componentWillUnMount() {
+
+  componentWillUnMount() {    // eslint-disable-line
     eventProxy.off('textInputEditor');
     eventProxy.off('textInputDelete');
   }
@@ -44,8 +45,10 @@ export default class TextInputComponent extends React.Component {
         controlName: textInput && textInput.controlName,
         defaultVal: (textInput && textInput.defaultVal) || selectionText,
         describeVal: textInput && textInput.describeVal,
-        dataType: textInput && textInput.dataType || '普通文本',
-        tags: textInput && textInput.tags
+        dataType: (textInput && textInput.dataType) || '普通文本',
+        tags: textInput && textInput.tags,
+        isRequired: (textInput && textInput.isRequired) || true,
+        isReadOnly: (textInput && textInput.isReadOnly) || false
       }
     });
   }
@@ -95,6 +98,6 @@ export default class TextInputComponent extends React.Component {
           onModalCancel={this.onModalCancel}
         />
       </div>
-    )
+    );
   }
 }

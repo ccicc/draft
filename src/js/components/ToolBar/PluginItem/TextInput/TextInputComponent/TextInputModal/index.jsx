@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import {
   Modal,
@@ -8,10 +6,12 @@ import {
   Col,
   Form,
   Input,
-  Select
+  Select,
+  Switch
 } from 'antd';
 import SelectType from './SelectType';
-import ColorPicker from './../../../../../Common/ColorPicker';
+import styles from './index.less';
+// import ColorPicker from './../../../../../Common/ColorPicker';
 
 const FormItem = Form.Item;
 
@@ -20,19 +20,27 @@ class TextInputModal extends React.Component {
     super(props);
     this.state = {
       dataTypeRules: []
-    }
+    };
   }
 
   // 动态获取校验规则
   getRules = (dataTypeRules) => {
-    this.setState({dataTypeRules});
+    const { isRequired } = this.props;
+    if (isRequired) {
+      dataTypeRules.push({
+        required: true, message: '控件值必须填写'
+      });
+      this.setState({ dataTypeRules });
+    } else {
+      this.setState({ dataTypeRules });
+    }
   }
 
   render() {
     const {
-      config,
+      // config,
       isVisible,
-      entityColor,
+      // entityColor,
       onModalConfirm,
       onModalCancel,
     } = this.props;
@@ -61,12 +69,13 @@ class TextInputModal extends React.Component {
         visible={isVisible}
         onCancel={onModalCancel}
         footer={footer}
+        className={styles.root}
       >
         <Form>
           <Row gutter={15}>
             <Col span={12}>
               <FormItem label="控件ID">
-                { getFieldDecorator('controlId')(<Input disabled/>) }
+                { getFieldDecorator('controlId')(<Input size="default" disabled />) }
               </FormItem>
             </Col>
             <Col span={12}>
@@ -74,7 +83,7 @@ class TextInputModal extends React.Component {
                 {
                   getFieldDecorator('controlName', {
                     rules: [{ required: true, message: '必须填写控件值' }],
-                  })(<Input placeholder="请输入控件名称"/>)
+                  })(<Input size="default" placeholder="请输入控件名称" />)
                 }
               </FormItem>
             </Col>
@@ -83,10 +92,11 @@ class TextInputModal extends React.Component {
             <Col span={12}>
               <FormItem label="标签">
                 {
-                  getFieldDecorator('tags',{
+                  getFieldDecorator('tags', {
                     valuePropName: 'defaultValue'
                   })(
                     <Select
+                      size="default"
                       allowClear
                       mode="tags"
                       tokenSeparator={[',']}
@@ -98,7 +108,7 @@ class TextInputModal extends React.Component {
             </Col>
             <Col span={12}>
               <FormItem label="控件描述">
-                { getFieldDecorator('describeVal')(<Input placeholder="请输入与控件描述信息"/>) }
+                { getFieldDecorator('describeVal')(<Input size="default" placeholder="请输入与控件描述信息" />) }
               </FormItem>
             </Col>
           </Row>
@@ -121,14 +131,38 @@ class TextInputModal extends React.Component {
                 {
                   getFieldDecorator('defaultVal', {
                     rules: dataTypeRules
-                  })(<Input placeholder="请输入控件值" />)
+                  })(<Input size="default" placeholder="请输入控件值" />)
+                }
+              </FormItem>
+            </Col>
+          </Row>
+          <Row gutter={15}>
+            <Col span={12}>
+              <FormItem label="是否必填">
+                {
+                  getFieldDecorator('isRequired', {
+                    valuePropName: 'defaultChecked'
+                  })(
+                    <Switch checkedChildren="是" unCheckedChildren="否" />
+                  )
+                }
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="是否只读">
+                {
+                  getFieldDecorator('isReadOnly', {
+                    valuePropName: 'defaultChecked'
+                  })(
+                    <Switch checkedChildren="是" unCheckedChildren="否" />
+                  )
                 }
               </FormItem>
             </Col>
           </Row>
         </Form>
       </Modal>
-    )
+    );
   }
 }
 
@@ -149,7 +183,13 @@ export default Form.create({
       },
       dataType: {
         value: props.dataType
+      },
+      isRequired: {
+        value: props.isRequired
+      },
+      isReadOnly: {
+        value: props.isReadOnly
       }
-    }
+    };
   }
 })(TextInputModal);

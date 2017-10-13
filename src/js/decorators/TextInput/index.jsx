@@ -1,9 +1,9 @@
-/* eslint-disable */ 
 import React from 'react';
 import {
-  Popover
+  Popover,
+  Popconfirm
 } from 'antd';
-import eventProxy from 'customUtils/eventProxy';
+import eventProxy from 'customUtils/eventProxy';  // eslint-disable-line
 import styles from './index.less';
 
 class TextInput extends React.Component {
@@ -44,11 +44,7 @@ class TextInput extends React.Component {
   render() {
     const { isVisible } = this.state;
     const { entityKey, contentState, children } = this.props;
-    const {
-      controlName,
-      defaultVal,
-      describeVal
-    } = contentState.getEntity(entityKey).getData();
+    const { controlName } = contentState.getEntity(entityKey).getData();
 
     const content = (
       <div>
@@ -61,13 +57,21 @@ class TextInput extends React.Component {
         >
           编 辑
         </span>
-        <span
-          className={styles.deleteBtn}
-          title="删除控件"
-          onClick={this.onDeleteClick}
+        <Popconfirm
+          placement="top"
+          title="确认删除该控件"
+          okText="确认"
+          cancelText="取消"
+          trigger="hover"
+          onConfirm={this.onDeleteClick}
         >
-          删 除
-        </span>
+          <span
+            className={styles.deleteBtn}
+            title="删除控件"
+          >
+            删 除
+          </span>
+        </Popconfirm>
       </div>
     );
 
@@ -94,7 +98,7 @@ class TextInput extends React.Component {
           <span onClick={this.onHandleClick}>{children}</span>
         </Popover>
       </span>
-    )
+    );
   }
 }
 

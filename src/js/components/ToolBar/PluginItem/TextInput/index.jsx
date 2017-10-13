@@ -51,12 +51,7 @@ export default class TextInput extends React.Component {
     if (currentEntity && contentState.getEntity(currentEntity).getType() === 'TEXTINPUT') {
       console.log(currentEntity);
       currentValues.textInput = {};
-      currentValues.textInput.controlID = contentState.getEntity(currentEntity).getData().controlID;
-      currentValues.textInput.controlName = contentState.getEntity(currentEntity).getData().controlName; // eslint-disable-line
-      currentValues.textInput.defaultVal = contentState.getEntity(currentEntity).getData().defaultVal; // eslint-disable-line
-      currentValues.textInput.describeVal = contentState.getEntity(currentEntity).getData().describeVal; // eslint-disable-line
-      currentValues.textInput.dataType = contentState.getEntity(currentEntity).getData().dataType;
-      currentValues.textInput.tags = contentState.getEntity(currentEntity).getData().tages;
+      currentValues.textInput = contentState.getEntity(currentEntity).getData();
     }
     currentValues.selectionText = getSelectionText(editorState);
     return currentValues;
@@ -82,7 +77,9 @@ export default class TextInput extends React.Component {
         defaultVal: textInput.defaultVal,
         describeVal: textInput.describeVal,
         dataType: textInput.dataType,
-        tags: textInput.tags
+        tags: textInput.tags,
+        isRequired: textInput.isRequired,
+        isReadOnly: textInput.isReadOnly
       })
       .getLastCreatedEntityKey();
     const text = `${textInput.controlName}: [ ${textInput.defaultVal} ]`;

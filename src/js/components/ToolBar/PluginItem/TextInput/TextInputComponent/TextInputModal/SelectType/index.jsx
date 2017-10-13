@@ -15,7 +15,6 @@ export default class SelectType extends React.Component {
       case 'string':
         this.setState({
           checkRules: [
-            { required: true, message: '控件值不能为空' },
             { type: 'string', message: '只能输入普通文本数据' }
           ]
         });
@@ -23,7 +22,6 @@ export default class SelectType extends React.Component {
       case 'number':
         this.setState({
           checkRules: [
-            { required: true, message: '控件值不能为空' },
             { pattern: /^\d+$/, message: '请输入数值' }
           ]
         });
@@ -31,7 +29,6 @@ export default class SelectType extends React.Component {
       case 'email':
         this.setState({
           checkRules: [
-            { required: true, message: '控件值不能为空' },
             { type: 'email', message: '输入的数据不符合电子邮件格式' }
           ]
         });
@@ -39,7 +36,6 @@ export default class SelectType extends React.Component {
       case 'identityCard':
         this.setState({
           checkRules: [
-            { required: true, message: '控件值不能为空' },
             {
               pattern: /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/,
               message: '输入的身份证格式错误'
@@ -61,7 +57,7 @@ export default class SelectType extends React.Component {
 
     return (
       <Select
-        size="large"
+        size="default"
         showSearch
         defaultValue={dataType}
         optionFilterProp="children"
