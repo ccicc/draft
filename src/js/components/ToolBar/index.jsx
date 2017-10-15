@@ -24,7 +24,7 @@ export default class ToolBar extends React.Component {
     return (
       <div className={styles.root}>
         <Tabs
-          defaultActiveKey="1"
+          defaultActiveKey="2"
         >
           <TabPane tab="编辑" key="1">
             <Row>

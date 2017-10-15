@@ -76,7 +76,10 @@ class TextInput extends React.Component {
     );
 
     return (
-      <span className={styles.root}>
+      <span
+        className={styles.root}
+        onClick={this.onHandleClick}
+      >
         {/* <span className={styles.controlName}>{controlName}</span>
         <span>:</span> */}
         <Popover
@@ -95,8 +98,11 @@ class TextInput extends React.Component {
             <span>{defaultVal}</span>
             <i className={styles.rim}> ] </i>
           </span> */}
-          <span onClick={this.onHandleClick}>{children}</span>
+          <span>
+            {children}
+          </span>
         </Popover>
+        <input className={styles.input} type="text" />
       </span>
     );
   }

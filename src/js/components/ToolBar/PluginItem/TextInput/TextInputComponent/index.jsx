@@ -29,7 +29,6 @@ export default class TextInputComponent extends React.Component {
     eventProxy.on('textInputDelete', this.onRemoveTextInput);
   }
 
-
   componentWillUnMount() {    // eslint-disable-line
     eventProxy.off('textInputEditor');
     eventProxy.off('textInputDelete');

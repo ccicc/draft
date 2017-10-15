@@ -49,7 +49,6 @@ export default class TextInput extends React.Component {
     const currentValues = {};
 
     if (currentEntity && contentState.getEntity(currentEntity).getType() === 'TEXTINPUT') {
-      console.log(currentEntity);
       currentValues.textInput = {};
       currentValues.textInput = contentState.getEntity(currentEntity).getData();
     }
