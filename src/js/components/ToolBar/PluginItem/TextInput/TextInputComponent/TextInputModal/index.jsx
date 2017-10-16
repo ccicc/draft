@@ -19,24 +19,34 @@ class TextInputModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataTypeRules: []
+      isRequired: true,
+      dataTypeRules: [{ required: true, message: '请输入控件值' }]
     };
+  }
+
+  onSwitchChange = (checked) => {
+    const { dataTypeRules } = this.state;
+    const newRules = dataTypeRules.map(item => {
+      if (item.required !== undefined) {
+        item.required = checked;
+      }
+      return item;
+    });
+    this.setState({
+      dataTypeRules: newRules,
+      isRequired: checked
+    });
   }
 
   // 动态获取校验规则
   getRules = (dataTypeRules) => {
-    const { isRequired } = this.props;
-    if (isRequired) {
-      dataTypeRules.push({
-        required: true, message: '控件值必须填写'
-      });
-      this.setState({ dataTypeRules });
-    } else {
-      this.setState({ dataTypeRules });
-    }
+    this.setState({
+      dataTypeRules
+    });
   }
 
   render() {
+    const { getFieldDecorator, validateFields } = this.props.form;
     const {
       // config,
       isVisible,
@@ -44,9 +54,9 @@ class TextInputModal extends React.Component {
       onModalConfirm,
       onModalCancel,
     } = this.props;
-    const { dataTypeRules } = this.state;
-    const { getFieldDecorator, validateFields } = this.props.form;
+    const { isRequired, dataTypeRules } = this.state;
 
+    console.log(dataTypeRules);
     const footer = [
       <Button
         type="primary"
@@ -120,6 +130,7 @@ class TextInputModal extends React.Component {
                     valuePropName: 'dataType'
                   })(
                     <SelectType
+                      isRequired={isRequired}
                       getRules={this.getRules}
                     />
                   )
@@ -130,7 +141,7 @@ class TextInputModal extends React.Component {
               <FormItem label="控件值">
                 {
                   getFieldDecorator('defaultVal', {
-                    rules: dataTypeRules
+                    rules: [...dataTypeRules]
                   })(<Input size="default" placeholder="请输入控件值" />)
                 }
               </FormItem>
@@ -138,18 +149,26 @@ class TextInputModal extends React.Component {
           </Row>
           <Row gutter={15}>
             <Col span={12}>
-              <FormItem label="是否必填">
+              <FormItem
+                label="是否必填"
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 6, offset: 2 }}
+              >
                 {
                   getFieldDecorator('isRequired', {
                     valuePropName: 'defaultChecked'
                   })(
-                    <Switch checkedChildren="是" unCheckedChildren="否" />
+                    <Switch size="default" checkedChildren="是" unCheckedChildren="否" onChange={this.onSwitchChange} />
                   )
                 }
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="是否只读">
+              <FormItem
+                label="是否只读"
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 6, offset: 2 }}
+              >
                 {
                   getFieldDecorator('isReadOnly', {
                     valuePropName: 'defaultChecked'

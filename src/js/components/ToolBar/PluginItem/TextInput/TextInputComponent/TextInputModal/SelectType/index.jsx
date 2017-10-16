@@ -47,7 +47,12 @@ export default class SelectType extends React.Component {
         return checkRules;
     }
     setTimeout(() => {
-      this.props.getRules(this.state.checkRules);
+      const { isRequired } = this.props;
+      let { checkRules } = this.state;  // eslint-disable-line
+      if (isRequired) {
+        checkRules = [...checkRules, { required: true, message: '必须填写控件值' }];
+      }
+      this.props.getRules(checkRules);
     });
   }
 
