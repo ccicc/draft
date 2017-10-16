@@ -32,14 +32,16 @@ export default class PageBreak extends React.Component {
     return (
       <Button
         size="small"
+        type="default"
         title={options.title}
         onClick={this.onAddPageBreak}
-        className={classnames({
-          [`fa fa-${options.icon} fa-lg`]: true,
-          iconFont: true
-        })}
       >
-        <i className="fa fa-minus fa-lg iconFont" />
+        <i
+          className={classnames({
+            [`fa fa-${options.icon} fa-lg`]: true,
+            iconFont: true
+          })}
+        />
       </Button>
     );
   }

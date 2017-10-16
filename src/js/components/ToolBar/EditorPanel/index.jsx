@@ -20,8 +20,7 @@ import {
   Copy,
   Image,
   Postil,
-  Equation,
-  PageBreak
+  Equation
 } from './../ToolItem';
 
 export default class EditorPanel extends React.Component {
@@ -113,7 +112,7 @@ export default class EditorPanel extends React.Component {
             style={{ padding: '5px 0' }}
             justify="start"
           >
-            <Col span={7.5}>
+            <Col span={8.5}>
               <InlineTool
                 config={config}
                 editorState={editorState}
@@ -150,13 +149,6 @@ export default class EditorPanel extends React.Component {
             </Col>
             <Col span={1.5}>
               <Equation
-                editorState={editorState}
-                config={config}
-                onEditorStateChange={onEditorStateChange}
-              />
-            </Col>
-            <Col span={1.5}>
-              <PageBreak
                 editorState={editorState}
                 config={config}
                 onEditorStateChange={onEditorStateChange}
