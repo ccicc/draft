@@ -20,7 +20,8 @@ import {
   Copy,
   Image,
   Postil,
-  Equation
+  Equation,
+  PageBreak
 } from './../ToolItem';
 
 export default class EditorPanel extends React.Component {
@@ -134,13 +135,6 @@ export default class EditorPanel extends React.Component {
               />
             </Col>
             <Col span={1.5}>
-              <Image
-                config={config}
-                editorState={editorState}
-                onEditorStateChange={onEditorStateChange}
-              />
-            </Col>
-            <Col span={1.5}>
               <Postil
                 editorState={editorState}
                 onEditorStateChange={onEditorStateChange}
@@ -148,7 +142,21 @@ export default class EditorPanel extends React.Component {
               />
             </Col>
             <Col span={1.5}>
+              <Image
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={1.5}>
               <Equation
+                editorState={editorState}
+                config={config}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
+            <Col span={1.5}>
+              <PageBreak
                 editorState={editorState}
                 config={config}
                 onEditorStateChange={onEditorStateChange}

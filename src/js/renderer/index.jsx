@@ -1,4 +1,5 @@
 import ImageComponent from './Image';
+import PageBreakComponent from './PageBreak';
 
 const getBlockRenderFunc = (options) => (contentBlock) => {
   const type = contentBlock.getType();
@@ -13,6 +14,11 @@ const getBlockRenderFunc = (options) => (contentBlock) => {
         props: {
           options
         }
+      };
+    } else if (entity && entity.getType() === 'PAGEBREAK') {
+      return {
+        component: PageBreakComponent,
+        editable: false
       };
     }
   }

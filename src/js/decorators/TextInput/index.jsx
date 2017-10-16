@@ -102,7 +102,12 @@ class TextInput extends React.Component {
             {children}
           </span>
         </Popover>
-        <input className={styles.input} type="text" disabled />
+        {/* <input
+          disabled
+          title={describeVal}
+          className={styles.input}
+          type="text"
+        /> */}
       </span>
     );
   }

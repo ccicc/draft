@@ -3,10 +3,10 @@ import { Affix } from 'antd';
 import {
   Editor,
   EditorState,
-  RichUtils,
   convertFromRaw,
   convertToRaw,
-  CompositeDecorator
+  CompositeDecorator,
+  getDefaultKeyBinding,
 } from 'draft-js';
 
 import {
@@ -43,7 +43,8 @@ export default class Draft extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: undefined
+      editorState: undefined,
+      isReadOnly: false
     };
 
     this.blockRenderFn = getBlockRenderFunc({
@@ -100,13 +101,20 @@ export default class Draft extends React.Component {
     return editorState;
   }
 
-  handleKeyCommand = (command, editorState) => {
-    const newState = RichUtils.handleKeyCommand(editorState, command);
-    if (newState) {
-      this.onChange(newState);
-      return true;
+  myKeyBindingFn = (e) => {
+    const { isReadOnly } = this.state;
+    if (isReadOnly && (e.keyCode === 8 || e.keyCode === 46)) {
+      console.log(e.target);
+      return 'stop-delete';
     }
-    return false;
+    return getDefaultKeyBinding(e);
+  }
+
+  handleKeyCommand = (command) => {
+    if (command === 'stop-delete') {
+      return 'handled';
+    }
+    return 'not-handled';
   }
 
   handlePastedText = () => {
@@ -139,6 +147,7 @@ export default class Draft extends React.Component {
             customStyleMap={getCustomStyleMap()}
             blockStyleFn={blockStyleFn}
             ref={element => this.domEditor = element}
+            keyBindingFn={this.myKeyBindingFn}
             handleKeyCommand={this.handleKeyCommand}
             handlePastedText={this.handlePastedText}
             blockRendererFn={this.blockRenderFn}

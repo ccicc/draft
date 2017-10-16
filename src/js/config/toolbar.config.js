@@ -11,7 +11,8 @@ export default {
     'fontSize',
     'fontFamily',
     'list',
-    'colorPicker'
+    'colorPicker',
+    'PageBreak'
   ],
   inline: {
     component: 'Inline',
@@ -113,5 +114,9 @@ export default {
       addPostil: { icon: 'commenting', title: '添加批注' },
       removePostil: { icon: 'comment-o', title: '移除批注' }
     }
+  },
+  pageBreak: {
+    component: 'PageBreak',
+    options: { icon: 'minus', title: '添加分页符' }
   }
 };
