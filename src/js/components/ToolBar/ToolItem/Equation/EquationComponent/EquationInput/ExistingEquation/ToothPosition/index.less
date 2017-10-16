@@ -1,0 +1,37 @@
+.root{
+  position: relative;
+  text-align:center;
+  :global(.ant-tag){
+    height:22px;
+    line-height:20px;
+    padding:0 3px;
+    margin: 3px;
+  }
+
+  :before{
+    content: '';
+    position: absolute;
+    top: -5px;
+    bottom: -5px;
+    left: 50%;
+    width: 1px;
+    height: calc(110%);
+    background: #ccc;
+  } 
+
+  :after{
+    content: '';
+    position: absolute;
+    left: -5px;
+    right: -5px;
+    top:50%;
+    width: calc(110%);
+    height: 1px;
+    background: #ccc;
+  }
+}
+
+.wrapper{
+  display: inline-block;
+  width:50%;
+}

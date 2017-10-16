@@ -65,7 +65,7 @@ export default class EquationComponent extends React.Component {
     const { isVisible } = this.state;
 
     const content = (
-      <div style={{ width: '300px' }}>
+      <div style={{ width: '400px' }}>
         <EquationInput
           onCustomEquationConfirm={this.onCustomEquationConfirm}
           onExistingEquationConfirm={this.onExistingEquationConfirm}

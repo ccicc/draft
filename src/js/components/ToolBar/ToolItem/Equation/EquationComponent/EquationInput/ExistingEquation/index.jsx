@@ -8,6 +8,7 @@ import {
 } from 'antd';
 
 import WrapperMenstrual from './Menstrual';
+import ToothPosition from './ToothPosition';
 import styles from './index.less';
 
 const Panel = Collapse.Panel;
@@ -86,6 +87,9 @@ export default class ExistingEquation extends React.Component {
               {...menstrualData}
               onChange={this.onMenstrualDataChange}
             />
+          </Panel>
+          <Panel header="牙位公式" key="2">
+            <ToothPosition />
           </Panel>
         </Collapse>
         <div
