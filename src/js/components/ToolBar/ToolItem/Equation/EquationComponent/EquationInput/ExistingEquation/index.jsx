@@ -27,6 +27,10 @@ export default class ExistingEquation extends React.Component {
         menstrualCycle: '',
         lastMenstrual: ''
       },
+      toothPosition: {
+        upperTooth: [],
+        underTooth: []
+      },
       equationData: ''
     };
   }
@@ -40,6 +44,15 @@ export default class ExistingEquation extends React.Component {
     });
 
     setTimeout(() => this.onEquationDataChange(), 0);
+  }
+
+  onToothPositionChange = (upperTooth, underTooth) => {
+    const { toothPosition } = this.state;
+    toothPosition.upperTooth = upperTooth;
+    toothPosition.underTooth = underTooth;
+    this.setState({
+      toothPosition
+    });
   }
 
   onEquationDataChange = () => {
@@ -89,7 +102,9 @@ export default class ExistingEquation extends React.Component {
             />
           </Panel>
           <Panel header="牙位公式" key="2">
-            <ToothPosition />
+            <ToothPosition
+              onChange={this.onToothPositionChange}
+            />
           </Panel>
         </Collapse>
         <div
