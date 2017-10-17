@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import {
   Button,
-  Popover
+  Modal
 } from 'antd';
 
 import EquationInput from './EquationInput';
@@ -27,12 +27,6 @@ export default class EquationComponent extends React.Component {
       isVisible: !isVisible
     });
   }
-
-  // onHandleVisibleChange = (visible) => {
-  //   this.setState({
-  //     isVisible: visible
-  //   });
-  // }
 
   onExistingEquationConfirm = (equationData) => {
     const { onAddEquation } = this.props;
@@ -64,25 +58,8 @@ export default class EquationComponent extends React.Component {
   render() {
     const { isVisible } = this.state;
 
-    const content = (
-      <div style={{ width: '400px' }}>
-        <EquationInput
-          onCustomEquationConfirm={this.onCustomEquationConfirm}
-          onExistingEquationConfirm={this.onExistingEquationConfirm}
-          onHandleCancel={this.onHandleCancel}
-        />
-      </div>
-    );
-
     return (
-      <Popover
-        title="插入公式"
-        placement="bottom"
-        content={content}
-        visible={isVisible}
-        trigger="click"
-        // onVisibleChange={this.onHandleVisibleChange}
-      >
+      <div>
         <Button
           title="插入公式"
           size="small"
@@ -94,7 +71,20 @@ export default class EquationComponent extends React.Component {
           })}
           />
         </Button>
-      </Popover>
+        <Modal
+          visible={isVisible}
+          title="插入公式"
+          width={420}
+          footer={null}
+          onCancel={() => this.setState({ isVisible: false })}
+        >
+          <EquationInput
+            onCustomEquationConfirm={this.onCustomEquationConfirm}
+            onExistingEquationConfirm={this.onExistingEquationConfirm}
+            onHandleCancel={this.onHandleCancel}
+          />
+        </Modal>
+      </div>
     );
   }
 }

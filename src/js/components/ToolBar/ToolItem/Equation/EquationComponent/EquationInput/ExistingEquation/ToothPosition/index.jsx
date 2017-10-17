@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tag } from 'antd';
+import { Tag, Button } from 'antd';
 import styles from './index.less';
 
 const { CheckableTag } = Tag;
@@ -82,41 +82,102 @@ export default class ToothPosition extends React.Component {
     return selectedUnderTooth[type].indexOf(tag) !== -1;
   }
 
+  onAllSelectedClick = () => {
+    const { onUpperToothChange, onUnderToothChange } = this.props;
+    this.setState({
+      selectedUpperTooth: {
+        A: [8, 7, 6, 5, 4, 3, 2, 1],
+        B: [1, 2, 3, 4, 5, 6, 7, 8],
+        C: ['A', 'B', 'C', 'D', 'E'],
+        D: ['E', 'D', 'C', 'B', 'A']
+      },
+      selectedUnderTooth: {
+        A: ['E', 'D', 'C', 'B', 'A'],
+        B: ['A', 'B', 'C', 'D', 'E'],
+        C: [8, 7, 6, 5, 4, 3, 2, 1],
+        D: [1, 2, 3, 4, 5, 6, 7, 8]
+      }
+    });
+
+    setTimeout(() => {
+      onUpperToothChange(this.state.selectedUpperTooth);
+      onUnderToothChange(this.state.selectedUnderTooth);
+    }, 0);
+  }
+
+  onAllCancelClick = () => {
+    const { onUpperToothChange, onUnderToothChange } = this.props;
+    this.setState({
+      selectedUpperTooth: {
+        A: [],
+        B: [],
+        C: [],
+        D: []
+      },
+      selectedUnderTooth: {
+        A: [],
+        B: [],
+        C: [],
+        D: []
+      }
+    });
+    setTimeout(() => {
+      onUpperToothChange(this.state.selectedUpperTooth);
+      onUnderToothChange(this.state.selectedUnderTooth);
+    }, 0);
+  }
+
   render() {
     const { upperTooth, underTooth } = this.props;
 
     return (
       <div className={styles.root}>
-        {
-          upperTooth.map((item, index) => (
-            <span key={index} className={styles.wrapper}>
-              {
-                item.items.map(val => (
-                  <CheckableTag
-                    key={val}
-                    onChange={(checked) => this.onHandleUpperChange(item.type, val, checked)}
-                    checked={this.onHandleUpperFilter(item.type, val)}
-                  >{val}</CheckableTag>
-                ))
-              }
-            </span>
-          ))
-        }
-        {
-          underTooth.map((item, index) => (
-            <span key={index} className={styles.wrapper}>
-              {
-                item.items.map(val => (
-                  <CheckableTag
-                    key={val}
-                    onChange={(checked) => this.onHandleUnderChange(item.type, val, checked)}
-                    checked={this.onHandleUnderFilter(item.type, val)}
-                  >{val}</CheckableTag>
-                ))
-              }
-            </span>
-          ))
-        }
+        <Button.Group>
+          <Button
+            size="small"
+            onClick={this.onAllSelectedClick}
+          >
+            全选
+          </Button>
+          <Button
+            size="small"
+            onClick={this.onAllCancelClick}
+          >
+            取消选中
+          </Button>
+        </Button.Group>
+        <div className={styles.toothContainer}>
+          {
+            upperTooth.map((item, index) => (
+              <span key={index} className={styles.wrapper}>
+                {
+                  item.items.map(val => (
+                    <CheckableTag
+                      key={val}
+                      onChange={(checked) => this.onHandleUpperChange(item.type, val, checked)}
+                      checked={this.onHandleUpperFilter(item.type, val)}
+                    >{val}</CheckableTag>
+                  ))
+                }
+              </span>
+            ))
+          }
+          {
+            underTooth.map((item, index) => (
+              <span key={index} className={styles.wrapper}>
+                {
+                  item.items.map(val => (
+                    <CheckableTag
+                      key={val}
+                      onChange={(checked) => this.onHandleUnderChange(item.type, val, checked)}
+                      checked={this.onHandleUnderFilter(item.type, val)}
+                    >{val}</CheckableTag>
+                  ))
+                }
+              </span>
+            ))
+          }
+        </div>
       </div>
     );
   }

@@ -108,7 +108,7 @@ export default class ExistingEquation extends React.Component {
       \\begin{array}{c|c}
 
       \\small \\sf{${upperToothA}} & \\small \\sf{${upperToothB}}   \\cr
-      \\small \\bf{${upperToothC}} &  \\footnotesize \\bf{${upperToothD}} \\cr
+      \\footnotesize \\bf{${upperToothC}} &  \\footnotesize \\bf{${upperToothD}} \\cr
       ----- & ----- \\cr
       \\footnotesize \\bf{${underToothA}} &  \\footnotesize \\bf{${underToothB}} \\cr
       \\small \\sf{${underToothC}} &  \\small \\sf{${underToothD}}
