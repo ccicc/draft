@@ -87,11 +87,11 @@ export default class TextInput extends React.Component {
         isReadOnly: textInput.isReadOnly
       })
       .getLastCreatedEntityKey();
-    const text = `${textInput.controlName}: [ ${textInput.defaultVal} ]`;
+    // const text = `${textInput.controlName}: [ ${textInput.defaultVal} ]`;
     let contentState = Modifier.replaceText(
       editorState.getCurrentContent(),
       selectionState,
-      text,
+      ' ',
       editorState.getCurrentInlineStyle(),
       entityKey
     );
@@ -100,8 +100,8 @@ export default class TextInput extends React.Component {
     // 添加空格
     selectionState = newEditorState.getSelection();
     selectionState = selectionState.merge({
-      anchorOffset: selectionState.getAnchorOffset() + text.length,
-      focusOffset: selectionState.getFocusOffset() + text.length
+      anchorOffset: selectionState.getAnchorOffset(),
+      focusOffset: selectionState.getFocusOffset()
     });
     newEditorState = EditorState.acceptSelection(newEditorState, selectionState);
     contentState = Modifier.replaceText(

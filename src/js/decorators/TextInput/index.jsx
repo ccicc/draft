@@ -44,7 +44,7 @@ class TextInput extends React.Component {
   render() {
     const { isVisible } = this.state;
     const { entityKey, contentState, children } = this.props;
-    const { controlName } = contentState.getEntity(entityKey).getData();
+    const { controlName, defaultVal, describeVal } = contentState.getEntity(entityKey).getData();
 
     const content = (
       <div>
@@ -80,8 +80,8 @@ class TextInput extends React.Component {
         className={styles.root}
         onClick={this.onHandleClick}
       >
-        {/* <span className={styles.controlName}>{controlName}</span>
-        <span>:</span> */}
+        <span className={styles.controlName}>{controlName}</span>
+        <span>:</span>
         <Popover
           visible={isVisible}
           content={content}
@@ -89,7 +89,7 @@ class TextInput extends React.Component {
           trigger="click "
           onVisibleChange={this.onHandleVisibleChange}
         >
-          {/* <span
+          <span
             className={styles.controlVal}
             title={describeVal}
             onClick={this.onHandleClick}
@@ -97,10 +97,8 @@ class TextInput extends React.Component {
             <i className={styles.rim}> [ </i>
             <span>{defaultVal}</span>
             <i className={styles.rim}> ] </i>
-          </span> */}
-          <span>
-            {children}
           </span>
+          <span style={{ display: 'none' }} >{children}</span>
         </Popover>
         {/* <input
           disabled
