@@ -8,7 +8,6 @@ import CustomBtn from './../CustomBtn';
 
 import CustomStrikeThrough from './CustomStrikeThrough';
 import PageBreak from './PageBreak';
-import InsertBlock from './InsertBlock';
 
 export default class InlineTool extends React.Component {
   static propTypes = {
@@ -130,10 +129,6 @@ export default class InlineTool extends React.Component {
         />
         <PageBreak
           config={config}
-          editorState={editorState}
-          onEditorStateChange={onEditorStateChange}
-        />
-        <InsertBlock
           editorState={editorState}
           onEditorStateChange={onEditorStateChange}
         />

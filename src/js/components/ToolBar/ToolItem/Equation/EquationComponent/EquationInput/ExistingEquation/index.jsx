@@ -94,14 +94,14 @@ export default class ExistingEquation extends React.Component {
   onToothRender = () => {
     const { upperTooth, underTooth } = this.state.toothPosition;
 
-    const upperToothA = upperTooth.A.sort().join(' ') || ' ';
+    const upperToothA = upperTooth.A.sort((a, b) => a < b).join(' ') || ' ';
     const upperToothB = upperTooth.B.sort().join(' ') || ' ';
-    const upperToothC = upperTooth.C.sort().join(' ') || ' ';
+    const upperToothC = upperTooth.C.sort((a, b) => a < b).join(' ') || ' ';
     const upperToothD = upperTooth.D.sort().join(' ') || ' ';
 
-    const underToothA = underTooth.A.sort().join(' ') || ' ';
+    const underToothA = underTooth.A.sort((a, b) => a < b).join(' ') || ' ';
     const underToothB = underTooth.B.sort().join(' ') || ' ';
-    const underToothC = underTooth.C.sort().join(' ') || ' ';
+    const underToothC = underTooth.C.sort((a, b) => a < b).join(' ') || ' ';
     const underToothD = underTooth.D.sort().join(' ') || ' ';
 
     const equationData = `
