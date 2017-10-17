@@ -28,8 +28,18 @@ export default class ExistingEquation extends React.Component {
         lastMenstrual: ''
       },
       toothPosition: {
-        upperTooth: [],
-        underTooth: []
+        upperTooth: {
+          A: [],
+          B: [],
+          C: [],
+          D: []
+        },
+        underTooth: {
+          A: [],
+          B: [],
+          C: [],
+          D: []
+        }
       },
       equationData: ''
     };
@@ -43,32 +53,35 @@ export default class ExistingEquation extends React.Component {
       }
     });
 
-    setTimeout(() => this.onEquationDataChange(), 0);
+    setTimeout(() => this.onMenarcheRender(), 0);
   }
 
-  onToothPositionChange = (upperTooth, underTooth) => {
+  onUpperToothChange = (upperTooth) => {
     const { toothPosition } = this.state;
     toothPosition.upperTooth = upperTooth;
-    toothPosition.underTooth = underTooth;
-    this.setState({
-      toothPosition
-    });
+    this.setState({ toothPosition });
+    setTimeout(() => this.onToothRender(), 0);
   }
 
-  onEquationDataChange = () => {
+  onUnderToothChange = (underTooth) => {
+    const { toothPosition } = this.state;
+    toothPosition.underTooth = underTooth;
+    this.setState({ toothPosition });
+    setTimeout(() => this.onToothRender(), 0);
+  }
+
+  onMenarcheRender = () => {
     const {
       menarcheAge,
       menstrualPeriod,
       menstrualCycle,
       lastMenstrual,
     } = this.state.menstrualData;
-
     const equationData = `
       ${menarcheAge.value || ''}
       \\dfrac{${menstrualPeriod.value || ''}}{${menstrualCycle.value || ''}}
       ${moment(lastMenstrual.value).format('YYYY-MM-DD') || ''}
     `;
-
     katex.render(
       equationData,
       this.equationContainer
@@ -78,10 +91,44 @@ export default class ExistingEquation extends React.Component {
     });
   }
 
+  onToothRender = () => {
+    const { upperTooth, underTooth } = this.state.toothPosition;
+
+    const upperToothA = upperTooth.A.sort().join(' ') || ' ';
+    const upperToothB = upperTooth.B.sort().join(' ') || ' ';
+    const upperToothC = upperTooth.C.sort().join(' ') || ' ';
+    const upperToothD = upperTooth.D.sort().join(' ') || ' ';
+
+    const underToothA = underTooth.A.sort().join(' ') || ' ';
+    const underToothB = underTooth.B.sort().join(' ') || ' ';
+    const underToothC = underTooth.C.sort().join(' ') || ' ';
+    const underToothD = underTooth.D.sort().join(' ') || ' ';
+
+    const equationData = `
+      \\begin{array}{c|c}
+
+      \\small \\sf{${upperToothA}} & \\small \\sf{${upperToothB}}   \\cr
+      \\small \\bf{${upperToothC}} &  \\footnotesize \\bf{${upperToothD}} \\cr
+      ----- & ----- \\cr
+      \\footnotesize \\bf{${underToothA}} &  \\footnotesize \\bf{${underToothB}} \\cr
+      \\small \\sf{${underToothC}} &  \\small \\sf{${underToothD}}
+
+      \\end{array}
+    `;
+
+    katex.render(
+      equationData,
+      this.equationContainer
+    );
+
+    this.setState({
+      equationData
+    });
+  }
+
   onHandleConfirm = () => {
     const { onExistingEquationConfirm } = this.props;
     const { equationData } = this.state;
-
     if (equationData) {
       onExistingEquationConfirm(equationData);
     }
@@ -103,7 +150,8 @@ export default class ExistingEquation extends React.Component {
           </Panel>
           <Panel header="牙位公式" key="2">
             <ToothPosition
-              onChange={this.onToothPositionChange}
+              onUpperToothChange={this.onUpperToothChange}
+              onUnderToothChange={this.onUnderToothChange}
             />
           </Panel>
         </Collapse>

@@ -5,18 +5,18 @@ import styles from './index.less';
 const { CheckableTag } = Tag;
 export default class ToothPosition extends React.Component {
   static defaultProps = {
-    upperTooth: {
-      A: [8, 7, 6, 5, 4, 3, 2, 1],
-      B: [1, 2, 3, 4, 5, 6, 7, 8],
-      C: ['E', 'D', 'C', 'B', 'A'],
-      D: ['A', 'B', 'C', 'D', 'E'],
-    },
-    underTooth: {
-      A: ['E', 'D', 'C', 'B', 'A'],
-      B: ['A', 'B', 'C', 'D', 'E'],
-      C: [8, 7, 6, 5, 4, 3, 2, 1],
-      D: [1, 2, 3, 4, 5, 6, 7, 8]
-    }
+    upperTooth: [
+      { type: 'A', items: [8, 7, 6, 5, 4, 3, 2, 1] },
+      { type: 'B', items: [1, 2, 3, 4, 5, 6, 7, 8] },
+      { type: 'C', items: ['E', 'D', 'C', 'B', 'A'] },
+      { type: 'D', items: ['A', 'B', 'C', 'D', 'E'] }
+    ],
+    underTooth: [
+      { type: 'A', items: ['E', 'D', 'C', 'B', 'A'] },
+      { type: 'B', items: ['A', 'B', 'C', 'D', 'E'] },
+      { type: 'C', items: [8, 7, 6, 5, 4, 3, 2, 1] },
+      { type: 'D', items: [1, 2, 3, 4, 5, 6, 7, 8] }
+    ]
   };
 
   constructor(props) {
@@ -39,6 +39,7 @@ export default class ToothPosition extends React.Component {
 
   onHandleUpperChange = (type, tag, checked) => {
     const { selectedUpperTooth } = this.state;
+    const { onUpperToothChange } = this.props;
     const currentArr = selectedUpperTooth[type];
 
     const newArr = checked ?
@@ -48,6 +49,10 @@ export default class ToothPosition extends React.Component {
     this.setState({
       selectedUpperTooth
     });
+
+    setTimeout(() => {
+      onUpperToothChange(this.state.selectedUpperTooth);
+    }, 0);
   }
 
   onHandleUpperFilter = (type, tag) => {
@@ -57,6 +62,7 @@ export default class ToothPosition extends React.Component {
 
   onHandleUnderChange = (type, tag, checked) => {
     const { selectedUnderTooth } = this.state;
+    const { onUnderToothChange } = this.props;
     const currentArr = selectedUnderTooth[type];
 
     const newArr = checked ?
@@ -66,6 +72,9 @@ export default class ToothPosition extends React.Component {
     this.setState({
       selectedUnderTooth
     });
+    setTimeout(() => {
+      onUnderToothChange(this.state.selectedUnderTooth);
+    }, 0);
   }
 
   onHandleUnderFilter = (type, tag) => {
@@ -78,107 +87,36 @@ export default class ToothPosition extends React.Component {
 
     return (
       <div className={styles.root}>
-        <span className={styles.wrapper}>
-          {
-            upperTooth.A.map(item => (
-              <CheckableTag
-                key={item}
-                checked={this.onHandleUpperFilter('A', item)}
-                onChange={(checked) => this.onHandleUpperChange('A', item, checked)}
-              >{item}</CheckableTag>
-            ))
-          }
-        </span>
-        <span className={styles.wrapper}>
-          {
-            upperTooth.B.map(item => (
-              <CheckableTag
-                key={item}
-                checked={this.onHandleUpperFilter('B', item)}
-                onChange={(checked) => this.onHandleUpperChange('B', item, checked)}
-              >{item}</CheckableTag>
-            ))
-          }
-        </span>
-        <span className={styles.wrapper}>
-          {
-            upperTooth.C.map(item => (
-              <CheckableTag
-                key={item}
-                checked={this.onHandleUpperFilter('C', item)}
-                onChange={(checked) => this.onHandleUpperChange('C', item, checked)}
-              >
-                {item}
-              </CheckableTag>
-            ))
-          }
-        </span>
-        <span className={styles.wrapper}>
-          {
-            upperTooth.D.map(item => (
-              <CheckableTag
-                key={item}
-                checked={this.onHandleUpperFilter('D', item)}
-                onChange={(checked) => this.onHandleUpperChange('D', item, checked)}
-              >
-                {item}
-              </CheckableTag>
-            ))
-          }
-        </span>
-
-        <span className={styles.wrapper}>
-          {
-            underTooth.A.map(item => (
-              <CheckableTag
-                key={item}
-                onChange={(checked) => this.onHandleUnderChange('A', item, checked)}
-                checked={this.onHandleUnderFilter('A', item)}
-              >
-                {item}
-              </CheckableTag>
-            ))
-          }
-        </span>
-        <span className={styles.wrapper}>
-          {
-            underTooth.B.map(item => (
-              <CheckableTag
-                key={item}
-                onChange={(checked) => this.onHandleUnderChange('B', item, checked)}
-                checked={this.onHandleUnderFilter('B', item)}
-              >
-                {item}
-              </CheckableTag>
-            ))
-          }
-        </span>
-        <span className={styles.wrapper}>
-          {
-            underTooth.C.map(item => (
-              <CheckableTag
-                key={item}
-                onChange={(checked) => this.onHandleUnderChange('C', item, checked)}
-                checked={this.onHandleUnderFilter('C', item)}
-              >
-                {item}
-              </CheckableTag>
-            ))
-          }
-        </span>
-        <span className={styles.wrapper}>
-          {
-            underTooth.D.map(item => (
-              <CheckableTag
-                key={item}
-                onChange={(checked) => this.onHandleUnderChange('D', item, checked)}
-                checked={this.onHandleUnderFilter('D', item)}
-              >
-                {item}
-              </CheckableTag>
-            ))
-          }
-        </span>
+        {
+          upperTooth.map((item, index) => (
+            <span key={index} className={styles.wrapper}>
+              {
+                item.items.map(val => (
+                  <CheckableTag
+                    key={val}
+                    onChange={(checked) => this.onHandleUpperChange(item.type, val, checked)}
+                    checked={this.onHandleUpperFilter(item.type, val)}
+                  >{val}</CheckableTag>
+                ))
+              }
+            </span>
+          ))
+        }
+        {
+          underTooth.map((item, index) => (
+            <span key={index} className={styles.wrapper}>
+              {
+                item.items.map(val => (
+                  <CheckableTag
+                    key={val}
+                    onChange={(checked) => this.onHandleUnderChange(item.type, val, checked)}
+                    checked={this.onHandleUnderFilter(item.type, val)}
+                  >{val}</CheckableTag>
+                ))
+              }
+            </span>
+          ))
+        }
       </div>
     );
   }
