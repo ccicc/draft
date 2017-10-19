@@ -46,9 +46,15 @@ class SelectionInput extends React.Component {
     });
   }
 
+  onHandleVisibleChange = (isVisible) => {
+    this.setState({
+      isVisible
+    });
+  }
+
   render() {
     const { isVisible } = this.state;
-    const { entityKey, contentState } = this.props;
+    const { entityKey, contentState, children } = this.props;
     const {
       controlName,
       defaultVal,
@@ -98,8 +104,9 @@ class SelectionInput extends React.Component {
         <Popover
           visible={isVisible}
           content={content}
-          placement="top"
+          placement="topLeft"
           trigger="click"
+          onVisibleChange={this.onHandleVisibleChange}
         >
           <span
             className={styles.controlVal}
@@ -112,6 +119,7 @@ class SelectionInput extends React.Component {
               value={defaultVal}
               notFoundContent="没有可选项"
               onSelect={this.onSelectValueChange}
+              dropdownMatchSelectWidth={false}
             >
               {
                 selectItems.map(item => (
@@ -125,6 +133,7 @@ class SelectionInput extends React.Component {
                 ))
               }
             </Select>
+            <span style={{ display: 'none' }}>{children}</span>
             <i className={styles.rim}> ] </i>
           </span>
         </Popover>

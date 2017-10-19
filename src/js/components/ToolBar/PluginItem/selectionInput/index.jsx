@@ -70,10 +70,12 @@ export default class SelectionInput extends React.Component {
       .getCurrentContent()
       .createEntity('SELECTIONINPUT', 'IMMUTABLE', { ...selectionInput })
       .getLastCreatedEntityKey();
+
+    const text = `${selectionInput.controlName} : [ ${selectionInput.defaultVal} ]`;
     let contentState = Modifier.replaceText(
       editorState.getCurrentContent(),
       selectionState,
-      ' ',
+      text,
       editorState.getCurrentInlineStyle(),
       entityKey
     );

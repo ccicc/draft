@@ -85,7 +85,7 @@ class TextInput extends React.Component {
         <Popover
           visible={isVisible}
           content={content}
-          placement="top"
+          placement="topLeft"
           trigger="click "
           onVisibleChange={this.onHandleVisibleChange}
         >

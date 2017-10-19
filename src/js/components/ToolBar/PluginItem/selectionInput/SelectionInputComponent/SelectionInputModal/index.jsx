@@ -33,7 +33,7 @@ class SelectionInputModal extends React.Component {
 
   onCleanDefaultVal = () => {
     const { setFieldsValue } = this.props.form;
-    setFieldsValue({ defaultVal: '' });
+    setFieldsValue({ defaultVal: '未知' });
   }
 
   render() {

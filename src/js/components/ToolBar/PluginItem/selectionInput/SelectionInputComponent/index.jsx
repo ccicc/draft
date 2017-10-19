@@ -1,13 +1,10 @@
-/* eslint-disable */ 
-
 import React from 'react';
-import eventProxy from './../../../../../customUtils/eventProxy';
 import { Button } from 'antd';
-import PropTypes from 'prop-types';
 
+import eventProxy from './../../../../../customUtils/eventProxy';
 import SelectionInputModal from './SelectionInputModal';
 
-export default class SelectionInputComponent extends React.Component{
+export default class SelectionInputComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,12 +18,12 @@ export default class SelectionInputComponent extends React.Component{
         selectItems: [],
         tags: []
       }
-    }
+    };
   }
 
   componentDidMount() {
     eventProxy.on('selectionInputEditor', this.onHandleClick);
-    eventProxy.on('selectioninputDelete', this.onHandleRemove);
+    eventProxy.on('selectionInputDelete', this.onHandleRemove);
   }
 
   componentWillUnmount() {
@@ -35,7 +32,7 @@ export default class SelectionInputComponent extends React.Component{
   }
 
   onHandleClick = () => {
-    const { selectionInput, selectionText } = this.props;
+    const { selectionInput } = this.props;
     this.setState({
       isVisible: true,
       selectionInput: {
@@ -53,7 +50,7 @@ export default class SelectionInputComponent extends React.Component{
   onHandleConfirm = (err, changeFields) => {
     const { selectionInput } = this.state;
     const { onChange } = this.props;
-    if(err)return false;
+    if (err) return false;
     this.setState({
       isVisible: false,
       selectionInput: {
@@ -97,6 +94,6 @@ export default class SelectionInputComponent extends React.Component{
           onHandleCancel={this.onHandleCancel}
         />
       </div>
-    )
+    );
   }
 }
