@@ -17,8 +17,6 @@ export default class SelectItem extends React.Component {
       inputVal: '',
       inputTitle: ''
     };
-
-    console.log(props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -129,6 +127,12 @@ export default class SelectItem extends React.Component {
     this.setState({ selectItems });
   }
 
+  onSetDefaultValue = () => {
+    const { onSetFieldsValue } = this.props;
+    const { currentSelected } = this.state;
+    onSetFieldsValue(currentSelected);
+  }
+
   render() {
     const { selectItems, inputVal, inputTitle, currentSelected } = this.state;
 
@@ -195,6 +199,12 @@ export default class SelectItem extends React.Component {
             icon="arrow-down"
             title="向下移动"
             onClick={this.onItemUnderMoving}
+          />
+          <Button
+            style={{ color: '#108ee9' }}
+            icon="star"
+            title="设置默认值"
+            onClick={this.onSetDefaultValue}
           />
           <Button
             icon="delete"

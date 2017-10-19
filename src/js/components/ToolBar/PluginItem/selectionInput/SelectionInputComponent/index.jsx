@@ -1,6 +1,7 @@
 /* eslint-disable */ 
 
 import React from 'react';
+import eventProxy from './../../../../../customUtils/eventProxy';
 import { Button } from 'antd';
 import PropTypes from 'prop-types';
 
@@ -14,13 +15,23 @@ export default class SelectionInputComponent extends React.Component{
       selectionInput: {
         controlId: 'selectionInput',
         controlName: '',
-        defaultVal: '',
+        defaultVal: '未知',
         describeVal: '',
         entityColor: '#333',
-        selectItems: [{ val: '未知', title: '默认值' }],
+        selectItems: [],
         tags: []
       }
     }
+  }
+
+  componentDidMount() {
+    eventProxy.on('selectionInputEditor', this.onHandleClick);
+    eventProxy.on('selectioninputDelete', this.onHandleRemove);
+  }
+
+  componentWillUnmount() {
+    eventProxy.off('selectionInputEditor');
+    eventProxy.off('selectionInputDelete');
   }
 
   onHandleClick = () => {
@@ -30,16 +41,16 @@ export default class SelectionInputComponent extends React.Component{
       selectionInput: {
         ...this.state.selectionInput,
         controlName: selectionInput && selectionInput.controlName,
-        defaultVal: (selectionInput && selectionInput.defaultVal) || selectionText,
+        defaultVal: (selectionInput && selectionInput.defaultVal) || '未知',
         describeVal: selectionInput && selectionInput.describeVal,
+        entityColor: (selectionInput && selectionInput.entityColor) || '#333',
         tags: (selectionInput && selectionInput.tags) || [],
-        selectItems: (selectionInput && selectionInput.selectItems) || [{ val: '未知', title: '默认值' }],
+        selectItems: (selectionInput && selectionInput.selectItems) || [],
       }
     });
   }
-  
+
   onHandleConfirm = (err, changeFields) => {
-    console.log(changeFields);
     const { selectionInput } = this.state;
     const { onChange } = this.props;
     if(err)return false;
@@ -60,13 +71,9 @@ export default class SelectionInputComponent extends React.Component{
     });
   }
 
-  onChangeEntityColor = (color) => {
-    this.setState({
-      selectionInput: {
-        ...this.state.selectionInput,
-        entityColor: color
-      }
-    })
+  onHandleRemove = () => {
+    const { onChange } = this.props;
+    onChange('unSelectionInput');
   }
 
   render() {
@@ -86,7 +93,6 @@ export default class SelectionInputComponent extends React.Component{
           config={config}
           {...selectionInput}
           isVisible={isVisible}
-          onChangeEntityColor={this.onChangeEntityColor}
           onHandleConfirm={this.onHandleConfirm}
           onHandleCancel={this.onHandleCancel}
         />

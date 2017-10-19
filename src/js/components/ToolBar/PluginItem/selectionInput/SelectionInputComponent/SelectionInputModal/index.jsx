@@ -26,6 +26,16 @@ class SelectionInputModal extends React.Component {
     this.state = {}
   }
 
+  onSetDefaultVal = (value) => {
+    const { setFieldsValue } = this.props.form;
+    setFieldsValue({ defaultVal: value });
+  }
+
+  onCleanDefaultVal = () => {
+    const { setFieldsValue } = this.props.form;
+    setFieldsValue({ defaultVal: '' });
+  }
+
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
     const {
@@ -113,25 +123,34 @@ class SelectionInputModal extends React.Component {
           <Row gutter={15}>
             <Col span={12}>
               <FormItem label="字体颜色">
-                <ColorPicker
-                  config={config}
-                  entityColor={entityColor}
-                  onSelectEntityColor={onChangeEntityColor}
-                />
+                {
+                  getFieldDecorator('entityColor', {
+                    valuePropName: 'entityColor'
+                  })(
+                    <ColorPicker
+                      config={config}
+                    />
+                  )
+                }
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="控件值">
+              <FormItem label="控件值" className={styles.defaultVal}>
                 {
                   getFieldDecorator('defaultVal')(
-                    <div className={styles.defaultVal}>
-                      <Input
-                        style={{ color: `${entityColor}` }}
-                        size="default" disabled
-                        placeholder="选择控件值"
-                        addonAfter={<Button title="返回默认值" size="default" icon="rollback" />}
-                      />
-                    </div>
+                    <Input
+                      style={{ color: `${entityColor}` }}
+                      size="default" disabled
+                      placeholder="选择控件值"
+                      addonAfter={
+                        <Button
+                          title="清除默认值"
+                          size="default"
+                          icon="rollback"
+                          onClick={this.onCleanDefaultVal}
+                        />
+                      }
+                    />
                   )
                 }
               </FormItem>
@@ -144,7 +163,9 @@ class SelectionInputModal extends React.Component {
                       getFieldDecorator('selectItems', {
                         valuePropName: 'selectItems'
                       })(
-                        <SelectItem />
+                        <SelectItem
+                          onSetFieldsValue={this.onSetDefaultVal}
+                        />
                         )
                     }
                   </TabPane>
@@ -175,6 +196,9 @@ export default Form.create({
       },
       describeVal: {
         value: props.describeVal
+      },
+      entityColor: {
+        value: props.entityColor
       },
       selectItems: {
         value: props.selectItems

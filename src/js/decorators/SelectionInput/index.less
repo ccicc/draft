@@ -25,13 +25,6 @@
   cursor: text;
 }
 
-.controlVal{
-  position:relative;
-  padding-left: 5px;
-  color: #333;
-  cursor: pointer;
-}
-
 .rim{
   font-style: normal;
   color: #00f;
@@ -54,4 +47,35 @@
   &:extend(.editorBtn);
   color: #f00;
   padding-left: 10px;
+}
+
+.controlVal{
+  display: inline-block;
+  position:relative;
+  padding-left: 5px;
+  cursor: pointer;
+  text-align: center;
+
+  :global{
+    .ant-select {
+      font-size: 14px;
+      color: #000;
+    }
+    .ant-select-selection{
+      background: rgba(16, 142, 233, 0.1);
+      border: none;
+      outline: none;
+    }
+    .ant-select-selection__rendered{
+      margin: 0;
+    }
+  
+    .ant-select-selection-selected-value{
+      padding: 0 10px;
+    }
+  
+    .ant-select-arrow{
+      display: none;
+    }
+  }
 }

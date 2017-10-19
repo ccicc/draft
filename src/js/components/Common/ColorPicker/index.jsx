@@ -8,7 +8,6 @@ export default class ColorPicker extends React.Component {
     isFontColor: PropTypes.bool,
     isBgColor: PropTypes.bool,
     onSelectFontColor: PropTypes.func,
-    onSelectEntityColor: PropTypes.func,
     onSelectBgColor: PropTypes.func
   };
 
@@ -26,8 +25,8 @@ export default class ColorPicker extends React.Component {
     this.setState({
       entityFontColor: color.hex
     });
-    console.log(color.hex);
-    this.props.onSelectEntityColor(color.hex);
+
+    this.props.onChange(color.hex);
   }
 
   // 更改编辑器字体颜色

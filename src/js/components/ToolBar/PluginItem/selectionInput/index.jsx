@@ -48,14 +48,13 @@ export default class SelectionInput extends React.Component {
     const currentValues = {};
 
     if (currentEntity && contentState.getEntity(currentEntity).getType() === 'SELECTIONINPUT') {
-      currentEntity.selectionInput = contentState.getEntity(currentEntity).getData();
+      currentValues.selectionInput = contentState.getEntity(currentEntity).getData();
     }
     currentValues.selectionText = getSelectionText(editorState);
     return currentValues;
   }
 
   addSelectionInput = (selectionInput) => {
-    console.log(selectionInput);
     const { editorState, onEditorStateChange } = this.props;
     const { currentEntity } = this.state;
     let selectionState = editorState.getSelection();

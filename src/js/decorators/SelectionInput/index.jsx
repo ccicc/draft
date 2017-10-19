@@ -1,16 +1,19 @@
 import React from 'react';
 import {
   Popover,
-  Popconfirm
+  Popconfirm,
+  Select
 } from 'antd';
-import eventProxy from 'customUtils/eventProxy';  // eslint-disable-line
+
+import eventProxy from './../../customUtils/eventProxy';
 import styles from './index.less';
 
-class TextInput extends React.Component {
+const Option = Select.Option;
+class SelectionInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisible: false
+      isVisible: false,
     };
   }
 
@@ -25,26 +28,34 @@ class TextInput extends React.Component {
     this.setState({
       isVisible: false
     });
-    eventProxy.trigger('textInputEditor');
+    eventProxy.trigger('selectionInputEditor');
   }
 
   onDeleteClick = () => {
     this.setState({
       isVisible: false
     });
-    eventProxy.trigger('textInputDelete');
+    eventProxy.trigger('selectionInputDelete');
   }
 
-  onHandleVisibleChange = (visible) => {
+  onSelectValueChange = (value) => {
+    const { entityKey, contentState } = this.props;
+    contentState.mergeEntityData(entityKey, { defaultVal: value });
     this.setState({
-      isVisible: visible
+      isRender: true
     });
   }
 
   render() {
     const { isVisible } = this.state;
-    const { entityKey, contentState, children } = this.props;
-    const { controlName, defaultVal, describeVal } = contentState.getEntity(entityKey).getData();
+    const { entityKey, contentState } = this.props;
+    const {
+      controlName,
+      defaultVal,
+      describeVal,
+      entityColor,
+      selectItems
+    } = contentState.getEntity(entityKey).getData();
 
     const content = (
       <div>
@@ -55,7 +66,7 @@ class TextInput extends React.Component {
           title="编辑控件内容"
           onClick={this.onEditorClick}
         >
-          编 辑
+          编辑
         </span>
         <Popconfirm
           placement="top"
@@ -69,66 +80,78 @@ class TextInput extends React.Component {
             className={styles.deleteBtn}
             title="删除控件"
           >
-            删 除
+            删除
           </span>
         </Popconfirm>
       </div>
     );
 
     return (
-      <span
-        className={styles.root}
-        onClick={this.onHandleClick}
-      >
-        <span className={styles.controlName}>{controlName}</span>
+      <span className={styles.root}>
+        <span
+          className={styles.controlName}
+          onClick={this.onHandleClick}
+        >
+          {controlName}
+        </span>
         <span>:</span>
         <Popover
           visible={isVisible}
           content={content}
           placement="top"
-          trigger="click "
-          onVisibleChange={this.onHandleVisibleChange}
+          trigger="click"
         >
           <span
             className={styles.controlVal}
             title={describeVal}
+            style={{ color: entityColor }}
           >
             <i className={styles.rim}> [ </i>
-            <span>{defaultVal}</span>
+            <Select
+              size="small"
+              value={defaultVal}
+              notFoundContent="没有可选项"
+              onSelect={this.onSelectValueChange}
+            >
+              {
+                selectItems.map(item => (
+                  <Option
+                    key={item.val}
+                    title={item.title}
+                    value={item.val}
+                  >
+                    {item.val}
+                  </Option>
+                ))
+              }
+            </Select>
             <i className={styles.rim}> ] </i>
           </span>
-          <span style={{ display: 'none' }} >{children}</span>
         </Popover>
-        <input
-          disabled
-          title={describeVal}
-          className={styles.input}
-          type="text"
-        />
       </span>
     );
   }
 }
 
-function findTextInputEntities(contentBlock, callback, contentState) {
+
+function findSelectionInputEntities(contentBlock, callback, contentState) {
   contentBlock.findEntityRanges(
     (character) => {
       const entityKey = character.getEntity();
       return (
         entityKey !== null &&
-        contentState.getEntity(entityKey).getType() === 'TEXTINPUT'
+        contentState.getEntity(entityKey).getType() === 'SELECTIONINPUT'
       );
     },
     callback
   );
 }
 
-
-function textInputDecorator() {
+function selectionInputDecorator() {
   return {
-    strategy: findTextInputEntities,
-    component: TextInput
+    strategy: findSelectionInputEntities,
+    component: SelectionInput
   };
 }
 
-export default textInputDecorator;
+export default selectionInputDecorator;
