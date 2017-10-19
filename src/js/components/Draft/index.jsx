@@ -64,7 +64,7 @@ export default class Draft extends React.Component {
 
   onChange = (editorState) => {
     const contentState = editorState.getCurrentContent();
-    console.log(JSON.stringify(convertToRaw(contentState)));
+    console.log(convertToRaw(contentState));
     this.setState({
       editorState
     });

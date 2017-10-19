@@ -10,8 +10,8 @@ import {
   Switch
 } from 'antd';
 import SelectType from './SelectType';
+import ColorPicker from './../../../../../Common/ColorPicker';
 import styles from './index.less';
-// import ColorPicker from './../../../../../Common/ColorPicker';
 
 const FormItem = Form.Item;
 
@@ -48,9 +48,8 @@ class TextInputModal extends React.Component {
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
     const {
-      // config,
+      config,
       isVisible,
-      // entityColor,
       onModalConfirm,
       onModalCancel,
     } = this.props;
@@ -147,6 +146,21 @@ class TextInputModal extends React.Component {
               </FormItem>
             </Col>
           </Row>
+          <Row>
+            <Col span={24}>
+              <FormItem label="字体颜色">
+                {
+                  getFieldDecorator('entityColor', {
+                    valuePropName: 'entityColor'
+                  })(
+                    <ColorPicker
+                      config={config}
+                    />
+                  )
+                }
+              </FormItem>
+            </Col>
+          </Row>
           <Row gutter={15}>
             <Col span={12}>
               <FormItem
@@ -195,7 +209,7 @@ export default Form.create({
         value: props.controlName
       },
       tags: {
-        values: props.tags,
+        value: props.tags,
       },
       defaultVal: {
         value: props.defaultVal
@@ -205,6 +219,9 @@ export default Form.create({
       },
       dataType: {
         value: props.dataType
+      },
+      entityColor: {
+        value: props.entityColor
       },
       isRequired: {
         value: props.isRequired

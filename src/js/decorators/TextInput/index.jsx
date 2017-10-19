@@ -44,7 +44,12 @@ class TextInput extends React.Component {
   render() {
     const { isVisible } = this.state;
     const { entityKey, contentState, children } = this.props;
-    const { controlName, defaultVal, describeVal } = contentState.getEntity(entityKey).getData();
+    const {
+      controlName,
+      defaultVal,
+      describeVal,
+      entityColor
+    } = contentState.getEntity(entityKey).getData();
 
     const content = (
       <div>
@@ -94,7 +99,7 @@ class TextInput extends React.Component {
             title={describeVal}
           >
             <i className={styles.rim}> [ </i>
-            <span>{defaultVal}</span>
+            <span style={{ color: entityColor }}>{defaultVal}</span>
             <i className={styles.rim}> ] </i>
           </span>
           <span style={{ display: 'none' }} >{children}</span>

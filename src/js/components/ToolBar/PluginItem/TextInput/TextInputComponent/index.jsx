@@ -16,6 +16,7 @@ export default class TextInputComponent extends React.Component {
         describeVal: '',
         dataType: '',
         tags: [],
+        entityColor: '#333',
         isRequired: true,
         isReadOnly: false
       },
@@ -46,6 +47,7 @@ export default class TextInputComponent extends React.Component {
         describeVal: textInput && textInput.describeVal,
         dataType: (textInput && textInput.dataType) || '普通文本',
         tags: textInput && textInput.tags,
+        entityColor: (textInput && textInput.entityColor) || '#333',
         isRequired: (textInput && textInput.isRequired) || true,
         isReadOnly: (textInput && textInput.isReadOnly) || false
       }

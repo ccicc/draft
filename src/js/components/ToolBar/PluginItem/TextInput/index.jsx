@@ -82,6 +82,7 @@ export default class TextInput extends React.Component {
         describeVal: textInput.describeVal,
         dataType: textInput.dataType,
         tags: textInput.tags,
+        entityColor: textInput.entityColor,
         isRequired: textInput.isRequired,
         isReadOnly: textInput.isReadOnly
       })
