@@ -56,7 +56,6 @@ class TextInputModal extends React.Component {
     } = this.props;
     const { isRequired, dataTypeRules } = this.state;
 
-    console.log(dataTypeRules);
     const footer = [
       <Button
         type="primary"
@@ -80,6 +79,7 @@ class TextInputModal extends React.Component {
         onCancel={onModalCancel}
         footer={footer}
         className={styles.root}
+        width={500}
       >
         <Form>
           <Row gutter={15}>
@@ -92,7 +92,7 @@ class TextInputModal extends React.Component {
               <FormItem label="控件名称" >
                 {
                   getFieldDecorator('controlName', {
-                    rules: [{ required: true, message: '必须填写控件值' }],
+                    rules: [{ required: true, message: '请填写控件名称' }],
                   })(<Input size="default" placeholder="请输入控件名称" />)
                 }
               </FormItem>
@@ -193,6 +193,9 @@ export default Form.create({
       },
       controlName: {
         value: props.controlName
+      },
+      tags: {
+        values: props.tags,
       },
       defaultVal: {
         value: props.defaultVal

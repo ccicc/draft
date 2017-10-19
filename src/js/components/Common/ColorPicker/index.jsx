@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TwitterPicker, BlockPicker } from 'react-color';
+import { BlockPicker, GithubPicker } from 'react-color';
 
 export default class ColorPicker extends React.Component {
   static propTypes = {
@@ -26,7 +26,7 @@ export default class ColorPicker extends React.Component {
     this.setState({
       entityFontColor: color.hex
     });
-
+    console.log(color.hex);
     this.props.onSelectEntityColor(color.hex);
   }
 
@@ -72,8 +72,8 @@ export default class ColorPicker extends React.Component {
     );
 
     const entityColorPicker = (
-      <div style={{ marginTop: '10px' }}>
-        <TwitterPicker
+      <div>
+        <GithubPicker
           width="100%"
           color={this.props.entityColor}
           colors={colors.entityColors}

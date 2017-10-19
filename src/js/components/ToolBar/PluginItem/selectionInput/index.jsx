@@ -1,19 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { EditorState, Modifier } from 'draft-js';
 import {
   getSelectionText,
   getSelectionEntity,
   getEntityRange
 } from 'draftjs-utils';
-import TextInputComponent from './TextInputComponent';
+import SelectionInputComponent from './SelectionInputComponent';
 
-export default class TextInput extends React.Component {
-  static propTypes = {
-    config: PropTypes.object.isRequired,
-    editorState: PropTypes.object.isRequired,
-    onEditorStateChange: PropTypes.func.isRequired,
-  };
+export default class SelectionInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,29 +33,29 @@ export default class TextInput extends React.Component {
     }
   }
 
-  onHandleChange = (value, textInput) => {
-    if (value === 'textInput') {
-      console.log('onHnadleChange', textInput);
-      this.addTextInput(textInput);
+  onHandleChange = (value, selectionInput) => {
+    if (value === 'selectionInput') {
+      this.addSelectionInput(selectionInput);
     } else {
       this.removeTextInput();
     }
   }
 
-  getCurrentValues = () => {
+  getCurrentValue = () => {
     const { editorState } = this.props;
     const { currentEntity } = this.state;
     const contentState = editorState.getCurrentContent();
     const currentValues = {};
 
-    if (currentEntity && contentState.getEntity(currentEntity).getType() === 'TEXTINPUT') {
-      currentValues.textInput = contentState.getEntity(currentEntity).getData();
+    if (currentEntity && contentState.getEntity(currentEntity).getType() === 'SELECTIONINPUT') {
+      currentEntity.selectionInput = contentState.getEntity(currentEntity).getData();
     }
     currentValues.selectionText = getSelectionText(editorState);
     return currentValues;
   }
 
-  addTextInput = (textInput) => {
+  addSelectionInput = (selectionInput) => {
+    console.log(selectionInput);
     const { editorState, onEditorStateChange } = this.props;
     const { currentEntity } = this.state;
     let selectionState = editorState.getSelection();
@@ -75,45 +69,35 @@ export default class TextInput extends React.Component {
     }
     const entityKey = editorState
       .getCurrentContent()
-      .createEntity('TEXTINPUT', 'IMMUTABLE', {
-        controlID: textInput.controlId,
-        controlName: textInput.controlName,
-        defaultVal: textInput.defaultVal,
-        describeVal: textInput.describeVal,
-        dataType: textInput.dataType,
-        tags: textInput.tags,
-        isRequired: textInput.isRequired,
-        isReadOnly: textInput.isReadOnly
-      })
+      .createEntity('SELECTIONINPUT', 'IMMUTABLE', { ...selectionInput })
       .getLastCreatedEntityKey();
-    const text = `${textInput.controlName}: [ ${textInput.defaultVal} ]`;
     let contentState = Modifier.replaceText(
       editorState.getCurrentContent(),
       selectionState,
-      text,
+      ' ',
       editorState.getCurrentInlineStyle(),
       entityKey
     );
-    let newEditorState = EditorState.push(editorState, contentState, 'insert-characters');
+    let newState = EditorState.push(editorState, contentState, 'insert-characters');
 
-    // 添加空格
-    selectionState = newEditorState.getSelection();
+    const newSelectionState = newState.getSelection();
     selectionState = selectionState.merge({
-      anchorOffset: selectionState.getAnchorOffset(),
-      focusOffset: selectionState.getFocusOffset()
+      anchorOffset: newSelectionState.getAnchorOffset(),
+      focusOffset: newSelectionState.getFocusOffset()
     });
-    newEditorState = EditorState.acceptSelection(newEditorState, selectionState);
+    newState = EditorState.acceptSelection(newState, selectionState);
     contentState = Modifier.replaceText(
-      newEditorState.getCurrentContent(),
+      newState.getCurrentContent(),
       selectionState,
       ' ',
-      newEditorState.getCurrentInlineStyle(),
+      newState.getCurrentInlineStyle(),
       undefined
     );
-    onEditorStateChange(EditorState.push(newEditorState, contentState, 'insert-characters'));
+    onEditorStateChange(EditorState.push(newState, contentState, 'insert-cahracter'));
   }
 
   removeTextInput = () => {
+    // 移除创建的实体组件
     const { editorState, onEditorStateChange } = this.props;
     const { currentEntity } = this.state;
     let selectionState = editorState.getSelection();
@@ -131,22 +115,20 @@ export default class TextInput extends React.Component {
       ' ',
       editorState.getCurrentInlineStyle()
     );
-
-    const newEditorState = EditorState.push(editorState, contentState, 'insert-character');
-    onEditorStateChange(newEditorState);
+    const newState = EditorState.push(editorState, contentState, 'insert-character');
+    onEditorStateChange(newState);
   }
 
   render() {
-    const { selectionText, textInput } = this.getCurrentValues();
     const { currentEntity } = this.state;
     const { config } = this.props;
-
+    const { selectionInput, selectionText } = this.getCurrentValue();
     return (
-      <TextInputComponent
+      <SelectionInputComponent
         config={config}
-        textInput={textInput}
-        currentEntity={currentEntity}
+        selectionInput={selectionInput}
         selectionText={selectionText}
+        currentEntity={currentEntity}
         onChange={this.onHandleChange}
       />
     );

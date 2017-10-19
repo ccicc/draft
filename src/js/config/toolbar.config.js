@@ -50,9 +50,9 @@ export default {
     component: 'ColorPicker',
     options: {
       icon: 'eyedropper',
-      fontColors: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#ccc', '#0693E3', '#666', '#333', '#363'],
-      entityColors: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#ccc', '#0693E3', '#666', '#333'],
-      bgColors: ['#FF6900', '#FCB900', '#EB144C', '#F78DA7', '#7BDCB5', '#ccc', '#0693E3', '#f5f5f5', '#333', '#363']
+      fontColors: ['#B80000', '#DB3E00', '#FCCB00', '#008B02', '#006B76', '#1273DE', '#004DCF', '#5300EB', '#333', '#f5f5f5'],
+      entityColors: ['#B80000', '#DB3E00', '#FCCB00', '#008B02', '#006B76', '#004DCF', '#5300EB', '#333'],
+      bgColors: ['#B80000', '#DB3E00', '#FCCB00', '#008B02', '#006B76', '#1273DE', '#004DCF', '#5300EB', '#333', '#f5f5f5']
     }
   },
   textAlign: {

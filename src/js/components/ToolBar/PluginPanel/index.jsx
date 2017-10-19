@@ -8,7 +8,8 @@ import {
   Card
 } from 'antd';
 import {
-  TextInput
+  TextInput,
+  SelectionInput
 } from './../PluginItem';
 
 
@@ -32,8 +33,15 @@ export default class PluginPanel extends React.Component{
           gutter={10}
           style={{ padding: '5px 0' }}
         >
-          <Col span={24}>
+          <Col span={4}>
             <TextInput 
+              config={config}
+              editorState={editorState}
+              onEditorStateChange={onEditorStateChange}
+            />
+          </Col>
+          <Col span={4}>
+            <SelectionInput
               config={config}
               editorState={editorState}
               onEditorStateChange={onEditorStateChange}

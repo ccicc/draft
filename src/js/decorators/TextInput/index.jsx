@@ -100,12 +100,12 @@ class TextInput extends React.Component {
           </span>
           <span style={{ display: 'none' }} >{children}</span>
         </Popover>
-        {/* <input
+        <input
           disabled
           title={describeVal}
           className={styles.input}
           type="text"
-        /> */}
+        />
       </span>
     );
   }

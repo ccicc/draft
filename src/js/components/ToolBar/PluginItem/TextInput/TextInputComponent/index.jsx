@@ -84,6 +84,7 @@ export default class TextInputComponent extends React.Component {
       <div>
         <Button
           type="primary"
+          title="添加文本输入框控件"
           onClick={this.onAddTextInputClick}
         >
           文本输入控件

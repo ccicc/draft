@@ -8,7 +8,6 @@ import {
   CompositeDecorator,
   getDefaultKeyBinding,
 } from 'draft-js';
-
 import {
   changeDepth,
   getCustomStyleMap,
