@@ -147,7 +147,7 @@ class TextInputModal extends React.Component {
             </Col>
           </Row>
           <Row>
-            <Col span={24}>
+            <Col span={12}>
               <FormItem label="字体颜色">
                 {
                   getFieldDecorator('entityColor', {

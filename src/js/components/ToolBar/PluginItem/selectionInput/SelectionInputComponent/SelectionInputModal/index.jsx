@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import {
   Modal,
@@ -9,7 +7,6 @@ import {
   Col,
   Select,
   Input,
-  Icon,
   Tabs
 } from 'antd';
 
@@ -21,11 +18,6 @@ const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
 class SelectionInputModal extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {}
-  }
-
   onSetDefaultVal = (value) => {
     const { setFieldsValue } = this.props.form;
     setFieldsValue({ defaultVal: value });
@@ -41,9 +33,6 @@ class SelectionInputModal extends React.Component {
     const {
       config,
       isVisible,
-      entityColor,
-      onChangeEntityColor,
-      onChangeSelectItems,
       onHandleConfirm,
       onHandleCancel
     } = this.props;
@@ -106,7 +95,7 @@ class SelectionInputModal extends React.Component {
                       tokenSeparator={[',']}
                       placeholder="多个标签可用逗号隔开"
                     />
-                    )
+                  )
                 }
               </FormItem>
             </Col>
@@ -139,8 +128,8 @@ class SelectionInputModal extends React.Component {
                 {
                   getFieldDecorator('defaultVal')(
                     <Input
-                      style={{ color: `${entityColor}` }}
-                      size="default" disabled
+                      disabled
+                      size="default"
                       placeholder="选择控件值"
                       addonAfter={
                         <Button
@@ -166,7 +155,7 @@ class SelectionInputModal extends React.Component {
                         <SelectItem
                           onSetFieldsValue={this.onSetDefaultVal}
                         />
-                        )
+                      )
                     }
                   </TabPane>
                 </Tabs>
@@ -175,7 +164,7 @@ class SelectionInputModal extends React.Component {
           </Row>
         </Form>
       </Modal>
-    )
+    );
   }
 }
 
@@ -203,6 +192,6 @@ export default Form.create({
       selectItems: {
         value: props.selectItems
       }
-    }
+    };
   }
 })(SelectionInputModal);
