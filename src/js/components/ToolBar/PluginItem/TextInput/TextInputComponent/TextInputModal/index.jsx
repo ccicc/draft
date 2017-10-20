@@ -110,7 +110,7 @@ class TextInputModal extends React.Component {
                       tokenSeparator={[',']}
                       placeholder="多个标签可用逗号分隔"
                     />
-                    )
+                  )
                 }
               </FormItem>
             </Col>
@@ -131,7 +131,7 @@ class TextInputModal extends React.Component {
                       isRequired={isRequired}
                       getRules={this.getRules}
                     />
-                    )
+                  )
                 }
               </FormItem>
             </Col>
@@ -155,7 +155,7 @@ class TextInputModal extends React.Component {
                     <ColorPicker
                       config={config}
                     />
-                    )
+                  )
                 }
               </FormItem>
             </Col>
@@ -172,7 +172,7 @@ class TextInputModal extends React.Component {
                     valuePropName: 'defaultChecked'
                   })(
                     <Switch size="default" checkedChildren="是" unCheckedChildren="否" onChange={this.onSwitchChange} />
-                    )
+                  )
                 }
               </FormItem>
             </Col>
@@ -187,7 +187,7 @@ class TextInputModal extends React.Component {
                     valuePropName: 'defaultChecked'
                   })(
                     <Switch checkedChildren="是" unCheckedChildren="否" />
-                    )
+                  )
                 }
               </FormItem>
             </Col>

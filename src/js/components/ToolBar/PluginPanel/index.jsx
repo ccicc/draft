@@ -9,7 +9,8 @@ import {
 } from 'antd';
 import {
   TextInput,
-  SelectionInput
+  SelectionInput,
+  DateInput
 } from './../PluginItem';
 
 
@@ -33,15 +34,22 @@ export default class PluginPanel extends React.Component{
           gutter={10}
           style={{ padding: '5px 0' }}
         >
-          <Col span={4}>
+          <Col span={3.5}>
             <TextInput 
               config={config}
               editorState={editorState}
               onEditorStateChange={onEditorStateChange}
             />
           </Col>
-          <Col span={4}>
+          <Col span={4.5}>
             <SelectionInput
+              config={config}
+              editorState={editorState}
+              onEditorStateChange={onEditorStateChange}
+            />
+          </Col>
+          <Col span={3.5}>
+            <DateInput
               config={config}
               editorState={editorState}
               onEditorStateChange={onEditorStateChange}

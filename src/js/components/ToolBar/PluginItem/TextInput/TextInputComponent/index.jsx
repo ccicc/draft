@@ -95,7 +95,6 @@ export default class TextInputComponent extends React.Component {
           {...textInput}
           config={config}
           isVisible={isVisible}
-          entityColor={textInput.fontColor}
           onModalConfirm={this.onModalConfirm}
           onModalCancel={this.onModalCancel}
         />
