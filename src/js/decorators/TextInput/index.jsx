@@ -86,7 +86,9 @@ class TextInput extends React.Component {
         onClick={this.onHandleClick}
       >
         <span className={styles.controlName}>{controlName}</span>
-        <span>:</span>
+        {
+          controlName && <span>:</span>
+        }
         <Popover
           visible={isVisible}
           content={content}

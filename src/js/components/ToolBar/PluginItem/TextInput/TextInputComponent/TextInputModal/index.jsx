@@ -84,14 +84,13 @@ class TextInputModal extends React.Component {
           <Row gutter={15}>
             <Col span={12}>
               <FormItem label="控件ID">
-                { getFieldDecorator('controlId')(<Input size="default" disabled />) }
+                {getFieldDecorator('controlId')(<Input size="default" disabled />)}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem label="控件名称" >
                 {
                   getFieldDecorator('controlName', {
-                    rules: [{ required: true, message: '请填写控件名称' }],
                   })(<Input size="default" placeholder="请输入控件名称" />)
                 }
               </FormItem>
@@ -111,13 +110,13 @@ class TextInputModal extends React.Component {
                       tokenSeparator={[',']}
                       placeholder="多个标签可用逗号分隔"
                     />
-                  )
+                    )
                 }
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem label="控件描述">
-                { getFieldDecorator('describeVal')(<Input size="default" placeholder="请输入与控件描述信息" />) }
+                {getFieldDecorator('describeVal')(<Input size="default" placeholder="请输入与控件描述信息" />)}
               </FormItem>
             </Col>
           </Row>
@@ -132,7 +131,7 @@ class TextInputModal extends React.Component {
                       isRequired={isRequired}
                       getRules={this.getRules}
                     />
-                  )
+                    )
                 }
               </FormItem>
             </Col>
@@ -156,7 +155,7 @@ class TextInputModal extends React.Component {
                     <ColorPicker
                       config={config}
                     />
-                  )
+                    )
                 }
               </FormItem>
             </Col>
@@ -173,7 +172,7 @@ class TextInputModal extends React.Component {
                     valuePropName: 'defaultChecked'
                   })(
                     <Switch size="default" checkedChildren="是" unCheckedChildren="否" onChange={this.onSwitchChange} />
-                  )
+                    )
                 }
               </FormItem>
             </Col>
@@ -188,7 +187,7 @@ class TextInputModal extends React.Component {
                     valuePropName: 'defaultChecked'
                   })(
                     <Switch checkedChildren="是" unCheckedChildren="否" />
-                  )
+                    )
                 }
               </FormItem>
             </Col>

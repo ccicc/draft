@@ -65,7 +65,7 @@ class SelectionInput extends React.Component {
 
     const content = (
       <div>
-        <span className={styles.popupName}>{controlName}</span>
+        { controlName && <span className={styles.popupName}>{controlName}</span>}
         文本输入框
         <span
           className={styles.editorBtn}
@@ -94,13 +94,6 @@ class SelectionInput extends React.Component {
 
     return (
       <span className={styles.root}>
-        <span
-          className={styles.controlName}
-          onClick={this.onHandleClick}
-        >
-          {controlName}
-        </span>
-        <span>:</span>
         <Popover
           visible={isVisible}
           content={content}
@@ -108,6 +101,15 @@ class SelectionInput extends React.Component {
           trigger="click"
           onVisibleChange={this.onHandleVisibleChange}
         >
+          <span
+            className={styles.controlName}
+            onClick={this.onHandleClick}
+          >
+            {controlName}
+          </span>
+          {
+            controlName && <span>:</span>
+          }
           <span
             className={styles.controlVal}
             title={describeVal}
@@ -127,6 +129,7 @@ class SelectionInput extends React.Component {
                     key={item.val}
                     title={item.title}
                     value={item.val}
+                    style={{ color: item.val === defaultVal ? entityColor : '' }}
                   >
                     {item.val}
                   </Option>

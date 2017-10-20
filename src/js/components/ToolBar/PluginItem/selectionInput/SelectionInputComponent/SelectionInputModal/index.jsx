@@ -75,7 +75,6 @@ class SelectionInputModal extends React.Component {
               <FormItem label="控件名称">
                 {
                   getFieldDecorator('controlName', {
-                    rules: [{ required: true, message: '请填写控件名称' }]
                   })(<Input size="default" placeholder="请填写控件名称" />)
                 }
               </FormItem>
