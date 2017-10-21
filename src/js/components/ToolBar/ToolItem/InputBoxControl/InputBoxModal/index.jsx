@@ -1,11 +1,8 @@
-/* eslint-disable */ 
-
 import React from 'react';
-import eventProxy from './../../../../../customUtils/eventProxy';
+import PropTypes from 'prop-types';
 import {
   Modal,
-  Select,
-  Button
+  Select
 } from 'antd';
 
 import inputBoxHOC from './../InputBoxHOC';
@@ -13,6 +10,14 @@ import InputBoxForm from './InputBoxForm';
 
 const Option = Select.Option;
 export default class InputBoxModal extends React.Component {
+  static propTypes = {
+    config: PropTypes.object.isRequired,
+    editorState: PropTypes.object.isRequired,
+    onEditorStateChange: PropTypes.func.isRequired,
+    isVisible: PropTypes.bool.isRequired,
+    onHiddenModal: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -48,7 +53,7 @@ export default class InputBoxModal extends React.Component {
         footer={null}
       >
         <div>
-          <Select 
+          <Select
             showSearch
             value={currentInputBox}
             optionFilterProp="children"
@@ -60,13 +65,13 @@ export default class InputBoxModal extends React.Component {
             <Option value="DateInput">日期输入框</Option>
           </Select>
         </div>
-        <WrapperInputBoxForm 
+        <WrapperInputBoxForm
           config={config}
           editorState={editorState}
           onEditorStateChange={onEditorStateChange}
           onHiddenModal={onHiddenModal}
         />
       </Modal>
-    )
+    );
   }
 }

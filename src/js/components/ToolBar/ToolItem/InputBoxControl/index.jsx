@@ -1,10 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
 } from 'antd';
 import InputBoxModal from './InputBoxModal';
 
 export default class InputBoxControl extends React.Component {
+  static propTypes = {
+    config: PropTypes.object.isRequired,
+    editorState: PropTypes.object.isRequired,
+    onEditorStateChange: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {

@@ -1,5 +1,5 @@
-/* eslint-disable */ 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { EditorState, Modifier } from 'draft-js';
 import {
   getSelectionText,
@@ -7,11 +7,17 @@ import {
   getEntityRange
 } from 'draftjs-utils';
 
-
+// 一个高阶组件，将添加和删除实体的方法从各个输入框控件中解耦出来
 export default function inputBoxHOC(currInputBox) {
-  return function(Component) {
-
+  return function (Component) {         // eslint-disable-line
     return class extends React.Component {
+      static propTypes = {
+        config: PropTypes.object.isRequired,
+        editorState: PropTypes.object.isRequired,
+        onEditorStateChange: PropTypes.func.isRequired,
+        onHiddenModal: PropTypes.func.isRequired
+      };
+
       constructor(props) {
         super(props);
         this.state = {
@@ -21,7 +27,7 @@ export default function inputBoxHOC(currInputBox) {
 
       componentWillMount() {
         const { editorState } = this.props;
-        if(editorState) {
+        if (editorState) {
           this.setState({
             currentEntity: getSelectionEntity(editorState)
           });
@@ -38,10 +44,9 @@ export default function inputBoxHOC(currInputBox) {
       }
 
       onHandleChange = (value, entityData) => {
-        console.log(value, entityData);
         if (value === currInputBox) {
           this.addInputBoxEntity(entityData);
-        }else {
+        } else {
           this.removeInputBoxEntity();
         }
       }
@@ -53,7 +58,7 @@ export default function inputBoxHOC(currInputBox) {
         const contentState = editorState.getCurrentContent();
         const currentValues = {};
 
-        if(currentEntity && contentState.getEntity(currentEntity).getType() === type) {
+        if (currentEntity && contentState.getEntity(currentEntity).getType() === currInputBox) {
           currentValues[currInputBox] = contentState.getEntity(currentEntity).getData();
         }
         currentValues.selectionText = getSelectionText(editorState);
@@ -66,7 +71,7 @@ export default function inputBoxHOC(currInputBox) {
         const { currentEntity } = this.state;
         let selectionState = editorState.getSelection();
 
-        if(currentEntity) {
+        if (currentEntity) {
           const entityRange = getEntityRange(editorState, currentEntity);
           selectionState = selectionState.merge({
             anchorOffset: entityRange.start,
@@ -75,10 +80,10 @@ export default function inputBoxHOC(currInputBox) {
         }
         const entityKey = editorState
           .getCurrentContent()
-          .createEntity(currInputBox.toUpperCase(), 'IMMUTABLE', {...entityData})
+          .createEntity(currInputBox.toUpperCase(), 'IMMUTABLE', { ...entityData })
           .getLastCreatedEntityKey();
-        
-        const placeholderText = `${entityData.controlName}: [ ${entityData.defaultVal} ]`;
+
+        const placeholderText = `${entityData.controlName || ''}: [ ${entityData.defaultVal || ''} ]`;
         let contentState = Modifier.replaceText(
           editorState.getCurrentContent(),
           selectionState,
@@ -109,7 +114,7 @@ export default function inputBoxHOC(currInputBox) {
         const { currentEntity } = this.state;
         let selectionState = editorState.getSelection();
 
-        if(currentEntity) {
+        if (currentEntity) {
           const entityRange = getEntityRange(editorState, currentEntity);
           selectionState = selectionState.merge({
             anchorOffset: entityRange.start,
@@ -127,10 +132,9 @@ export default function inputBoxHOC(currInputBox) {
       }
 
       render() {
-        const { currentEntity } = this.state;
         const { config, onHiddenModal } = this.props;
         const { selectionText, entityData } = this.getCurrentValue();
-        const controlID = entityData && entityData.controlID || currInputBox;
+        const controlID = (entityData && entityData.controlID) || currInputBox;
         return (
           <Component
             entityData={entityData}
@@ -140,9 +144,8 @@ export default function inputBoxHOC(currInputBox) {
             onChange={this.onHandleChange}
             onHiddenModal={onHiddenModal}
           />
-        )
+        );
       }
-    }
-
-  }
+    };
+  };
 }
