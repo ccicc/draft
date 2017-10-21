@@ -7,15 +7,18 @@ import {
   Select,
   Input,
   Button,
-  Switch
+  Switch,
+  Tabs
 } from 'antd';
 
 import ColorPicker from './../../../../../../Common/ColorPicker';
 import SelectType from './SelectType';
+import SelectItem from './SelectItem';
 
 import styles from './index.less';
 
 const FormItem = Form.Item;
+const TabPane = Tabs.TabPane;
 class InputForm extends React.Component {
   constructor(props) {
     super(props);
@@ -45,9 +48,19 @@ class InputForm extends React.Component {
     });
   }
 
+  onSetDefaultVal = (value) => {
+    const { setFieldsValue } = this.props.form;
+    setFieldsValue({ defaultVal: value });
+  }
+
+  onCleanDefaultVal = () => {
+    const { setFieldsValue } = this.props.form;
+    setFieldsValue({ defaultVal: '未知' });
+  }
+
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
-    const { config, onHandleConfirm, onHandleCancel } = this.props;
+    const { config, controlID, onHandleConfirm, onHandleCancel } = this.props;
     const { dataTypeRules, isRequired } = this.state;
 
     const ControlID = (
@@ -100,14 +113,27 @@ class InputForm extends React.Component {
       </FormItem>
     );
 
+    let DefaultInput;
+    if (controlID === 'TextInput') {
+      DefaultInput = (<Input size="default" placeholder="请输入控件值" />)
+    } else if(controlID === 'SelectionInput') {
+      DefaultInput = (
+        <Input
+          disabled
+          size="default"
+          placeholder="选择控件值"
+          addonAfter={ 
+            <Button title="清除默认值" size="default" icon="rollback" onClick={this.onCleanDefaultVal} /> 
+          }
+        />
+      );
+    }
     const DefaultVal = (
-      <FormItem label="控件值">
+      <FormItem label="控件值" className={styles.defaultVal}>
         {
           getFieldDecorator('defaultVal', {
             rules: [...dataTypeRules]
-          })(
-            <Input size="default" placeholder="请输入控件值" />
-          )
+          })(DefaultInput)
         }
       </FormItem>
     );
@@ -158,6 +184,24 @@ class InputForm extends React.Component {
       </FormItem>
     );
 
+    const SelectItems = (
+      <FormItem>
+        <Tabs type="card">
+          <TabPane tab="自定义选项" key="1">
+            {
+              getFieldDecorator('selectItems', {
+                valuePropsName: 'selectItems'
+              })(
+                <SelectItem
+                  onSetFieldsValue={this.onSetDefaultVal}
+                />
+                )
+            }
+          </TabPane>
+        </Tabs>
+      </FormItem>
+    );
+
     const TextInput = (
       <Row gutter={15}>
         <Col span={12}> {ControlID} </Col>
@@ -180,14 +224,15 @@ class InputForm extends React.Component {
         <Col span={12}> {DescribeVal} </Col>
         <Col span={12}> {EntityColor} </Col>
         <Col span={12}> {DefaultVal} </Col>
+        <Col span={24}> {SelectItems} </Col>
       </Row>
     );
 
     return (
       <div className={styles.root}>
         <Form>
-          { this.props.controlID === 'TextInput' && TextInput }
-          { this.props.controlID === 'SelectionInput' && SelectionInput }
+          {this.props.controlID === 'TextInput' && TextInput}
+          {this.props.controlID === 'SelectionInput' && SelectionInput}
           <Button
             key="submit"
             type="primary"
@@ -239,6 +284,9 @@ const WrapperInputForm = Form.create({
       },
       isReadOnly: {
         value: props.isReadOnly || false
+      },
+      selectItems: {
+        value: props.selectItems || []
       }
     };
   }
