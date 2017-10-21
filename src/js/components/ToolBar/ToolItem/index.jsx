@@ -27,3 +27,5 @@ export { default as Image } from './Image';
 export { default as Postil } from './Postil';
 
 export { default as Equation } from './Equation';
+
+export { default as InputBoxControl } from './InputBoxControl';

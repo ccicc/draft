@@ -20,7 +20,8 @@ import {
   Copy,
   Image,
   Postil,
-  Equation
+  Equation,
+  InputBoxControl
 } from './../ToolItem';
 
 export default class EditorPanel extends React.Component {
@@ -105,7 +106,16 @@ export default class EditorPanel extends React.Component {
                 onEditorStateChange={onEditorStateChange}
               />
             </Col>
+            <Col span={3}>
+              <InputBoxControl
+                config={config}
+                editorState={editorState}
+                onEditorStateChange={onEditorStateChange}
+              />
+            </Col>
           </Row>
+
+
           <Row
             type="flex"
             gutter={10}
