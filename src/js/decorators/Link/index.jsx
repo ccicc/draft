@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import styles from './index.less';
 
-class Link extends React.Component {
+export default class Link extends React.Component {
   static propTypes = {
     entityKey: PropTypes.string.isRequired,
     children: PropTypes.array,
@@ -80,25 +80,3 @@ class Link extends React.Component {
     );
   }
 }
-
-function findLinkEntities(contentBlock, callback, contentState) {
-  contentBlock.findEntityRanges(
-    (character) => {
-      const entityKey = character.getEntity();
-      return (
-        entityKey !== null &&
-        contentState.getEntity(entityKey).getType() === 'LINK'
-      );
-    },
-    callback
-  );
-}
-
-function linkDecorator() {
-  return {
-    strategy: findLinkEntities,
-    component: Link
-  };
-}
-
-export default linkDecorator;

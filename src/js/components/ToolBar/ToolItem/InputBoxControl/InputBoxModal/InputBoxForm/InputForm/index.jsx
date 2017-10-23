@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import {
   Row,
@@ -8,7 +7,8 @@ import {
   Input,
   Button,
   Switch,
-  Tabs
+  Tabs,
+  DatePicker
 } from 'antd';
 
 import ColorPicker from './../../../../../../Common/ColorPicker';
@@ -19,12 +19,28 @@ import styles from './index.less';
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
+const Option = Select.Option;
+
 class InputForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isRequired: true,
-      dataTypeRules: [{ required: true, message: '请输入控件值' }]
+      dataTypeRules: [{ required: true, message: '请输入控件值' }],
+      dateFormat: 'YYYY-MM-DD HH:mm'
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { isRequired, dateFormat } = nextProps;
+    if (
+      isRequired && isRequired !== this.props.isRequired &&
+      dateFormat && dateFormat !== this.props.dateFormat
+    ) {
+      this.setState({
+        isRequired,
+        dateFormat
+      });
     }
   }
 
@@ -32,19 +48,13 @@ class InputForm extends React.Component {
     const { dataTypeRules } = this.state;
     const newRules = dataTypeRules.map(item => {
       if (item.required !== undefined) {
-        item.required = checked
+        item.required = checked;
       }
       return item;
     });
     this.setState({
       dataTypeRules: newRules,
       isRequired: checked
-    });
-  }
-
-  getRules = (dataTypeRules) => {
-    this.setState({
-      dataTypeRules
     });
   }
 
@@ -58,10 +68,22 @@ class InputForm extends React.Component {
     setFieldsValue({ defaultVal: '未知' });
   }
 
+  onDateFormatChange = (value) => {
+    this.setState({
+      dateFormat: value
+    });
+  }
+
+  getRules = (dataTypeRules) => {
+    this.setState({
+      dataTypeRules
+    });
+  }
+
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
     const { config, controlID, onHandleConfirm, onHandleCancel } = this.props;
-    const { dataTypeRules, isRequired } = this.state;
+    const { dataTypeRules, isRequired, dateFormat } = this.state;
 
     const ControlID = (
       <FormItem label="控件ID">
@@ -127,7 +149,7 @@ class InputForm extends React.Component {
           }
         </FormItem>
       );
-    } else if(controlID === 'SelectionInput') {
+    } else if (controlID === 'SelectionInput') {
       DefaultVal = (
         <FormItem label="控件值" className={styles.defaultVal}>
           {
@@ -135,9 +157,27 @@ class InputForm extends React.Component {
               <Input
                 disabled
                 size="default"
-                addonAfter={ 
-                  <Button title="清除默认值" size="default" icon="rollback" onClick={this.onCleanDefaultVal} /> 
+                addonAfter={
+                  <Button title="清除默认值" size="default" icon="rollback" onClick={this.onCleanDefaultVal} />
                 }
+              />
+            )
+          }
+        </FormItem>
+      );
+    } else if (controlID === 'DateInput') {
+      DefaultVal = (
+        <FormItem label="控件值">
+          {
+            getFieldDecorator('defaultVal', {
+              rules: [{ required: isRequired, message: '请选择日期时间' }]
+            })(
+              <DatePicker
+                showTime
+                size="default"
+                style={{ width: '100%' }}
+                placeholder="请选择时间"
+                format={dateFormat}
               />
             )
           }
@@ -202,10 +242,35 @@ class InputForm extends React.Component {
                 <SelectItem
                   onSetFieldsValue={this.onSetDefaultVal}
                 />
-                )
+              )
             }
           </TabPane>
         </Tabs>
+      </FormItem>
+    );
+
+    const DateFormat = (
+      <FormItem label="日期格式">
+        {
+          getFieldDecorator('dateFormat', {
+            valuePropsName: 'dateFormat',
+          })(
+            <Select
+              showSearch
+              size="default"
+              placeholder="选择日期格式"
+              optionFilterprop="children"
+              onChange={this.onDateFormatChange}
+            >
+              <Option key="1" value="YYYY-MM-DD">YYYY-MM-DD</Option>
+              <Option key="2" value="YYYY-MM-DD HH:MM">YYYY-MM-DD HH:mm</Option>
+              <Option key="3" value="YYYY-MM-DD HH:MM:SS">YYYY-MM-DD HH:mm:ss</Option>
+              <Option key="4" value="YYYY/MM/DD">YYYY/MM/DD</Option>
+              <Option key="5" value="YYYY/MM/DD HH:MM">YYYY/MM/DD HH:mm</Option>
+              <Option key="6" value="YYYY/MM/DD HH:MM:SS">YYYY/MM/DD HH:mm:ss</Option>
+            </Select>
+          )
+        }
       </FormItem>
     );
 
@@ -235,11 +300,26 @@ class InputForm extends React.Component {
       </Row>
     );
 
+    const DateInput = (
+      <Row gutter={15}>
+        <Col span={12}>{ControlID}</Col>
+        <Col span={12}>{ControlName}</Col>
+        <Col span={12}>{Tags}</Col>
+        <Col span={12}>{DescribeVal}</Col>
+        <Col span={12}>{DateFormat}</Col>
+        <Col span={12}>{DefaultVal}</Col>
+        <Col span={12}>{EntityColor}</Col>
+        <Col span={12}>{IsRequired}</Col>
+        <Col span={12}>{IsReadOnly}</Col>
+      </Row>
+    );
+
     return (
       <div className={styles.root}>
         <Form>
           {this.props.controlID === 'TextInput' && TextInput}
           {this.props.controlID === 'SelectionInput' && SelectionInput}
+          {this.props.controlID === 'DateInput' && DateInput}
           <Button
             key="submit"
             type="primary"
@@ -255,10 +335,9 @@ class InputForm extends React.Component {
           >
             取消
           </Button>
-
         </Form>
       </div>
-    )
+    );
   }
 }
 
@@ -294,6 +373,9 @@ const WrapperInputForm = Form.create({
       },
       selectItems: {
         value: props.selectItems || []
+      },
+      dateFormat: {
+        value: props.dateFormat
       }
     };
   }

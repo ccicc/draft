@@ -6,7 +6,7 @@ import {
 import eventProxy from 'customUtils/eventProxy';  // eslint-disable-line
 import styles from './index.less';
 
-class TextInput extends React.Component {
+export default class TextInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,10 +85,7 @@ class TextInput extends React.Component {
         className={styles.root}
         onClick={this.onHandleClick}
       >
-        <span className={styles.controlName}>{controlName}</span>
-        {
-          controlName && <span>:</span>
-        }
+        {controlName && <span className={styles.controlName}>{controlName} : </span>}
         <Popover
           visible={isVisible}
           content={content}
@@ -116,26 +113,3 @@ class TextInput extends React.Component {
     );
   }
 }
-
-function findTextInputEntities(contentBlock, callback, contentState) {
-  contentBlock.findEntityRanges(
-    (character) => {
-      const entityKey = character.getEntity();
-      return (
-        entityKey !== null &&
-        contentState.getEntity(entityKey).getType() === 'TEXTINPUT'
-      );
-    },
-    callback
-  );
-}
-
-
-function textInputDecorator() {
-  return {
-    strategy: findTextInputEntities,
-    component: TextInput
-  };
-}
-
-export default textInputDecorator;

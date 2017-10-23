@@ -3,7 +3,7 @@ import katex from 'katex';
 import PropTypes from 'prop-types';
 import styles from './index.less';
 
-class Equation extends React.Component {
+export default class Equation extends React.Component {
   static propTypes = {
     entityKey: PropTypes.string.isRequired,
     contentState: PropTypes.object.isRequired
@@ -31,24 +31,3 @@ class Equation extends React.Component {
   }
 }
 
-function findEquationEntities(contentBlock, callback, contentState) {
-  contentBlock.findEntityRanges(
-    (characters) => {
-      const entityKey = characters.getEntity();
-      return (
-        entityKey !== null &&
-        contentState.getEntity(entityKey).getType() === 'EQUATION'
-      );
-    },
-    callback
-  );
-}
-
-function equationDecorator() {
-  return {
-    strategy: findEquationEntities,
-    component: Equation
-  };
-}
-
-export default equationDecorator;

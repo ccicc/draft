@@ -27,12 +27,13 @@ import Toolbar from './../ToolBar';
 
 // 装饰器导入
 import {
-  linkDecorator,
-  postilDecorator,
-  equationDecorator,
-  strikeThroughDecorator,
-  textInputDecorator,
-  selectionInputDecorator
+  Link,
+  Postil,
+  Equation,
+  CustomThrough,
+  TextInput,
+  SelectionInput,
+  DateInput
 } from './../../decorators';
 
 // 自定义块级组件导入
@@ -85,13 +86,44 @@ export default class Draft extends React.Component {
   getEditorState = () => this.state.editorState;
 
   getCompositeDecorator = () => {
+    // decorator装饰器初始化
+    const strategyFn = function (type, contentBlock, callback, contentState) {  // eslint-disable-line
+      // 装饰器策略函数
+      contentBlock.findEntityRanges(
+        (character) => {
+          const entityKey = character.getEntity();
+          return (
+            entityKey !== null &&
+            contentState.getEntity(entityKey).getType() === type
+          );
+        },
+        callback
+      );
+    };
+    const deComponent = (Component, props) => {
+      // 装饰器组件
+      return (
+        <Component
+          editorState={this.state.editorState}
+          onEditorStateChange={this.onChange}
+          {...props}
+        />
+      );
+    };
+    const createDecorator = (entityType, entityComponent) => {
+      return {
+        strategy: strategyFn.bind(this, entityType),
+        component: deComponent.bind(this, entityComponent)
+      };
+    };
     const decorators = [
-      linkDecorator(),
-      postilDecorator(),
-      equationDecorator(),
-      strikeThroughDecorator(),
-      textInputDecorator(),
-      selectionInputDecorator()
+      createDecorator('CUSTOMTHROUGH', CustomThrough),
+      createDecorator('LINK', Link),
+      createDecorator('EQUATION', Equation),
+      createDecorator('POSTIL', Postil),
+      createDecorator('SELECTIONINPUT', SelectionInput),
+      createDecorator('TEXTINPUT', TextInput),
+      createDecorator('DATEINPUT', DateInput)
     ];
     return new CompositeDecorator(decorators);
   }

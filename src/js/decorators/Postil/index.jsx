@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import styles from './index.less';
 
-class Postil extends React.Component {
+export default class Postil extends React.Component {
   static propTypes = {
     entityKey: PropTypes.string.isRequired,
     children: PropTypes.array,
@@ -27,25 +27,3 @@ class Postil extends React.Component {
     );
   }
 }
-
-function findPostilEntities(contentBlock, callback, contentState) {
-  contentBlock.findEntityRanges(
-    (character) => {
-      const entityKey = character.getEntity();
-      return (
-        entityKey !== null &&
-        contentState.getEntity(entityKey).getType() === 'POSTIL'
-      );
-    },
-    callback
-  );
-}
-
-function postilDecorator() {
-  return {
-    strategy: findPostilEntities,
-    component: Postil
-  };
-}
-
-export default postilDecorator;

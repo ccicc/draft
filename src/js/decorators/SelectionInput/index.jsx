@@ -9,7 +9,7 @@ import eventProxy from './../../customUtils/eventProxy';
 import styles from './index.less';
 
 const Option = Select.Option;
-class SelectionInput extends React.Component {
+export default class SelectionInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -144,26 +144,3 @@ class SelectionInput extends React.Component {
     );
   }
 }
-
-
-function findSelectionInputEntities(contentBlock, callback, contentState) {
-  contentBlock.findEntityRanges(
-    (character) => {
-      const entityKey = character.getEntity();
-      return (
-        entityKey !== null &&
-        contentState.getEntity(entityKey).getType() === 'SELECTIONINPUT'
-      );
-    },
-    callback
-  );
-}
-
-function selectionInputDecorator() {
-  return {
-    strategy: findSelectionInputEntities,
-    component: SelectionInput
-  };
-}
-
-export default selectionInputDecorator;

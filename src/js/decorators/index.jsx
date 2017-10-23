@@ -1,11 +1,13 @@
-export { default as linkDecorator } from './Link';
+export { default as Link } from './Link';
 
-export { default as postilDecorator } from './Postil';
+export { default as Postil } from './Postil';
 
-export { default as equationDecorator } from './Equation';
+export { default as Equation } from './Equation';
 
-export { default as strikeThroughDecorator } from './CustomThrough';
+export { default as CustomThrough } from './CustomThrough';
 
-export { default as textInputDecorator } from './TextInput';
+export { default as TextInput } from './TextInput';
 
-export { default as selectionInputDecorator } from './SelectionInput';
+export { default as SelectionInput } from './SelectionInput';
+
+export { default as DateInput } from './DateInput';
