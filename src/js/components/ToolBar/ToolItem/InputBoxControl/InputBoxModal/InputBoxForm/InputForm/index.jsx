@@ -113,30 +113,37 @@ class InputForm extends React.Component {
       </FormItem>
     );
 
-    let DefaultInput;
+    let DefaultVal;
+
     if (controlID === 'TextInput') {
-      DefaultInput = (<Input size="default" placeholder="请输入控件值" />)
-    } else if(controlID === 'SelectionInput') {
-      DefaultInput = (
-        <Input
-          disabled
-          size="default"
-          placeholder="选择控件值"
-          addonAfter={ 
-            <Button title="清除默认值" size="default" icon="rollback" onClick={this.onCleanDefaultVal} /> 
+      DefaultVal = (
+        <FormItem label="控件值" className={styles.defaultVal}>
+          {
+            getFieldDecorator('defaultVal', {
+              rules: [...dataTypeRules]
+            })(
+              <Input size="default" placeholder="请输入控件值" />
+            )
           }
-        />
+        </FormItem>
+      );
+    } else if(controlID === 'SelectionInput') {
+      DefaultVal = (
+        <FormItem label="控件值" className={styles.defaultVal}>
+          {
+            getFieldDecorator('defaultVal')(
+              <Input
+                disabled
+                size="default"
+                addonAfter={ 
+                  <Button title="清除默认值" size="default" icon="rollback" onClick={this.onCleanDefaultVal} /> 
+                }
+              />
+            )
+          }
+        </FormItem>
       );
     }
-    const DefaultVal = (
-      <FormItem label="控件值" className={styles.defaultVal}>
-        {
-          getFieldDecorator('defaultVal', {
-            rules: [...dataTypeRules]
-          })(DefaultInput)
-        }
-      </FormItem>
-    );
 
     const IsRequired = (
       <FormItem

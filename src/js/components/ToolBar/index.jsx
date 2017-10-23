@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Row, Col } from 'antd';
 import EditorPanel from './EditorPanel';
-import PluginPanel from './PluginPanel';
 
 import styles from './index.less';
 
@@ -24,7 +23,7 @@ export default class ToolBar extends React.Component {
     return (
       <div className={styles.root}>
         <Tabs
-          defaultActiveKey="2"
+          defaultActiveKey="1"
         >
           <TabPane tab="编辑" key="1">
             <Row>
@@ -37,20 +36,6 @@ export default class ToolBar extends React.Component {
               </Col>
             </Row>
           </TabPane>
-
-          <TabPane tab="插入" key="2">
-            <Row span={24}>
-              <Col>
-                <PluginPanel
-                  config={config}
-                  editorState={editorState}
-                  onEditorStateChange={onEditorStateChange}
-                />
-              </Col>
-            </Row>
-          </TabPane>
-
-          <TabPane tab="表格" key="3">表格面板</TabPane>
         </Tabs>
       </div>
     );

@@ -36,10 +36,8 @@ export default class InputBoxForm extends React.Component {
         ...changeFields
       }
     });
-    setTimeout(() => {
-      onChange(this.state.controlID, this.state.entityData);
-      onHiddenModal();
-    });
+    onChange(changeFields.controlID, changeFields);
+    onHiddenModal();
   }
 
   onHandleCancel = () => {
