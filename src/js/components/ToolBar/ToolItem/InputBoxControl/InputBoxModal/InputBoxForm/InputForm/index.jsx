@@ -343,6 +343,7 @@ class InputForm extends React.Component {
 
 const WrapperInputForm = Form.create({
   mapPropsToFields(props) {
+    console.log(props);
     return {
       controlID: {
         value: props.controlID

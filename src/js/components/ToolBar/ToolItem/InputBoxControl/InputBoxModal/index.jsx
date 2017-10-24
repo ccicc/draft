@@ -36,15 +36,20 @@ export default class InputBoxModal extends React.Component {
       onHandleClick();
       this.onSelectChange(val);
     });
+    eventProxy.on('textInputEditor', (val) => {
+      onHandleClick();
+      this.onSelectChange(val);
+    });
   }
 
   componentWillUnmount() {
     eventProxy.off('dataInputEditor');
     eventProxy.off('selectionInputEditor');
+    eventProxy.off('textInputEditor');
   }
 
   onSelectChange = (val) => {
-    if (val && val !== this.state.currentInputBox) {
+    if (val) {
       this.setState({
         currentInputBox: val
       });

@@ -38,13 +38,14 @@ export default function inputBoxHOC(currInputBox) {
       componentDidMount() {
         eventProxy.on('dateInputDelete', this.removeInputBoxEntity);
         eventProxy.on('selectionInputDelete', this.removeInputBoxEntity);
+        eventProxy.on('textInputEditor', this.removeInputBoxEntity);
       }
 
       componentWillReceiveProps(nextProps) {
         const { editorState } = nextProps;
         if (editorState && editorState !== this.props.editorState) {
           this.setState({
-            currentEntity: editorState.getSelectionEntity()
+            currentEntity: getSelectionEntity(editorState)
           });
         }
       }
@@ -52,6 +53,7 @@ export default function inputBoxHOC(currInputBox) {
       componentWillUnmount() {
         eventProxy.off('dateInputDelete');
         eventProxy.off('selectionInputDelete');
+        eventProxy.off('textInputDelete');
       }
 
       onHandleChange = (value, entityData) => {
@@ -93,7 +95,7 @@ export default function inputBoxHOC(currInputBox) {
         }
         const entityKey = editorState
           .getCurrentContent()
-          .createEntity(currInputBox.toUpperCase(), 'MUTABLE', { ...entityData })
+          .createEntity(currInputBox.toUpperCase(), 'IMMUTABLE', { ...entityData })
           .getLastCreatedEntityKey();
 
         const placeholderText = `${entityData.controlName || ''}: [ ${entityData.defaultVal || ''} ]`;
@@ -148,6 +150,7 @@ export default function inputBoxHOC(currInputBox) {
         const { config, onHiddenModal } = this.props;
         const { selectionText, entityData } = this.getCurrentValue();
         const controlID = (entityData && entityData.controlID) || currInputBox;
+
         return (
           <Component
             entityData={entityData}

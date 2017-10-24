@@ -24,7 +24,7 @@ export default class TextInput extends React.Component {
     this.setState({
       isVisible: false
     });
-    eventProxy.trigger('textInputEditor');
+    eventProxy.trigger('textInputEditor', 'TextInput');
   }
 
   onDeleteClick = () => {
@@ -75,7 +75,6 @@ export default class TextInput extends React.Component {
         className={styles.root}
         onClick={this.onHandleClick}
       >
-        {controlName && <span className={styles.controlName}>{controlName} : </span>}
         <Popover
           visible={isVisible}
           content={content}
@@ -83,22 +82,17 @@ export default class TextInput extends React.Component {
           trigger="click "
           onVisibleChange={this.onHandleVisibleChange}
         >
-          <span
-            className={styles.controlVal}
-            title={describeVal}
-          >
-            <i className={styles.rim}> [ </i>
-            <span style={{ color: entityColor }}>{defaultVal}</span>
-            <i className={styles.rim}> ] </i>
-          </span>
-          <span style={{ display: 'none' }} >{children}</span>
+          {controlName && <span className={styles.controlName}>{controlName} : </span>}
         </Popover>
-        <input
-          disabled
+        <span
+          className={styles.controlVal}
           title={describeVal}
-          className={styles.input}
-          type="text"
-        />
+        >
+          <i className={styles.rim}> [ </i>
+          <span style={{ color: entityColor }}>{defaultVal}</span>
+          <i className={styles.rim}> ] </i>
+          <span style={{ display: 'none' }}>{children}</span>
+        </span>
       </span>
     );
   }
