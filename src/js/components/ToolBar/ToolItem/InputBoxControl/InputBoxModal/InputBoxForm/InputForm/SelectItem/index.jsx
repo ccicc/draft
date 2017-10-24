@@ -41,7 +41,6 @@ export default class SelectItem extends React.Component {
       inputVal: e.target.value
     });
   }
-
   onInputTitleChange = (e) => {
     this.setState({
       inputTitle: e.target.value
@@ -78,6 +77,7 @@ export default class SelectItem extends React.Component {
       inputVal: '',
       inputTitle: ''
     });
+    setTimeout(() => this.props.onChange(this.state.selectItems), 0);
     return true;
   }
 
@@ -136,18 +136,21 @@ export default class SelectItem extends React.Component {
   }
 
   onSetDefaultValue = () => {
-    const { onSetFieldsValue } = this.props;
+    const { onSetDefaultVal, onAddDefaultVal, controlID } = this.props;
     const { currentSelected } = this.state;
-    onSetFieldsValue(currentSelected);
+    if (controlID === 'SelectionInput') {
+      return onSetDefaultVal(currentSelected);
+    }
+    return onAddDefaultVal(currentSelected);
   }
 
   render() {
     const { selectItems, inputVal, inputTitle, currentSelected } = this.state;
-
+    const { controlID } = this.props;
     return (
       <div className="root">
         <select
-          multiple="multiple"
+          multiple
           className={styles.select}
           onChange={this.onSelectChange}
           value={[currentSelected]}
@@ -211,7 +214,7 @@ export default class SelectItem extends React.Component {
           <Button
             style={{ color: '#108ee9' }}
             icon="star"
-            title="设置默认值"
+            title={controlID === 'SelectionInput' ? '设置默认值' : '添加默认值'}
             onClick={this.onSetDefaultValue}
           />
           <Button

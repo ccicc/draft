@@ -59,22 +59,42 @@ class InputForm extends React.Component {
   }
 
   onSetDefaultVal = (value) => {
+    // 单选下拉框设置默认值
     const { setFieldsValue } = this.props.form;
     setFieldsValue({ defaultVal: value });
   }
 
+  onAddDefaultVal = (value) => {
+    // 多选下拉框添加默认值
+    const { getFieldValue, setFieldsValue } = this.props.form;
+    const defaultVal = getFieldValue('defaultVal');
+    let newDefaultVal = '';
+    if (!defaultVal || defaultVal === '未知') {
+      newDefaultVal = value;
+    } else if (defaultVal.split(',').some(item => item === value)) {
+      newDefaultVal = defaultVal;
+    } else {
+      newDefaultVal = `${defaultVal},${value}`;
+    }
+
+    setFieldsValue({ defaultVal: newDefaultVal });
+  }
+
   onCleanDefaultVal = () => {
+    // 清除输入框默认值
     const { setFieldsValue } = this.props.form;
     setFieldsValue({ defaultVal: '未知' });
   }
 
   onDateFormatChange = (value) => {
+    // 日期格式更改
     this.setState({
       dateFormat: value
     });
   }
 
   getRules = (dataTypeRules) => {
+    // 动态获取校验规则
     this.setState({
       dataTypeRules
     });
@@ -149,7 +169,8 @@ class InputForm extends React.Component {
           }
         </FormItem>
       );
-    } else if (controlID === 'SelectionInput') {
+    }
+    if (controlID === 'SelectionInput' || controlID === 'SelectionMultipleInput') {
       DefaultVal = (
         <FormItem label="控件值" className={styles.defaultVal}>
           {
@@ -165,7 +186,8 @@ class InputForm extends React.Component {
           }
         </FormItem>
       );
-    } else if (controlID === 'DateInput') {
+    }
+    if (controlID === 'DateInput') {
       DefaultVal = (
         <FormItem label="控件值">
           {
@@ -240,7 +262,9 @@ class InputForm extends React.Component {
                 valuePropsName: 'selectItems'
               })(
                 <SelectItem
-                  onSetFieldsValue={this.onSetDefaultVal}
+                  controlID={controlID}
+                  onSetDefaultVal={this.onSetDefaultVal}
+                  onAddDefaultVal={this.onAddDefaultVal}
                 />
               )
             };
@@ -300,6 +324,18 @@ class InputForm extends React.Component {
       </Row>
     );
 
+    const SelectionMultipleInput = (
+      <Row gutter={15}>
+        <Col span={12}>{ControlID}</Col>
+        <Col span={12}>{ControlName}</Col>
+        <Col span={12}>{Tags}</Col>
+        <Col span={12}>{DescribeVal}</Col>
+        <Col span={12}>{EntityColor}</Col>
+        <Col span={12}>{DefaultVal}</Col>
+        <Col span={24}>{SelectItems}</Col>
+      </Row>
+    );
+
     const DateInput = (
       <Row gutter={15}>
         <Col span={12}>{ControlID}</Col>
@@ -320,6 +356,7 @@ class InputForm extends React.Component {
           {this.props.controlID === 'TextInput' && TextInput}
           {this.props.controlID === 'SelectionInput' && SelectionInput}
           {this.props.controlID === 'DateInput' && DateInput}
+          {this.props.controlID === 'SelectionMultipleInput' && SelectionMultipleInput}
           <Button
             key="submit"
             type="primary"
@@ -343,7 +380,15 @@ class InputForm extends React.Component {
 
 const WrapperInputForm = Form.create({
   mapPropsToFields(props) {
-    console.log(props);
+    let defaultVal;
+    if (
+      props.controlID === 'SelectionInput' ||
+      props.controlID === 'SelectionMultipleInput'
+    ) {
+      defaultVal = props.defaultVal || '未知';
+    } else {
+      defaultVal = props.defaultVal;
+    }
     return {
       controlID: {
         value: props.controlID
@@ -355,7 +400,7 @@ const WrapperInputForm = Form.create({
         value: props.tags
       },
       defaultVal: {
-        value: props.defaultVal
+        value: defaultVal
       },
       describeVal: {
         value: props.describeVal
@@ -376,7 +421,7 @@ const WrapperInputForm = Form.create({
         value: props.selectItems || []
       },
       dateFormat: {
-        value: props.dateFormat
+        value: props.dateFormat || 'YYYY-MM-DD HH:mm'
       }
     };
   }

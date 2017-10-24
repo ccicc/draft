@@ -38,7 +38,8 @@ export default function inputBoxHOC(currInputBox) {
       componentDidMount() {
         eventProxy.on('dateInputDelete', this.removeInputBoxEntity);
         eventProxy.on('selectionInputDelete', this.removeInputBoxEntity);
-        eventProxy.on('textInputEditor', this.removeInputBoxEntity);
+        eventProxy.on('textInputDelete', this.removeInputBoxEntity);
+        eventProxy.on('selectionMultipleDelete', this.removeInputBoxEntity);
       }
 
       componentWillReceiveProps(nextProps) {
@@ -54,6 +55,7 @@ export default function inputBoxHOC(currInputBox) {
         eventProxy.off('dateInputDelete');
         eventProxy.off('selectionInputDelete');
         eventProxy.off('textInputDelete');
+        eventProxy.off('selectionMultipleDelete');
       }
 
       onHandleChange = (value, entityData) => {

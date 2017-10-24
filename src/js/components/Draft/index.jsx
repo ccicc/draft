@@ -33,6 +33,7 @@ import {
   CustomThrough,
   TextInput,
   SelectionInput,
+  SelectionMultipleInput,
   DateInput
 } from './../../decorators';
 
@@ -123,7 +124,8 @@ export default class Draft extends React.Component {
       createDecorator('POSTIL', Postil),
       createDecorator('SELECTIONINPUT', SelectionInput),
       createDecorator('TEXTINPUT', TextInput),
-      createDecorator('DATEINPUT', DateInput)
+      createDecorator('DATEINPUT', DateInput),
+      createDecorator('SELECTIONMULTIPLEINPUT', SelectionMultipleInput)
     ];
     return new CompositeDecorator(decorators);
   }

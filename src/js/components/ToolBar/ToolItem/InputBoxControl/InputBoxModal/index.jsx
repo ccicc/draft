@@ -40,12 +40,17 @@ export default class InputBoxModal extends React.Component {
       onHandleClick();
       this.onSelectChange(val);
     });
+    eventProxy.on('selectionMultipleEditor', (val) => {
+      onHandleClick();
+      this.onSelectChange(val);
+    });
   }
 
   componentWillUnmount() {
     eventProxy.off('dataInputEditor');
     eventProxy.off('selectionInputEditor');
     eventProxy.off('textInputEditor');
+    eventProxy.off('selectionMultipleEditor');
   }
 
   onSelectChange = (val) => {
@@ -83,8 +88,9 @@ export default class InputBoxModal extends React.Component {
             style={{ width: '100%' }}
           >
             <Option value="TextInput">文本输入框</Option>
-            <Option value="SelectionInput">下拉单选输入框</Option>
             <Option value="DateInput">日期输入框</Option>
+            <Option value="SelectionInput">下拉单选输入框</Option>
+            <Option value="SelectionMultipleInput">下拉多选输入框</Option>
           </Select>
         </div>
         <WrapperInputBoxForm
