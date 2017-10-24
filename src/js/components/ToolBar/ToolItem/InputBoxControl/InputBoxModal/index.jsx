@@ -7,6 +7,7 @@ import {
 
 import inputBoxHOC from './../InputBoxHOC';
 import InputBoxForm from './InputBoxForm';
+import eventProxy from './../../../../../customUtils/eventProxy';
 
 const Option = Select.Option;
 export default class InputBoxModal extends React.Component {
@@ -25,10 +26,29 @@ export default class InputBoxModal extends React.Component {
     };
   }
 
-  onSelectChange = (val) => {
-    this.setState({
-      currentInputBox: val
+  componentDidMount() {
+    const { onHandleClick } = this.props;
+    eventProxy.on('dateInputEditor', (val) => {
+      onHandleClick();
+      this.onSelectChange(val);
     });
+    eventProxy.on('selectionInputEditor', (val) => {
+      onHandleClick();
+      this.onSelectChange(val);
+    });
+  }
+
+  componentWillUnmount() {
+    eventProxy.off('dataInputEditor');
+    eventProxy.off('selectionInputEditor');
+  }
+
+  onSelectChange = (val) => {
+    if (val && val !== this.state.currentInputBox) {
+      this.setState({
+        currentInputBox: val
+      });
+    }
   }
 
   render() {
@@ -39,11 +59,8 @@ export default class InputBoxModal extends React.Component {
       isVisible,
       onHiddenModal
     } = this.props;
-
     const { currentInputBox } = this.state;
-
     const WrapperInputBoxForm = inputBoxHOC(currentInputBox)(InputBoxForm);
-
     return (
       <Modal
         title="插入控件"

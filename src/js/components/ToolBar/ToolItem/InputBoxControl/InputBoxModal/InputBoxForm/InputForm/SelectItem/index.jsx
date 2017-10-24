@@ -19,10 +19,19 @@ export default class SelectItem extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectItems !== this.props.selectItems) {
+  componentWillMount() {
+    const { value } = this.props;
+    if (value) {
       this.setState({
-        selectItems: nextProps.selectItems
+        selectItems: value
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.value !== this.props.value) {
+      this.setState({
+        selectItems: nextProps.value
       });
     }
   }
@@ -48,7 +57,6 @@ export default class SelectItem extends React.Component {
       inputVal: currentItem.val,
       inputTitle: currentItem.title
     });
-
     setTimeout(() => this.props.onChange(this.state.selectItems), 0);
   }
 

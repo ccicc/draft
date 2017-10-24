@@ -7,7 +7,8 @@ import {
   getEntityRange
 } from 'draftjs-utils';
 
-// 一个高阶组件，将添加和删除实体的方法从各个输入框控件中解耦出来
+import eventProxy from './../../../../../customUtils/eventProxy';
+
 export default function inputBoxHOC(currInputBox) {
   return function (Component) {         // eslint-disable-line
     return class extends React.Component {
@@ -34,13 +35,23 @@ export default function inputBoxHOC(currInputBox) {
         }
       }
 
+      componentDidMount() {
+        eventProxy.on('dateInputDelete', this.removeInputBoxEntity);
+        eventProxy.on('selectionInputDelete', this.removeInputBoxEntity);
+      }
+
       componentWillReceiveProps(nextProps) {
         const { editorState } = nextProps;
-        if (editorState !== this.props.editorState) {
+        if (editorState && editorState !== this.props.editorState) {
           this.setState({
             currentEntity: editorState.getSelectionEntity()
           });
         }
+      }
+
+      componentWillUnmount() {
+        eventProxy.off('dateInputDelete');
+        eventProxy.off('selectionInputDelete');
       }
 
       onHandleChange = (value, entityData) => {
@@ -57,9 +68,11 @@ export default function inputBoxHOC(currInputBox) {
         const { currentEntity } = this.state;
         const contentState = editorState.getCurrentContent();
         const currentValues = {};
-
-        if (currentEntity && contentState.getEntity(currentEntity).getType() === currInputBox) {
-          currentValues[currInputBox] = contentState.getEntity(currentEntity).getData();
+        if (
+          currentEntity &&
+          contentState.getEntity(currentEntity).getType() === currInputBox.toUpperCase()
+        ) {
+          currentValues.entityData = contentState.getEntity(currentEntity).getData();
         }
         currentValues.selectionText = getSelectionText(editorState);
         return currentValues;
@@ -80,7 +93,7 @@ export default function inputBoxHOC(currInputBox) {
         }
         const entityKey = editorState
           .getCurrentContent()
-          .createEntity(currInputBox.toUpperCase(), 'IMMUTABLE', { ...entityData })
+          .createEntity(currInputBox.toUpperCase(), 'MUTABLE', { ...entityData })
           .getLastCreatedEntityKey();
 
         const placeholderText = `${entityData.controlName || ''}: [ ${entityData.defaultVal || ''} ]`;
@@ -128,7 +141,7 @@ export default function inputBoxHOC(currInputBox) {
           editorState.getCurrentInlineStyle(),
           undefined
         );
-        onEditorStateChange(EditorState.push(editorState, contentState, 'insert-cahracter'));
+        onEditorStateChange(EditorState.push(editorState, contentState, 'insert-character'));
       }
 
       render() {

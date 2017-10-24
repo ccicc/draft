@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Popover,
-  Popconfirm
 } from 'antd';
 import eventProxy from 'customUtils/eventProxy';  // eslint-disable-line
 import styles from './index.less';
@@ -62,21 +61,12 @@ export default class TextInput extends React.Component {
         >
           编 辑
         </span>
-        <Popconfirm
-          placement="top"
-          title="确认删除该控件"
-          okText="确认"
-          cancelText="取消"
-          trigger="hover"
-          onConfirm={this.onDeleteClick}
+        <span
+          className={styles.deleteBtn}
+          title="删除控件"
         >
-          <span
-            className={styles.deleteBtn}
-            title="删除控件"
-          >
-            删 除
-          </span>
-        </Popconfirm>
+          删 除
+        </span>
       </div>
     );
 

@@ -1,19 +1,20 @@
 import React from 'react';
+import { EditorState } from 'draft-js';
 import {
   Popover,
-  Popconfirm,
-  Select
+  Dropdown,
+  Menu
 } from 'antd';
 
 import eventProxy from './../../customUtils/eventProxy';
 import styles from './index.less';
 
-const Option = Select.Option;
+const Item = Menu.Item;
 export default class SelectionInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisible: false,
+      isVisible: false
     };
   }
 
@@ -28,7 +29,7 @@ export default class SelectionInput extends React.Component {
     this.setState({
       isVisible: false
     });
-    eventProxy.trigger('selectionInputEditor');
+    eventProxy.trigger('selectionInputEditor', 'SelectionInput');
   }
 
   onDeleteClick = () => {
@@ -38,11 +39,16 @@ export default class SelectionInput extends React.Component {
     eventProxy.trigger('selectionInputDelete');
   }
 
-  onSelectValueChange = (value) => {
-    const { entityKey, contentState } = this.props;
-    contentState.mergeEntityData(entityKey, { defaultVal: value });
+  onSelectValueChange = (props) => {
+    const { entityKey, contentState, editorState, onEditorStateChange } = this.props;
+    const newContentState = contentState.mergeEntityData(
+      entityKey,
+      { defaultVal: props.key }
+    );
+    const newState = EditorState.push(editorState, newContentState, 'change-block-data');
+    onEditorStateChange(newState);
     this.setState({
-      isRender: true
+      update: true
     });
   }
 
@@ -65,7 +71,7 @@ export default class SelectionInput extends React.Component {
 
     const content = (
       <div>
-        { controlName && <span className={styles.popupName}>{controlName}</span>}
+        {controlName && <span className={styles.popupName}>{controlName}</span>}
         文本输入框
         <span
           className={styles.editorBtn}
@@ -74,22 +80,29 @@ export default class SelectionInput extends React.Component {
         >
           编辑
         </span>
-        <Popconfirm
-          placement="top"
-          title="确认删除该控件"
-          okText="确认"
-          cancelText="取消"
-          trigger="hover"
-          onConfirm={this.onDeleteClick}
+        <span
+          className={styles.deleteBtn}
+          title="删除控件"
+          onClick={this.onDeleteClick}
         >
-          <span
-            className={styles.deleteBtn}
-            title="删除控件"
-          >
-            删除
-          </span>
-        </Popconfirm>
+          删除
+        </span>
       </div>
+    );
+
+    const menu = (
+      <Menu onClick={this.onSelectValueChange}>
+        {
+          selectItems.map(item => (
+            <Item
+              key={item.val}
+              disabled={item.val === defaultVal}
+            >
+              <span title={item.title}>{item.val}</span>
+            </Item>
+          ))
+        }
+      </Menu>
     );
 
     return (
@@ -101,45 +114,30 @@ export default class SelectionInput extends React.Component {
           trigger="click"
           onVisibleChange={this.onHandleVisibleChange}
         >
-          <span
-            className={styles.controlName}
-            onClick={this.onHandleClick}
-          >
-            {controlName}
-          </span>
           {
-            controlName && <span>:</span>
+            controlName &&
+            <span
+              className={styles.controlName}
+              onClick={this.onHandleClick}
+            >{controlName} : </span>
           }
-          <span
-            className={styles.controlVal}
-            title={describeVal}
-            style={{ color: entityColor }}
-          >
-            <i className={styles.rim}> [ </i>
-            <Select
-              size="small"
-              value={defaultVal}
-              notFoundContent="没有可选项"
-              onSelect={this.onSelectValueChange}
-              dropdownMatchSelectWidth={false}
-            >
-              {
-                selectItems.map(item => (
-                  <Option
-                    key={item.val}
-                    title={item.title}
-                    value={item.val}
-                    style={{ color: item.val === defaultVal ? entityColor : '' }}
-                  >
-                    {item.val}
-                  </Option>
-                ))
-              }
-            </Select>
-            <span style={{ display: 'none' }}>{children}</span>
-            <i className={styles.rim}> ] </i>
-          </span>
         </Popover>
+        <span
+          className={styles.controlVal}
+          title={describeVal}
+          onClick={this.onSelectClick}
+        >
+          <i className={styles.rim}> [ </i>
+          <Dropdown
+            overlay={menu}
+            trigger={['click']}
+            placement="bottomCenter"
+          >
+            <span style={{ color: entityColor }}>{defaultVal}</span>
+          </Dropdown>
+          <i className={styles.rim}> ] </i>
+          <span style={{ display: 'none' }}>{children}</span>
+        </span>
       </span>
     );
   }

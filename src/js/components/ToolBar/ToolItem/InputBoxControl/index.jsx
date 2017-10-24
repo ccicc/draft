@@ -48,6 +48,7 @@ export default class InputBoxControl extends React.Component {
           onEditorStateChange={onEditorStateChange}
           isVisible={isVisible}
           onHiddenModal={this.onHiddenModal}
+          onHandleClick={this.onHandleClick}
         />
       </div>
     );

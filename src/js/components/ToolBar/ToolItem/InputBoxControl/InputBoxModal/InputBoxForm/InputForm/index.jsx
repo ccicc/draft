@@ -243,7 +243,7 @@ class InputForm extends React.Component {
                   onSetFieldsValue={this.onSetDefaultVal}
                 />
               )
-            }
+            };
           </TabPane>
         </Tabs>
       </FormItem>
