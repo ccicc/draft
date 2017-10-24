@@ -300,6 +300,7 @@ class InputForm extends React.Component {
               <Option key="4" value="YYYY/MM/DD">YYYY/MM/DD</Option>
               <Option key="5" value="YYYY/MM/DD HH:MM">YYYY/MM/DD HH:mm</Option>
               <Option key="6" value="YYYY/MM/DD HH:MM:SS">YYYY/MM/DD HH:mm:ss</Option>
+              <Option key="7" value="YYYY年MM月DD日 HH:mm:ss">年月日 HH:mm:ss</Option>
             </Select>
           )
         }
@@ -358,6 +359,17 @@ class InputForm extends React.Component {
       </Row>
     );
 
+    const CheckBoxInput = (
+      <Row gutter={15}>
+        <Col span={12}>{ControlID}</Col>
+        <Col span={12}>{ControlName}</Col>
+        <Col span={12}>{Tags}</Col>
+        <Col span={12}>{DescribeVal}</Col>
+        <Col span={12}>{EntityColor}</Col>
+        <Col span={12}>{DefaultVal}</Col>
+      </Row>
+    );
+
     return (
       <div className={styles.root}>
         <Form>
@@ -365,6 +377,7 @@ class InputForm extends React.Component {
           {this.props.controlID === 'SelectionInput' && SelectionInput}
           {this.props.controlID === 'DateInput' && DateInput}
           {this.props.controlID === 'SelectionMultipleInput' && SelectionMultipleInput}
+          {this.props.controlID === 'CheckBoxInput' && CheckBoxInput}
           <Button
             key="submit"
             type="primary"

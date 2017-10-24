@@ -91,6 +91,7 @@ export default class InputBoxModal extends React.Component {
             <Option value="DateInput">日期输入框</Option>
             <Option value="SelectionInput">下拉单选输入框</Option>
             <Option value="SelectionMultipleInput">下拉多选输入框</Option>
+            <Option value="CheckBoxInput">多选框输入框</Option>
           </Select>
         </div>
         <WrapperInputBoxForm
