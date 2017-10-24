@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Row,
   Col,
@@ -22,6 +23,13 @@ const TabPane = Tabs.TabPane;
 const Option = Select.Option;
 
 class InputForm extends React.Component {
+  static propTypes = {
+    config: PropTypes.object,
+    controlID: PropTypes.string.isRequired,
+    onHandleConfirm: PropTypes.func.isRequired,
+    onHandleCancel: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {

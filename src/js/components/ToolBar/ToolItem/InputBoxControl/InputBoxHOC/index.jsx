@@ -36,10 +36,10 @@ export default function inputBoxHOC(currInputBox) {
       }
 
       componentDidMount() {
-        eventProxy.on('dateInputDelete', this.removeInputBoxEntity);
-        eventProxy.on('selectionInputDelete', this.removeInputBoxEntity);
-        eventProxy.on('textInputDelete', this.removeInputBoxEntity);
-        eventProxy.on('selectionMultipleDelete', this.removeInputBoxEntity);
+        eventProxy.on('dateInputDelete', () => this.onHandleChange());
+        eventProxy.on('selectionInputDelete', () => this.onHandleChange());
+        eventProxy.on('textInputDelete', () => this.onHandleChange());
+        eventProxy.on('selectionMultipleDelete', () => this.onHandleChange());
       }
 
       componentWillReceiveProps(nextProps) {

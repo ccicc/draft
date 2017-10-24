@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Input,
@@ -9,6 +10,12 @@ import {
 import styles from './index.less';
 
 export default class SelectItem extends React.Component {
+  static propTypes = {
+    controlID: PropTypes.string.isRequired,
+    onSetDefaultVal: PropTypes.func.isRequired,
+    onAddDefaultVal: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {

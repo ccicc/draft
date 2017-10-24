@@ -3,7 +3,7 @@
   global
   document: false
 
-*/ 
+*/
 
 import React from 'react';
 import { EditorState } from 'draft-js';
@@ -28,18 +28,20 @@ export default class SelectionMultipleInput extends React.Component {
   }
 
   componentDidMount() {
-    document.body.addEventListener('click', (e) => {
-      if (e.target && e.target.matches('li.ant-dropdown-menu-item')) {
-        return;
-      }
-      this.setState({
-        isExpand: false
-      });
-    });
+    document.body.addEventListener('click', this.onBodyClick, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click');
+    document.body.removeEventListener('click', this.onBodyClick, false);
+  }
+
+  onBodyClick = (e) => {
+    if (e.target && e.target.matches('li.ant-dropdown-menu-item')) {
+      return;
+    }
+    this.setState({
+      isExpand: false
+    });
   }
 
   onHandleClick = () => {
@@ -130,9 +132,9 @@ export default class SelectionMultipleInput extends React.Component {
         onClick={this.onSelectValueChange}
       >
         {
-          selectItems.map((item, index) => (
+          selectItems.map((item) => (
             <Item
-              key={`item-${index}`}
+              key={item.val}
             >
               <span title={item.title}>{item.val}</span>
               {
