@@ -34,7 +34,6 @@ export default class ColorPicker extends React.Component {
     this.setState({
       fontColor: color.hex
     });
-
     this.props.onSelectFontColor(color.hex);
   }
 

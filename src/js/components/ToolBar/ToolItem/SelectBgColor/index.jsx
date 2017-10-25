@@ -1,3 +1,11 @@
+/*
+
+  global
+  window: false
+  document: false
+
+*/ 
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -29,7 +37,8 @@ export default class SelectBgColor extends React.Component {
       fontColor: undefined,
       bgColor: undefined,
       defaultFontColor: undefined,
-      defaultBgColor: undefined
+      defaultBgColor: undefined,
+      isVisible: false
     };
   }
 
@@ -49,21 +58,19 @@ export default class SelectBgColor extends React.Component {
     }
   }
 
-  /* eslint-disable */ 
-  comonentDidMount() {
+  componentDidMount() {
     const editorElm = document.querySelectorAll('.DraftEditor-root');
     if (editorElm && editorElm.length > 0) {
       const editorStyle = window.getComputedStyle(editorElm[0]);
       const defaultBgColor = editorStyle.getPropertyValue('background-color');
       const defaultFontColor = editorStyle.getPropertyValue('color');
-      this.setState({
+      this.setState({   // eslint-disable-line
         defaultBgColor,
         defaultFontColor
       });
     }
   }
 
-  /* eslint-enable */ 
   componentWillReceiveProps(nextProps) {
     const { editorState } = this.props;
     if (nextProps.editorState &&
@@ -92,25 +99,35 @@ export default class SelectBgColor extends React.Component {
     if (newState) {
       onEditorStateChange(newState);
     }
+    this.setState({
+      isVisible: false
+    });
   }
 
   onToggleFontColor = (fontColor) => {
-    console.log(fontColor);
     const { editorState, onEditorStateChange } = this.props;
     const newState = toggleCustomInlineStyle(
       editorState,
       'color',
       fontColor
     );
-
     if (newState) {
       onEditorStateChange(newState);
     }
+    this.setState({
+      isVisible: false
+    });
+  }
+
+  onHandleBtnClick = () => {
+    this.setState((prevState) => ({
+      isVisible: !prevState.isVisible
+    }));
   }
 
   render() {
     const { config } = this.props;
-    const { bgColor, defaultBgColor, fontColor, defaultFontColor } = this.state;
+    const { bgColor, defaultBgColor, fontColor, defaultFontColor, isVisible } = this.state;
     const options = config.colorPicker.options;
     const selectedBgColor = bgColor ? bgColor.substring(8) : defaultBgColor || '#f5f5f5';
     const selectedFontColor = fontColor ? fontColor.substring(6) : defaultFontColor || '#333';
@@ -142,6 +159,7 @@ export default class SelectBgColor extends React.Component {
     return (
       <Popover
         trigger="click"
+        visible={isVisible}
         placement="bottom"
         content={content}
         overlayStyle={{
@@ -152,6 +170,7 @@ export default class SelectBgColor extends React.Component {
           size="small"
           title="颜色设置"
           style={{ width: '100%' }}
+          onClick={this.onHandleBtnClick}
         >
           <i
             className={classnames({
