@@ -15,6 +15,7 @@ import {
 import ColorPicker from './../../../../../../Common/ColorPicker';
 import SelectType from './SelectType';
 import SelectItem from './SelectItem';
+import SelectTodo from './SelectTodo';
 
 import styles from './index.less';
 
@@ -281,6 +282,22 @@ class InputForm extends React.Component {
       </FormItem>
     );
 
+    const SelectTodos = (
+      <FormItem>
+        <Tabs type="card">
+          <TabPane tab="自定义选项" key="1">
+            {
+              getFieldDecorator('selectItems', {
+                valuePropsName: 'selectTodos'
+              })(
+                <SelectTodo />
+              )
+            }
+          </TabPane>
+        </Tabs>
+      </FormItem>
+    );
+
     const DateFormat = (
       <FormItem label="日期格式">
         {
@@ -367,6 +384,7 @@ class InputForm extends React.Component {
         <Col span={12}>{DescribeVal}</Col>
         <Col span={12}>{EntityColor}</Col>
         <Col span={12}>{DefaultVal}</Col>
+        <Col span={24}>{SelectTodos}</Col>
       </Row>
     );
 
