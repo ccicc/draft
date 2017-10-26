@@ -69,7 +69,7 @@ export default class TodoItem extends React.Component {
   }
 
   render() {
-    const { onChange, values, selectItems } = this.props;
+    const { onChange, values, selectItems, title } = this.props;
     const { isExpand, isEditor, value } = this.state;
     const controlBtn = (
       <Button.Group className={styles.control}>
@@ -120,7 +120,10 @@ export default class TodoItem extends React.Component {
         onMouseEnter={() => this.setState({ isExpand: true })}
         onMouseLeave={() => this.setState({ isExpand: false })}
       >
-        <label className={styles.label}>
+        <label
+          className={styles.label}
+          title={title}
+        >
           <input
             className={styles.input}
             type="checkbox"

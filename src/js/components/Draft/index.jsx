@@ -34,7 +34,8 @@ import {
   TextInput,
   SelectionInput,
   SelectionMultipleInput,
-  DateInput
+  DateInput,
+  CheckboxInput
 } from './../../decorators';
 
 // 自定义块级组件导入
@@ -125,7 +126,8 @@ export default class Draft extends React.Component {
       createDecorator('SELECTIONINPUT', SelectionInput),
       createDecorator('TEXTINPUT', TextInput),
       createDecorator('DATEINPUT', DateInput),
-      createDecorator('SELECTIONMULTIPLEINPUT', SelectionMultipleInput)
+      createDecorator('SELECTIONMULTIPLEINPUT', SelectionMultipleInput),
+      createDecorator('CHECKBOXINPUT', CheckboxInput)
     ];
     return new CompositeDecorator(decorators);
   }

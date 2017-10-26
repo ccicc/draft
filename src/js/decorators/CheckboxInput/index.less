@@ -1,0 +1,71 @@
+.root{
+  display: inline-block;
+  position: relative;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.controlName{
+  font-weight: bold;
+  padding-right: 5px;
+  color: #333;
+  cursor: text;
+}
+
+.controlVal{
+  display: inline-block;
+  position: relative;
+  padding: 0 5px;
+  cursor: pointer;
+  text-align: center;
+  background-color: #f0f8ff;
+  &:hover{
+    background-color:#add8e6;
+  }
+}
+
+.popupName{
+  padding-right: 10px;
+  font-size: 15px;
+  color: #666;
+}
+
+.editorBtn{
+  padding-left: 10px;
+  color: #093;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.deleteBtn{
+  &:extend(.editorBtn);
+  color: #f00;
+  padding-left: 10px;
+}
+
+.rim{
+  font-style: normal;
+  color: #00f;
+}
+
+.item{
+  position:relative;
+  display:inline-block;
+  cursor: pointer;
+}
+
+.itemLable{
+  display: inline-block;
+  padding-left: 20px;
+  margin-bottom: 0;
+  font-weight:400;
+  cursor: pointer;
+}
+
+.checkbox{
+  position: absolute;
+  display: inline-block;
+  margin: 3px 3px 0 -15px;
+  cursor: pointer;
+}

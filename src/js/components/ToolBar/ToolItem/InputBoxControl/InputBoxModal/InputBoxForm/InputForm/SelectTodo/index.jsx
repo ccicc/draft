@@ -138,6 +138,7 @@ export default class SelectTodo extends React.Component {
                 <TodoItem
                   key={index}
                   index={index}
+                  title={item.title}
                   value={item.value}
                   values={values}
                   selectItems={selectItems}
