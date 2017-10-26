@@ -465,6 +465,7 @@ const WrapperInputForm = Form.create({
         value: props.selectItems || []
       },
       selectTodos: {
+        // 不能拿到数据
         value: props.selectTodos || []
       },
       dateFormat: {

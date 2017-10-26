@@ -85,10 +85,7 @@ export default class SelectItem extends React.Component {
       inputVal: '',
       inputTitle: ''
     });
-    setTimeout(() => this.props.onChange({
-      items: this.state.selectItems,
-      checkedVals: this.state.values
-    }), 0);
+    setTimeout(() => this.props.onChange(this.state.selectItems), 0);
     return true;
   }
 

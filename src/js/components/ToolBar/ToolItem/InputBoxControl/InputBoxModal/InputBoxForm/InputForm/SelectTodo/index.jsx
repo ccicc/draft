@@ -20,6 +20,21 @@ export default class SelectTodo extends React.Component {
     };
   }
 
+  componentWillMount() {
+    const { selectItems, values } = this.props.value;
+    if (!selectItems || !values) {
+      this.setState({
+        selectItems: [],
+        values: []
+      });
+    } else {
+      this.setState({
+        selectItems: [],
+        values: []
+      });
+    }
+  }
+
   onChange = (e) => {
     const { value, checked } = e.target;
     let { values } = this.state;

@@ -1,43 +1,17 @@
 import React from 'react';
-import {
-  Popover
-} from 'antd';
+import PropTypes from 'prop-types';
 import { EditorState } from 'draft-js';
+import { PopupBox } from './../../components/Common';
 import styles from './index.less';
 
 export default class CheckboxInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isVisible: false
-    };
-  }
-
-  onHandleClick = () => {
-    this.setState({
-      isVisible: true
-    });
-  }
-
-  onHandleVisibleChange = (visible) => {
-    this.setState({
-      isVisible: visible
-    });
-  }
-
-  onHandleEditor = () => {
-    this.setState({
-      isVisible: false
-    });
-  }
-
-  onHandleDelete = () => {
-    this.setState({
-      isVisible: false
-    });
-  }
+  static propTypes = {
+    editorState: PropTypes.object.isRequired,
+    onEditorStateChange: PropTypes.func.isRequired,
+  };
 
   onHandleChange = (e) => {
+    // 存在bug
     const { checked, value } = e.target;
     const { entityKey, contentState, editorState, onEditorStateChange } = this.props;
     const { selectTodos } = contentState.getEntity(entityKey).getData();
@@ -58,9 +32,9 @@ export default class CheckboxInput extends React.Component {
   }
 
   render() {
-    const { isVisible } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
+      controlID,
       controlName,
       describeVal,
       entityColor,
@@ -68,30 +42,13 @@ export default class CheckboxInput extends React.Component {
     } = contentState.getEntity(entityKey).getData();
     const { items, selectedValues } = selectTodos;
 
-    const content = (
-      <div>
-        {
-          controlName &&
-          <span className={styles.popupName}>{controlName}</span>
-        }
-        文本输入框
-        <span className={styles.editorBtn} title="编辑控件内容">
-          编辑
-        </span>
-        <span className={styles.deleteBtn} title="删除控件">
-          删除
-        </span>
-      </div>
-    );
-
     return (
       <span className={styles.root}>
-        <Popover
-          visible={isVisible}
-          content={content}
-          placement="topLeft"
-          trigger="click"
-          onVisibleChange={this.onHandleVisibleChange}
+        <PopupBox
+          editorCommand="checkBoxInputEditor"
+          deleteCommand="checkBoxInputDelete"
+          controlID={controlID}
+          controlName={controlName}
         >
           {
             controlName &&
@@ -100,7 +57,7 @@ export default class CheckboxInput extends React.Component {
               onClick={this.onHandleClick}
             >{controlName}：</span>
           }
-        </Popover>
+        </PopupBox>
         <span
           className={styles.controlVal}
           title={describeVal}

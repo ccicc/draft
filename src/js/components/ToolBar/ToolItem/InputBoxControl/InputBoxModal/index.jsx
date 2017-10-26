@@ -28,21 +28,18 @@ export default class InputBoxModal extends React.Component {
 
   componentDidMount() {
     const { onHandleClick } = this.props;
-    eventProxy.on('dateInputEditor', (val) => {
-      onHandleClick();
-      this.onSelectChange(val);
-    });
-    eventProxy.on('selectionInputEditor', (val) => {
-      onHandleClick();
-      this.onSelectChange(val);
-    });
-    eventProxy.on('textInputEditor', (val) => {
-      onHandleClick();
-      this.onSelectChange(val);
-    });
-    eventProxy.on('selectionMultipleEditor', (val) => {
-      onHandleClick();
-      this.onSelectChange(val);
+    const inputBoxArr = [
+      'dateInputEditor',
+      'selectionInputEditor',
+      'textInputEditor',
+      'selectionMultipleEditor',
+      'checkBoxInputEditor'
+    ];
+    inputBoxArr.forEach(item => {
+      eventProxy.on(item, (val) => {
+        onHandleClick();
+        this.onSelectChange(val);
+      });
     });
   }
 
@@ -51,6 +48,7 @@ export default class InputBoxModal extends React.Component {
     eventProxy.off('selectionInputEditor');
     eventProxy.off('textInputEditor');
     eventProxy.off('selectionMultipleEditor');
+    eventProxy.off('checkBoxInputEditor');
   }
 
   onSelectChange = (val) => {

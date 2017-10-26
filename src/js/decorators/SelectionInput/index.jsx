@@ -1,44 +1,14 @@
 import React from 'react';
 import { EditorState } from 'draft-js';
 import {
-  Popover,
   Dropdown,
   Menu
 } from 'antd';
-
-import eventProxy from './../../customUtils/eventProxy';
+import { PopupBox } from './../../components/Common';
 import styles from './index.less';
 
 const Item = Menu.Item;
 export default class SelectionInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isVisible: false
-    };
-  }
-
-  onHandleClick = () => {
-    const { isVisible } = this.state;
-    this.setState({
-      isVisible: !isVisible
-    });
-  }
-
-  onEditorClick = () => {
-    this.setState({
-      isVisible: false
-    });
-    eventProxy.trigger('selectionInputEditor', 'SelectionInput');
-  }
-
-  onDeleteClick = () => {
-    this.setState({
-      isVisible: false
-    });
-    eventProxy.trigger('selectionInputDelete');
-  }
-
   onSelectValueChange = (props) => {
     const { entityKey, contentState, editorState, onEditorStateChange } = this.props;
     const newContentState = contentState.mergeEntityData(
@@ -52,43 +22,16 @@ export default class SelectionInput extends React.Component {
     });
   }
 
-  onHandleVisibleChange = (isVisible) => {
-    this.setState({
-      isVisible
-    });
-  }
-
   render() {
-    const { isVisible } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
+      controlID,
       controlName,
       defaultVal,
       describeVal,
       entityColor,
       selectItems
     } = contentState.getEntity(entityKey).getData();
-
-    const content = (
-      <div>
-        {controlName && <span className={styles.popupName}>{controlName}</span>}
-        文本输入框
-        <span
-          className={styles.editorBtn}
-          title="编辑控件内容"
-          onClick={this.onEditorClick}
-        >
-          编辑
-        </span>
-        <span
-          className={styles.deleteBtn}
-          title="删除控件"
-          onClick={this.onDeleteClick}
-        >
-          删除
-        </span>
-      </div>
-    );
 
     const menu = (
       <Menu onClick={this.onSelectValueChange}>
@@ -107,21 +50,20 @@ export default class SelectionInput extends React.Component {
 
     return (
       <span className={styles.root}>
-        <Popover
-          visible={isVisible}
-          content={content}
-          placement="topLeft"
-          trigger="click"
-          onVisibleChange={this.onHandleVisibleChange}
+        <PopupBox
+          editorCommand="selectionInputEditor"
+          deleteCommand="selectionInputDelete"
+          controlID={controlID}
+          controlName={controlName}
         >
           {
             controlName &&
             <span
               className={styles.controlName}
               onClick={this.onHandleClick}
-            >{controlName} : </span>
+            >{controlName}: </span>
           }
-        </Popover>
+        </PopupBox>
         <span
           className={styles.controlVal}
           title={describeVal}

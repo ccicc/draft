@@ -8,12 +8,11 @@
 import React from 'react';
 import { EditorState } from 'draft-js';
 import {
-  Popover,
   Dropdown,
   Menu,
   Icon
 } from 'antd';
-import eventProxy from './../../customUtils/eventProxy';
+import { PopupBox } from './../../components/Common';
 import styles from './index.less';
 
 const Item = Menu.Item;
@@ -22,7 +21,6 @@ export default class SelectionMultipleInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisible: false,
       isExpand: false
     };
   }
@@ -44,40 +42,15 @@ export default class SelectionMultipleInput extends React.Component {
     });
   }
 
-  onHandleClick = () => {
-    this.setState({
-      isVisible: true
-    });
-  }
-
   onHandleExpand = () => {
     this.setState({
       isExpand: true
     });
   }
 
-  onEditorClick = () => {
-    this.setState({
-      isVisible: false
-    });
-    eventProxy.trigger('selectionMultipleEditor', 'SelectionMultipleInput');
-  }
-
-  onDeleteClick = () => {
-    this.setState({
-      isVisible: false
-    });
-    eventProxy.trigger('selectionMultipleDelete');
-  }
-
-  onHandleVisibleChange = (visible) => {
-    this.setState({
-      isVisible: visible,
-    });
-  }
-
   onSelectValueChange = (options) => {
     // 增减子项并更新contentState对象
+    // 存在bug
     const { entityKey, contentState, editorState, onEditorStateChange } = this.props;
     const { defaultVal } = contentState.getEntity(entityKey).getData();
     let collectionItems = defaultVal.split(',');
@@ -87,7 +60,7 @@ export default class SelectionMultipleInput extends React.Component {
       collectionItems = collectionItems.filter(item => item !== options.key);
     }
     const newDefaultVal = collectionItems.join(',');
-    const newContentState = contentState.mergeEntityData(
+    const newContentState = editorState.getCurrentContent().mergeEntityData(
       entityKey,
       { defaultVal: newDefaultVal }
     );
@@ -99,32 +72,16 @@ export default class SelectionMultipleInput extends React.Component {
   }
 
   render() {
-    const { isVisible, isExpand } = this.state;
+    const { isExpand } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
+      controlID,
       controlName,
       defaultVal,
       describeVal,
       entityColor,
       selectItems
     } = contentState.getEntity(entityKey).getData();
-
-    const content = (
-      <div>
-        {controlName && <span className={styles.popupName}>{controlName}</span>}
-        文本输入框
-        <span
-          className={styles.editorBtn}
-          title="编辑控件内容"
-          onClick={this.onEditorClick}
-        >编辑</span>
-        <span
-          className={styles.deleteBtn}
-          title="删除控件"
-          onClick={this.onDeleteClick}
-        >删除</span>
-      </div>
-    );
 
     const menu = (
       <Menu
@@ -149,20 +106,20 @@ export default class SelectionMultipleInput extends React.Component {
 
     return (
       <span className={styles.root}>
-        <Popover
-          visible={isVisible}
-          content={content}
-          placement="topLeft"
-          trigger="click"
+        <PopupBox
+          editorCommand="selectionMultipleEditor"
+          deleteCommand="selectionMultipleDelete"
+          controlID={controlID}
+          controlName={controlName}
         >
           {
             controlName &&
             <span
               className={styles.controlName}
               onClick={this.onHandleClick}
-            >{controlName} : </span>
+            >{controlName}: </span>
           }
-        </Popover>
+        </PopupBox>
         <span
           className={styles.controlVal}
           title={describeVal}

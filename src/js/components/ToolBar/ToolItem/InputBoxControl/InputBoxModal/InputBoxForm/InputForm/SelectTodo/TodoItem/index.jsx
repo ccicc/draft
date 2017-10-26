@@ -1,8 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Input, Button } from 'antd';
 import styles from './index.less';
 
 export default class TodoItem extends React.Component {
+  static propTypes = {
+    index: PropTypes.number.isRequired,
+    title: PropTypes.string,
+    value: PropTypes.string.isRequired,
+    values: PropTypes.arrayOf(PropTypes.string),
+    selectItems: PropTypes.arrayOf(PropTypes.shape({
+      value: PropTypes.string,
+      title: PropTypes.string
+    })),
+    onChange: PropTypes.func.isRequired,
+    onEditorItem: PropTypes.func.isRequired,
+    onItemUpperMoving: PropTypes.func.isRequired,
+    onItemUnderMoving: PropTypes.func.isRequired,
+    onRemoveItem: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
