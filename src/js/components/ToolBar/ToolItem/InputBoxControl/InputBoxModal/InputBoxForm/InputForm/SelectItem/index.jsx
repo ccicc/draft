@@ -63,6 +63,7 @@ export default class SelectItem extends React.Component {
       inputVal: currentItem.val,
       inputTitle: currentItem.title
     });
+    // form包装后, 组件本身带有onchange事件
     setTimeout(() => this.props.onChange(this.state.selectItems), 0);
   }
 
@@ -84,7 +85,10 @@ export default class SelectItem extends React.Component {
       inputVal: '',
       inputTitle: ''
     });
-    setTimeout(() => this.props.onChange(this.state.selectItems), 0);
+    setTimeout(() => this.props.onChange({
+      items: this.state.selectItems,
+      checkedVals: this.state.values
+    }), 0);
     return true;
   }
 
@@ -100,7 +104,7 @@ export default class SelectItem extends React.Component {
   }
 
   onEditorItem = () => {
-    // 编辑器当前项
+    // 编辑当前项
     const { currentSelected, selectItems, inputVal, inputTitle } = this.state;
     const newItems = selectItems.map(item => {
       if (item.val === currentSelected && inputVal !== '') {

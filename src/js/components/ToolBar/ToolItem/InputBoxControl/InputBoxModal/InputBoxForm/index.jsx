@@ -29,6 +29,7 @@ export default class InputBoxForm extends React.Component {
   }
 
   onHandleConfirm = (err, changeFields) => {
+    console.log(changeFields);
     const { onChange, onHiddenModal } = this.props;
     if (err) return false;
     this.setState({

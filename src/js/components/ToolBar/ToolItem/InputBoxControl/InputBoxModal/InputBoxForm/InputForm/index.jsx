@@ -287,7 +287,7 @@ class InputForm extends React.Component {
         <Tabs type="card">
           <TabPane tab="自定义选项" key="1">
             {
-              getFieldDecorator('selectItems', {
+              getFieldDecorator('selectTodos', {
                 valuePropsName: 'selectTodos'
               })(
                 <SelectTodo />
@@ -324,6 +324,7 @@ class InputForm extends React.Component {
       </FormItem>
     );
 
+    // 文本输入框
     const TextInput = (
       <Row gutter={15}>
         <Col span={12}> {ControlID} </Col>
@@ -338,6 +339,7 @@ class InputForm extends React.Component {
       </Row>
     );
 
+    // 下拉单选输入框
     const SelectionInput = (
       <Row gutter={15}>
         <Col span={12}> {ControlID} </Col>
@@ -350,6 +352,7 @@ class InputForm extends React.Component {
       </Row>
     );
 
+    // 下拉多选输入框
     const SelectionMultipleInput = (
       <Row gutter={15}>
         <Col span={12}>{ControlID}</Col>
@@ -362,6 +365,7 @@ class InputForm extends React.Component {
       </Row>
     );
 
+    // 日期输入框
     const DateInput = (
       <Row gutter={15}>
         <Col span={12}>{ControlID}</Col>
@@ -376,6 +380,7 @@ class InputForm extends React.Component {
       </Row>
     );
 
+    // 多选输入框
     const CheckBoxInput = (
       <Row gutter={15}>
         <Col span={12}>{ControlID}</Col>
@@ -458,6 +463,9 @@ const WrapperInputForm = Form.create({
       },
       selectItems: {
         value: props.selectItems || []
+      },
+      selectTodos: {
+        value: props.selectTodos || []
       },
       dateFormat: {
         value: props.dateFormat || 'YYYY-MM-DD HH:mm'

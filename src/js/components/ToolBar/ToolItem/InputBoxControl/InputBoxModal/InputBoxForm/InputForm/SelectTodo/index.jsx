@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import {
   Button,
@@ -8,7 +6,6 @@ import {
   Col,
   message
 } from 'antd';
-import PropTypes from 'prop-types';
 import styles from './index.less';
 import TodoItem from './TodoItem';
 
@@ -16,26 +13,31 @@ export default class SelectTodo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectItems: [
-        { checked: false, value: 'aaa', title: 'aaaa' },
-        { checked: false, value: 'bb', title: 'bbbb' }
-      ],
+      selectItems: [],
+      values: [],
       inputVal: '',
       inputTitle: ''
     };
   }
 
   onChange = (e) => {
-    const { value } = e.target;
-    const { selectItems } = this.state;
-    const newItems = selectItems.map(item => {
-      if (item.value === value) {
-        item.checked = !item.checked
-      }
-    });
+    const { value, checked } = e.target;
+    let { values } = this.state;
+    if (checked && values.indexOf(value) === -1) {
+      values.push(value);
+    } else {
+      values = values.filter(item => item !== value);
+    }
     this.setState({
-      selectitems: newItems
+      values
     });
+
+    setTimeout(() => {
+      this.props.onChange({
+        items: this.state.selectItems,
+        selectedValues: this.state.values
+      });
+    }, 0);
   }
 
   onInputValueChange = (e) => {
@@ -69,8 +71,63 @@ export default class SelectTodo extends React.Component {
     });
   }
 
+  onEditorItem = (preValue, value) => {
+    // 编辑当前项
+    const { selectItems, values } = this.state;
+    const newSelectItems = selectItems.map(item => {
+      if (item.value === preValue) {
+        item.value = value;
+      }
+      return item;
+    });
+    const newValues = values.filter(item => item !== preValue);
+    newValues.push(value);
+    this.setState({
+      selectItems: newSelectItems,
+      values: newValues
+    });
+  }
+
+  onItemUpperMoving = (value) => {
+    // 上移当前项
+    const { selectItems } = this.state;
+    selectItems.forEach((item, index) => {
+      if (item.value === value && index > 0) {
+        selectItems[index] = selectItems[index - 1];
+        selectItems[index - 1] = item;
+      }
+    });
+    this.setState({ selectItems });
+  }
+
+  onItemUnderMoving = (value) => {
+    // 下移当前项
+    const { selectItems } = this.state;
+    let currentIndex;
+    selectItems.forEach((item, index) => {
+      if (item.value === value) {
+        currentIndex = index;
+      }
+    });
+    if (currentIndex < selectItems.length - 1) {
+      const temp = selectItems[currentIndex];
+      selectItems[currentIndex] = selectItems[currentIndex + 1];
+      selectItems[currentIndex + 1] = temp;
+    }
+    this.setState({ selectItems });
+  }
+
+  onRemoveItem = (value) => {
+    // 移除当前项
+    const { selectItems } = this.state;
+    const newItems = selectItems.filter(item => item.value !== value);
+    this.setState({
+      selectItems: newItems
+    });
+  }
+
   render() {
-    const { inputVal, inputTitle, selectItems } = this.state;
+    const { inputVal, inputTitle, selectItems, values } = this.state;
 
     return (
       <div>
@@ -78,11 +135,17 @@ export default class SelectTodo extends React.Component {
           <ul style={{ padding: 0 }}>
             {
               selectItems.map((item, index) => (
-                <TodoItem 
+                <TodoItem
                   key={index}
+                  index={index}
                   value={item.value}
-                  isChecked={item.checked}
+                  values={values}
+                  selectItems={selectItems}
                   onChange={this.onChange}
+                  onEditorItem={this.onEditorItem}
+                  onItemUpperMoving={this.onItemUpperMoving}
+                  onItemUnderMoving={this.onItemUnderMoving}
+                  onRemoveItem={this.onRemoveItem}
                 />
               ))
             }
@@ -119,6 +182,6 @@ export default class SelectTodo extends React.Component {
           </Col>
         </Row>
       </div>
-    )
+    );
   }
 }
