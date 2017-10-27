@@ -19,20 +19,11 @@ export default class SelectItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectItems: [],
+      selectItems: this.props.selectItems,
       currentSelected: '',
       inputVal: '',
       inputTitle: ''
     };
-  }
-
-  componentWillMount() {
-    const { value } = this.props;
-    if (value) {
-      this.setState({
-        selectItems: value
-      });
-    }
   }
 
   componentWillReceiveProps(nextProps) {

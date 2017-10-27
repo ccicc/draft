@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Input,
@@ -10,29 +11,23 @@ import styles from './index.less';
 import TodoItem from './TodoItem';
 
 export default class SelectTodo extends React.Component {
+  static propTypes = {
+    selectTodos: PropTypes.shape({
+      items: PropTypes.arrayOf(PropTypes.shape({
+        value: PropTypes.string,
+        title: PropTypes.string
+      })),
+      values: PropTypes.arrayOf(PropTypes.string)
+    })
+  };
   constructor(props) {
     super(props);
     this.state = {
-      selectItems: [],
-      values: [],
+      selectItems: this.props.selectTodos.items,
+      values: this.props.selectTodos.selectedValues,
       inputVal: '',
       inputTitle: ''
     };
-  }
-
-  componentWillMount() {
-    const { selectItems, values } = this.props.value;
-    if (!selectItems || !values) {
-      this.setState({
-        selectItems: [],
-        values: []
-      });
-    } else {
-      this.setState({
-        selectItems: [],
-        values: []
-      });
-    }
   }
 
   onChange = (e) => {
@@ -84,6 +79,13 @@ export default class SelectTodo extends React.Component {
       inputVal: '',
       inputTitle: ''
     });
+
+    setTimeout(() => {
+      this.props.onChange({
+        items: this.state.selectItems,
+        selectedValues: this.state.values
+      });
+    }, 0);
   }
 
   onEditorItem = (preValue, value) => {
@@ -143,7 +145,6 @@ export default class SelectTodo extends React.Component {
 
   render() {
     const { inputVal, inputTitle, selectItems, values } = this.state;
-
     return (
       <div>
         <div className={styles.wrapper}>

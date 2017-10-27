@@ -30,13 +30,12 @@ class InputForm extends React.Component {
     onHandleConfirm: PropTypes.func.isRequired,
     onHandleCancel: PropTypes.func.isRequired
   };
-
   constructor(props) {
     super(props);
     this.state = {
+      dateFormat: 'YYYY-MM-DD HH:mm',
       isRequired: true,
       dataTypeRules: [{ required: true, message: '请输入控件值' }],
-      dateFormat: 'YYYY-MM-DD HH:mm'
     };
   }
 
@@ -111,7 +110,12 @@ class InputForm extends React.Component {
 
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
-    const { config, controlID, onHandleConfirm, onHandleCancel } = this.props;
+    const {
+      config,
+      controlID,
+      onHandleConfirm,
+      onHandleCancel,
+    } = this.props;
     const { dataTypeRules, isRequired, dateFormat } = this.state;
 
     const ControlID = (
@@ -267,16 +271,15 @@ class InputForm extends React.Component {
         <Tabs type="card">
           <TabPane tab="自定义选项" key="1">
             {
-              getFieldDecorator('selectItems', {
-                valuePropsName: 'selectItems'
-              })(
+              getFieldDecorator('selectItems', { valuePropName: 'selectItems' })(
                 <SelectItem
                   controlID={controlID}
                   onSetDefaultVal={this.onSetDefaultVal}
                   onAddDefaultVal={this.onAddDefaultVal}
                 />
               )
-            };
+            }
+            )
           </TabPane>
         </Tabs>
       </FormItem>
@@ -287,9 +290,7 @@ class InputForm extends React.Component {
         <Tabs type="card">
           <TabPane tab="自定义选项" key="1">
             {
-              getFieldDecorator('selectTodos', {
-                valuePropsName: 'selectTodos'
-              })(
+              getFieldDecorator('selectTodos', { valuePropName: 'selectTodos' })(
                 <SelectTodo />
               )
             }
@@ -302,7 +303,7 @@ class InputForm extends React.Component {
       <FormItem label="日期格式">
         {
           getFieldDecorator('dateFormat', {
-            valuePropsName: 'dateFormat',
+            valuePropName: 'defaultValue',
           })(
             <Select
               showSearch
@@ -450,26 +451,25 @@ const WrapperInputForm = Form.create({
         value: props.describeVal
       },
       entityColor: {
-        value: props.entityColor || '#333'
+        value: props.entityColor
       },
       dataType: {
-        value: props.dataType || '普通文本'
+        value: props.dataType
       },
       isRequired: {
-        value: props.isRequired || true
+        value: props.isRequired
       },
       isReadOnly: {
-        value: props.isReadOnly || false
-      },
-      selectItems: {
-        value: props.selectItems || []
-      },
-      selectTodos: {
-        // 不能拿到数据
-        value: props.selectTodos || []
+        value: props.isReadOnly
       },
       dateFormat: {
-        value: props.dateFormat || 'YYYY-MM-DD HH:mm'
+        value: props.dateFormat
+      },
+      selectItems: {
+        value: props.selectItems
+      },
+      selectTodos: {
+        value: props.selectTodos
       }
     };
   }

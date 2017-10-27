@@ -45,7 +45,7 @@ export default function inputBoxHOC(currInputBox) {
 
       componentWillReceiveProps(nextProps) {
         const { editorState } = nextProps;
-        if (editorState && editorState !== this.props.editorState) {
+        if (editorState && (editorState !== this.props.editorState)) {
           this.setState({
             currentEntity: getSelectionEntity(editorState)
           });
@@ -154,7 +154,6 @@ export default function inputBoxHOC(currInputBox) {
         const { config, onHiddenModal } = this.props;
         const { selectionText, entityData } = this.getCurrentValue();
         const controlID = (entityData && entityData.controlID) || currInputBox;
-
         return (
           <Component
             entityData={entityData}

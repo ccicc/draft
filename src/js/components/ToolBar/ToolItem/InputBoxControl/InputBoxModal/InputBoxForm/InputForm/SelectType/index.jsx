@@ -1,7 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Select } from 'antd';
 
 export default class SelectType extends React.Component {
+  static propTypes = {
+    isRequired: PropTypes.bool.isRequired,
+    getRules: PropTypes.func.isRequired
+  };
   constructor(props) {
     super(props);
     this.state = {

@@ -11,25 +11,35 @@ export default class InputBoxForm extends React.Component {
     onChange: PropTypes.func.isRequired,
     onHiddenModal: PropTypes.func.isRequired
   };
-
+  static defaultProps = {
+    controlID: 'TextInput',
+    entityData: {
+      controlID: 'TextInput',
+      controlName: '',
+      tags: [],
+      defaultVal: undefined,
+      describeVal: '',
+      entityColor: '#333',
+      dataType: '普通文本',
+      isRequired: true,
+      isReadOnly: false,
+      dateFormat: 'YYYY-MM-DD HH:mm',
+      selectItems: [],
+      selectTodos: {
+        items: [],
+        selectedValues: []
+      }
+    }
+  };
   constructor(props) {
     super(props);
     this.state = {
-      controlID: '',
-      entityData: {}
+      controlID: this.props.controlID,
+      entityData: this.props.entityData
     };
   }
 
-  componentWillMount() {
-    const { controlID, entityData } = this.props;
-    this.setState({
-      controlID,
-      entityData
-    });
-  }
-
   onHandleConfirm = (err, changeFields) => {
-    console.log(changeFields);
     const { onChange, onHiddenModal } = this.props;
     if (err) return false;
     this.setState({
@@ -51,9 +61,9 @@ export default class InputBoxForm extends React.Component {
     const { config } = this.props;
     return (
       <WrapperInputForm
+        {...entityData}
         config={config}
         controlID={controlID}
-        {...entityData}
         onHandleConfirm={this.onHandleConfirm}
         onHandleCancel={this.onHandleCancel}
       />
