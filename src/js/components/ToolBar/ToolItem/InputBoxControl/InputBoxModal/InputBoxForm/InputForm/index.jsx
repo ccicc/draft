@@ -391,6 +391,8 @@ class InputForm extends React.Component {
         <Col span={12}>{Tags}</Col>
         <Col span={12}>{DescribeVal}</Col>
         <Col span={12}>{EntityColor}</Col>
+        <Col span={12}>{IsRequired}</Col>
+        <Col span={12}>{IsReadOnly}</Col>
         <Col span={24}>{SelectTodos}</Col>
       </Row>
     );
@@ -403,6 +405,8 @@ class InputForm extends React.Component {
         <Col span={12}>{Tags}</Col>
         <Col span={12}>{DescribeVal}</Col>
         <Col span={12}>{EntityColor}</Col>
+        <Col span={12}>{IsRequired}</Col>
+        <Col span={12}>{IsReadOnly}</Col>
         <Col span={24}>{SelectTodos}</Col>
       </Row>
     );

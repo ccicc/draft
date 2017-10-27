@@ -25,9 +25,14 @@
   cursor: text;
 }
 
+.rim{
+  font-style: normal;
+  color: #00f;
+}
+
 .controlVal{
   position: relative;
-  padding-left: 0 5px;
+  padding: 0 5px;
   color: #333;
   cursor: pointer;
   text-align: center;
@@ -35,9 +40,18 @@
   &:hover{
     background-color: #add8e6;
   }
+
+  :global{
+    .ant-popover-inner-content{
+      padding: 8px 10px;
+    }
+  }
 }
 
-.rim{
-  font-style: normal;
-  color: #00f;
+.editorInput{
+  outline: none;
+  font-size: 13px;
+  color: #333;
+  border: none;
+  border-bottom: 1px solid #ccc;
 }
