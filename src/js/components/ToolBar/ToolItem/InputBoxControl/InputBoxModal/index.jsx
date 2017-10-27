@@ -33,7 +33,8 @@ export default class InputBoxModal extends React.Component {
       'selectionInputEditor',
       'textInputEditor',
       'selectionMultipleEditor',
-      'checkBoxInputEditor'
+      'checkBoxInputEditor',
+      'radioBoxInputEditor'
     ];
     inputBoxArr.forEach(item => {
       eventProxy.on(item, (val) => {
@@ -49,6 +50,7 @@ export default class InputBoxModal extends React.Component {
     eventProxy.off('textInputEditor');
     eventProxy.off('selectionMultipleEditor');
     eventProxy.off('checkBoxInputEditor');
+    eventProxy.off('radioBoxInputEditor');
   }
 
   onSelectChange = (val) => {
@@ -89,7 +91,8 @@ export default class InputBoxModal extends React.Component {
             <Option value="DateInput">日期输入框</Option>
             <Option value="SelectionInput">下拉单选输入框</Option>
             <Option value="SelectionMultipleInput">下拉多选输入框</Option>
-            <Option value="CheckBoxInput">多选框输入框</Option>
+            <Option value="CheckBoxInput">复选框</Option>
+            <Option value="RadioBoxInput">单选框</Option>
           </Select>
         </div>
         <WrapperInputBoxForm

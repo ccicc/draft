@@ -27,7 +27,8 @@ export default class InputBoxForm extends React.Component {
       selectItems: [],
       selectTodos: {
         items: [],
-        selectedValues: []
+        selectedValues: [],
+        currentValue: ''
       }
     }
   };

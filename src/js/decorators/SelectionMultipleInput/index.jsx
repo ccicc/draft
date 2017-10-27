@@ -6,7 +6,6 @@
 */
 
 import React from 'react';
-import { EditorState } from 'draft-js';
 import {
   Dropdown,
   Menu,
@@ -50,22 +49,22 @@ export default class SelectionMultipleInput extends React.Component {
 
   onSelectValueChange = (options) => {
     // 增减子项并更新contentState对象
-    // 存在bug
-    const { entityKey, contentState, editorState, onEditorStateChange } = this.props;
-    const { defaultVal } = contentState.getEntity(entityKey).getData();
-    let collectionItems = defaultVal.split(',');
+    const { entityKey, contentState } = this.props;
+    const entityData = contentState.getEntity(entityKey).getData();
+    let collectionItems = entityData.defaultVal.split(',');
     if (collectionItems.every(item => options.key !== item)) {
       collectionItems.push(options.key);
     } else {
       collectionItems = collectionItems.filter(item => item !== options.key);
     }
     const newDefaultVal = collectionItems.join(',');
-    const newContentState = editorState.getCurrentContent().mergeEntityData(
+    contentState.replaceEntityData(
       entityKey,
-      { defaultVal: newDefaultVal }
+      {
+        ...entityData,
+        defaultVal: newDefaultVal
+      }
     );
-    const newState = EditorState.push(editorState, newContentState, 'change-block-data');
-    onEditorStateChange(newState);
     this.setState({
       update: true
     });

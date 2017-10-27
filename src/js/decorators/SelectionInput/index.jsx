@@ -1,5 +1,4 @@
 import React from 'react';
-import { EditorState } from 'draft-js';
 import {
   Dropdown,
   Menu
@@ -10,15 +9,17 @@ import styles from './index.less';
 const Item = Menu.Item;
 export default class SelectionInput extends React.Component {
   onSelectValueChange = (props) => {
-    const { entityKey, contentState, editorState, onEditorStateChange } = this.props;
-    const newContentState = contentState.mergeEntityData(
+    const { entityKey, contentState } = this.props;
+    const data = contentState.getEntity(entityKey).getData();
+    contentState.replaceEntityData(
       entityKey,
-      { defaultVal: props.key }
+      {
+        ...data,
+        defaultVal: props.key
+      }
     );
-    const newState = EditorState.push(editorState, newContentState, 'change-block-data');
-    onEditorStateChange(newState);
     this.setState({
-      update: true
+      updateL: true
     });
   }
 

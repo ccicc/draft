@@ -291,7 +291,9 @@ class InputForm extends React.Component {
           <TabPane tab="自定义选项" key="1">
             {
               getFieldDecorator('selectTodos', { valuePropName: 'selectTodos' })(
-                <SelectTodo />
+                <SelectTodo
+                  controlID={controlID}
+                />
               )
             }
           </TabPane>
@@ -389,7 +391,18 @@ class InputForm extends React.Component {
         <Col span={12}>{Tags}</Col>
         <Col span={12}>{DescribeVal}</Col>
         <Col span={12}>{EntityColor}</Col>
-        <Col span={12}>{DefaultVal}</Col>
+        <Col span={24}>{SelectTodos}</Col>
+      </Row>
+    );
+
+    // 单选输入框
+    const RadioBoxInput = (
+      <Row gutter={15}>
+        <Col span={12}>{ControlID}</Col>
+        <Col span={12}>{ControlName}</Col>
+        <Col span={12}>{Tags}</Col>
+        <Col span={12}>{DescribeVal}</Col>
+        <Col span={12}>{EntityColor}</Col>
         <Col span={24}>{SelectTodos}</Col>
       </Row>
     );
@@ -402,6 +415,7 @@ class InputForm extends React.Component {
           {this.props.controlID === 'DateInput' && DateInput}
           {this.props.controlID === 'SelectionMultipleInput' && SelectionMultipleInput}
           {this.props.controlID === 'CheckBoxInput' && CheckBoxInput}
+          {this.props.controlID === 'RadioBoxInput' && RadioBoxInput}
           <Button
             key="submit"
             type="primary"

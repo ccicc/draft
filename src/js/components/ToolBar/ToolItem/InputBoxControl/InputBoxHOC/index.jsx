@@ -41,6 +41,7 @@ export default function inputBoxHOC(currInputBox) {
         eventProxy.on('textInputDelete', () => this.onHandleChange());
         eventProxy.on('selectionMultipleDelete', () => this.onHandleChange());
         eventProxy.on('checkBoxInputDelete', () => this.onHandleChange());
+        eventProxy.on('radioBoxInputDelete', () => this.onHandleChange(0));
       }
 
       componentWillReceiveProps(nextProps) {
@@ -58,6 +59,7 @@ export default function inputBoxHOC(currInputBox) {
         eventProxy.off('textInputDelete');
         eventProxy.off('selectionMultipleDelete');
         eventProxy.off('checkBoxInputDelete');
+        eventProxy.off('radioBoxInputDelete');
       }
 
       onHandleChange = (value, entityData) => {

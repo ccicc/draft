@@ -2,34 +2,28 @@ import React from 'react';
 import { PopupBox } from './../../components/Common';
 import styles from './index.less';
 
-export default class CheckboxInput extends React.Component {
+export default class RadioboxInput extends React.Component {
   onHandleChange = (e) => {
-    const { checked, value } = e.target;
+    const { value } = e.target;
     const { entityKey, contentState } = this.props;
     const entityData = contentState.getEntity(entityKey).getData();
-    let { selectedValues } = entityData.selectTodos;
-    if (checked && selectedValues.indexOf(value) === -1) {
-      selectedValues.push(value);
-    } else {
-      selectedValues = selectedValues.filter(item => item !== value);
-    }
+    let { currentValue } = entityData.selectTodos;
+    currentValue = value;
     contentState.replaceEntityData(
       entityKey,
       {
         ...entityData,
         selectTodos: {
           ...entityData.selectTodos,
-          selectedValues
+          currentValue
         }
       }
     );
-    this.setState({
-      updateData: true
-    });
-  }
+    this.setState({});
+  };
 
   render() {
-    const { entityKey, contentState, children } = this.props;
+    const { entityKey, contentState } = this.props;
     const {
       controlID,
       controlName,
@@ -37,13 +31,12 @@ export default class CheckboxInput extends React.Component {
       entityColor,
       selectTodos
     } = contentState.getEntity(entityKey).getData();
-    const { items, selectedValues } = selectTodos;
-
+    const { items, currentValue } = selectTodos;
     return (
       <span className={styles.root}>
         <PopupBox
-          editorCommand="checkBoxInputEditor"
-          deleteCommand="checkBoxInputDelete"
+          editorCommand="radioBoxInputEditor"
+          deleteCommand="radioBoxInputDelete"
           controlID={controlID}
           controlName={controlName}
         >
@@ -52,7 +45,7 @@ export default class CheckboxInput extends React.Component {
             <span
               className={styles.controlName}
               onClick={this.onHandleClick}
-            >{controlName}：</span>
+            >{controlName}: </span>
           }
         </PopupBox>
         <span
@@ -70,18 +63,17 @@ export default class CheckboxInput extends React.Component {
                 <label className={styles.itemLabel}>
                   <input
                     className={styles.input}
-                    type="checkbox"
+                    type="radio"
                     value={item.value}
-                    checked={selectedValues.indexOf(item.value) !== -1}
+                    checked={item.value === currentValue}
                     onChange={this.onHandleChange}
                   />
-                  {item.value},
+                  {item.value}、
                 </label>
               </span>
             ))
           }
           <span className={styles.rim}> ] </span>
-          <span style={{ display: 'none' }}>{children}</span>
         </span>
       </span>
     );

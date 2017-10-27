@@ -35,7 +35,8 @@ import {
   SelectionInput,
   SelectionMultipleInput,
   DateInput,
-  CheckboxInput
+  CheckboxInput,
+  RadioboxInput
 } from './../../decorators';
 
 // 自定义块级组件导入
@@ -106,8 +107,6 @@ export default class Draft extends React.Component {
       // 装饰器组件
       return (
         <Component
-          editorState={this.state.editorState}
-          onEditorStateChange={this.onChange}
           {...props}
         />
       );
@@ -127,7 +126,8 @@ export default class Draft extends React.Component {
       createDecorator('TEXTINPUT', TextInput),
       createDecorator('DATEINPUT', DateInput),
       createDecorator('SELECTIONMULTIPLEINPUT', SelectionMultipleInput),
-      createDecorator('CHECKBOXINPUT', CheckboxInput)
+      createDecorator('CHECKBOXINPUT', CheckboxInput),
+      createDecorator('RADIOBOXINPUT', RadioboxInput),
     ];
     return new CompositeDecorator(decorators);
   }
@@ -141,7 +141,6 @@ export default class Draft extends React.Component {
   myKeyBindingFn = (e) => {
     const { isReadOnly } = this.state;
     if (isReadOnly && (e.keyCode === 8 || e.keyCode === 46)) {
-      console.log(e.target);
       return 'stop-delete';
     }
     return getDefaultKeyBinding(e);

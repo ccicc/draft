@@ -17,7 +17,8 @@ export default class SelectTodo extends React.Component {
         value: PropTypes.string,
         title: PropTypes.string
       })),
-      values: PropTypes.arrayOf(PropTypes.string)
+      values: PropTypes.arrayOf(PropTypes.string),
+      currentValue: PropTypes.string
     })
   };
   constructor(props) {
@@ -25,12 +26,13 @@ export default class SelectTodo extends React.Component {
     this.state = {
       selectItems: this.props.selectTodos.items,
       values: this.props.selectTodos.selectedValues,
+      currentValue: this.props.selectTodos.currentValue,
       inputVal: '',
       inputTitle: ''
     };
   }
 
-  onChange = (e) => {
+  onCheckboxChange = (e) => {
     const { value, checked } = e.target;
     let { values } = this.state;
     if (checked && values.indexOf(value) === -1) {
@@ -46,6 +48,19 @@ export default class SelectTodo extends React.Component {
       this.props.onChange({
         items: this.state.selectItems,
         selectedValues: this.state.values
+      });
+    }, 0);
+  }
+
+  onRadioboxChange = (e) => {
+    const { value } = e.target;
+    this.setState({
+      currentValue: value
+    });
+    setTimeout(() => {
+      this.props.onChange({
+        items: this.state.selectItems,
+        currentValue: value
       });
     }, 0);
   }
@@ -83,7 +98,8 @@ export default class SelectTodo extends React.Component {
     setTimeout(() => {
       this.props.onChange({
         items: this.state.selectItems,
-        selectedValues: this.state.values
+        selectedValues: this.state.values,
+        currentValue: this.state.currentValue
       });
     }, 0);
   }
@@ -144,7 +160,7 @@ export default class SelectTodo extends React.Component {
   }
 
   render() {
-    const { inputVal, inputTitle, selectItems, values } = this.state;
+    const { inputVal, inputTitle, selectItems, values, currentValue } = this.state;
     return (
       <div>
         <div className={styles.wrapper}>
@@ -154,11 +170,14 @@ export default class SelectTodo extends React.Component {
                 <TodoItem
                   key={index}
                   index={index}
+                  controlID={this.props.controlID}
                   title={item.title}
                   value={item.value}
                   values={values}
+                  currentValue={currentValue}
                   selectItems={selectItems}
-                  onChange={this.onChange}
+                  onCheckboxChange={this.onCheckboxChange}
+                  onRadioboxChange={this.onRadioboxChange}
                   onEditorItem={this.onEditorItem}
                   onItemUpperMoving={this.onItemUpperMoving}
                   onItemUnderMoving={this.onItemUnderMoving}

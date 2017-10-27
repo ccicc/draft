@@ -7,17 +7,22 @@ export default class TodoItem extends React.Component {
   static propTypes = {
     index: PropTypes.number.isRequired,
     title: PropTypes.string,
+    controlID: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     values: PropTypes.arrayOf(PropTypes.string),
     selectItems: PropTypes.arrayOf(PropTypes.shape({
       value: PropTypes.string,
       title: PropTypes.string
     })),
-    onChange: PropTypes.func.isRequired,
+    onCheckboxChange: PropTypes.func.isRequired,
     onEditorItem: PropTypes.func.isRequired,
     onItemUpperMoving: PropTypes.func.isRequired,
     onItemUnderMoving: PropTypes.func.isRequired,
     onRemoveItem: PropTypes.func.isRequired
+  };
+  static defaultProps = {
+    value: '',
+    preValue: ''
   };
 
   constructor(props) {
@@ -25,17 +30,9 @@ export default class TodoItem extends React.Component {
     this.state = {
       isEditor: false,
       isExpand: false,
-      value: '',
-      preValue: ''
+      value: this.props.value,
+      preValue: this.props.value
     };
-  }
-
-  componentWillMount() {
-    const { value } = this.props;
-    this.setState({
-      value,
-      preValue: value
-    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -86,7 +83,14 @@ export default class TodoItem extends React.Component {
   }
 
   render() {
-    const { onChange, values, selectItems, title } = this.props;
+    const {
+      onCheckboxChange,
+      onRadioboxChange,
+      values,
+      currentValue,
+      selectItems,
+      title
+    } = this.props;
     const { isExpand, isEditor, value } = this.state;
     const controlBtn = (
       <Button.Group className={styles.control}>
@@ -141,13 +145,23 @@ export default class TodoItem extends React.Component {
           className={styles.label}
           title={title}
         >
-          <input
-            className={styles.input}
-            type="checkbox"
-            value={value}
-            checked={values.indexOf(value) !== -1}
-            onChange={onChange}
-          />
+          {
+            this.props.controlID === 'CheckBoxInput' ?
+              (<input
+                className={styles.input}
+                type="checkbox"
+                value={value}
+                checked={values.indexOf(value) !== -1}
+                onChange={onCheckboxChange}
+              />) :
+              (<input
+                className={styles.input}
+                type="radio"
+                value={value}
+                checked={currentValue === value}
+                onChange={onRadioboxChange}
+              />)
+          }
           {
             isEditor ?
               (<Input

@@ -1,5 +1,4 @@
 import React from 'react';
-import { EditorState } from 'draft-js';
 import {
   DatePicker
 } from 'antd';
@@ -11,9 +10,10 @@ export default class DateInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false,
+      isOpen: false
     };
   }
+
   onHandleOpenClick = () => {
     this.setState({
       isOpen: true
@@ -25,16 +25,16 @@ export default class DateInput extends React.Component {
     });
   }
 
-  onHandleDateChange = (date) => {
-    // 存在bug
-    const { entityKey, contentState, editorState, onEditorStateChange } = this.props;
-    const newContentState = contentState.mergeEntityData(
+  onHandleChange = (date) => {
+    const { entityKey, contentState } = this.props;
+    const data = contentState.getEntity(entityKey).getData();
+    contentState.replaceEntityData(
       entityKey,
-      { defaultVal: date }
+      {
+        ...data,
+        defaultVal: date
+      }
     );
-    const newState = EditorState.push(editorState, newContentState, 'change-block-data');
-    onEditorStateChange(newState);
-    this.setState({});
   }
 
   render() {
@@ -77,7 +77,7 @@ export default class DateInput extends React.Component {
             format={dateFormat}
             open={isOpen}
             onOk={this.onHandleOkClick}
-            onChange={this.onHandleDateChange}
+            onChange={this.onHandleChange}
           />
           <span style={{ display: 'none' }}>{children}</span>
         </span>
