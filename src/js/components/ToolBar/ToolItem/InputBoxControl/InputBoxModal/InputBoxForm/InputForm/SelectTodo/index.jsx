@@ -33,6 +33,7 @@ export default class SelectTodo extends React.Component {
   }
 
   onCheckboxChange = (e) => {
+    // 多选框change事件
     const { value, checked } = e.target;
     let { values } = this.state;
     if (checked && values.indexOf(value) === -1) {
@@ -53,6 +54,7 @@ export default class SelectTodo extends React.Component {
   }
 
   onRadioboxChange = (e) => {
+    // 单选框change事件
     const { value } = e.target;
     this.setState({
       currentValue: value

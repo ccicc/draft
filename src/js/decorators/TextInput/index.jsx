@@ -4,54 +4,32 @@ import {
 } from 'antd';
 import { PopupBox } from './../../components/Common';
 import styles from './index.less';
-/* eslint-disable */
+
 export default class TextInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisible: false
+      update: false
     };
   }
-
-  componentDidMount() {
-    document.body.addEventListener('click', this.onBodyClick, false);
-  }
-
-  componentWillUnmount() {
-    document.body.removeEventListener('click', this.onBodyClick, false);
-  }
-
-  onBodyClick = () => {
+  onHandleVisibleChange = () => {
     const { contentState, entityKey } = this.props;
     const entityData = contentState.getEntity(entityKey).getData();
-    if (this.input && this.input.value !== '') {
+    if (this.input && (this.input.value !== '')) {
       contentState.replaceEntityData(
         entityKey,
         {
           ...entityData,
           defaultVal: this.input.value
         }
-      )
+      );
     }
     this.setState({
-      isVisible: false
-    });
-  }
-
-  onHandleClick = () => {
-    this.setState({
-      isVisible: !this.state.isVisible
-    });
-  }
-
-  onHandleVisibleChange = (visible) => {
-    this.setState({
-      isVisible: visible
+      update: true
     });
   }
 
   render() {
-    const { isVisible } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
       controlID,
@@ -63,16 +41,15 @@ export default class TextInput extends React.Component {
 
     const content = (
       <input
-        ref={element => this.input = element}
         type="text"
+        ref={element => this.input = element}
         className={styles.editorInput}
       />
-    )
+    );
 
     return (
       <span
         className={styles.root}
-        onClick={this.onHandleClick}
       >
         <PopupBox
           editorCommand="textInputEditor"
@@ -85,13 +62,13 @@ export default class TextInput extends React.Component {
         <span
           className={styles.controlVal}
           title={describeVal}
+          onClick={this.onHandleClick}
         >
           <Popover
-            visible={isVisible}
             placement="topLeft"
             trigger="click"
-            onVisibleChange={this.onHandleVisibleChange}
             content={content}
+            onVisibleChange={this.onHandleVisibleChange}
           >
             <i className={styles.rim}> [ </i>
             <span
