@@ -12,6 +12,7 @@ import TodoItem from './TodoItem';
 
 export default class SelectTodo extends React.Component {
   static propTypes = {
+    controlID: PropTypes.string,
     selectTodos: PropTypes.shape({
       items: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string,
@@ -28,7 +29,8 @@ export default class SelectTodo extends React.Component {
       values: this.props.selectTodos.selectedValues,
       currentValue: this.props.selectTodos.currentValue,
       inputVal: '',
-      inputTitle: ''
+      inputTitle: '',
+      isSelectedAll: false
     };
   }
 
@@ -44,13 +46,6 @@ export default class SelectTodo extends React.Component {
     this.setState({
       values
     });
-
-    setTimeout(() => {
-      this.props.onChange({
-        items: this.state.selectItems,
-        selectedValues: this.state.values
-      });
-    }, 0);
   }
 
   onRadioboxChange = (e) => {
@@ -104,6 +99,24 @@ export default class SelectTodo extends React.Component {
         currentValue: this.state.currentValue
       });
     }, 0);
+  }
+
+  onSelectedAllItem = () => {
+    const { selectItems, values } = this.state;
+    selectItems.forEach(item => {
+      values.push(item.value);
+    });
+    this.setState({
+      values,
+      isSelectedAll: true
+    });
+  }
+
+  onClearAllItem = () => {
+    this.setState({
+      values: [],
+      isSelectedAll: false
+    });
   }
 
   onEditorItem = (preValue, value) => {
@@ -162,7 +175,28 @@ export default class SelectTodo extends React.Component {
   }
 
   render() {
-    const { inputVal, inputTitle, selectItems, values, currentValue } = this.state;
+    const { inputVal, inputTitle, selectItems, values, currentValue, isSelectedAll } = this.state;
+
+    const selectedBtn =
+      isSelectedAll ?
+        (<Button
+          style={{ width: '30%' }}
+          size="default"
+          title="全不选"
+          icon="check-circle"
+          disabled={values.length === 0}
+          onClick={this.onClearAllItem}
+        />)
+        :
+        (<Button
+          style={{ width: '30%' }}
+          size="default"
+          title="全选"
+          icon="check-circle-o"
+          disabled={values.length === selectItems.length}
+          onClick={this.onSelectedAllItem}
+        />);
+
     return (
       <div>
         <div className={styles.wrapper}>
@@ -209,14 +243,20 @@ export default class SelectTodo extends React.Component {
             />
           </Col>
           <Col span={12}>
-            <Button
-              style={{ width: '100%' }}
-              size="default"
-              type="primary"
-              icon="plus"
-              title="添加"
-              onClick={this.onAddNewItem}
-            />
+            <Button.Group style={{ width: '100%' }}>
+              <Button
+                style={{ width: '70%' }}
+                size="default"
+                type="primary"
+                icon="plus"
+                title="添加"
+                onClick={this.onAddNewItem}
+              />
+              {
+                this.props.controlID === 'CheckBoxInput' &&
+                selectedBtn
+              }
+            </Button.Group>
           </Col>
         </Row>
       </div>

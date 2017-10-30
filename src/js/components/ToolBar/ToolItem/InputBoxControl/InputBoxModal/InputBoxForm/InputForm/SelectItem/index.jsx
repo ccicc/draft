@@ -22,8 +22,20 @@ export default class SelectItem extends React.Component {
       selectItems: this.props.selectItems,
       currentSelected: '',
       inputVal: '',
-      inputTitle: ''
+      inputTitle: '',
+      isSelectAll: false
     };
+  }
+
+  componentWillMount() {
+    // 组件初始化时控制全选按钮状态
+    const { defaultVal } = this.props;
+    const { selectItems } = this.state;
+    if (defaultVal && defaultVal.split(',').length === selectItems.length) {
+      this.setState({ isSelectAll: true });
+    } else {
+      this.setState({ isSelectAll: false });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -135,16 +147,39 @@ export default class SelectItem extends React.Component {
   }
 
   onSetDefaultValue = () => {
+    // 单选， 多选下拉框设置默认值
     const { onSetDefaultVal, onAddDefaultVal, controlID } = this.props;
-    const { currentSelected } = this.state;
+    const { currentSelected, selectItems } = this.state;
     if (controlID === 'SelectionInput') {
       return onSetDefaultVal(currentSelected);
     }
-    return onAddDefaultVal(currentSelected);
+    const newDefaultVal = onAddDefaultVal(currentSelected);
+    if (newDefaultVal.split(',').length === selectItems.length) {
+      this.setState({ isSelectAll: true });
+    }
+  }
+
+  onSelectAllClick = () => {
+    const { selectItems } = this.state;
+    const { onAddDefaultVal } = this.props;
+    selectItems.forEach(item => {
+      onAddDefaultVal(item.val);
+    });
+    this.setState({
+      isSelectAll: true
+    });
+  }
+
+  unCheckedAll = () => {
+    const { onCleanDefaultVal } = this.props;
+    onCleanDefaultVal();
+    this.setState({
+      isSelectAll: false
+    });
   }
 
   render() {
-    const { selectItems, inputVal, inputTitle, currentSelected } = this.state;
+    const { selectItems, inputVal, inputTitle, currentSelected, isSelectAll } = this.state;
     const { controlID } = this.props;
     return (
       <div className="root">
@@ -216,6 +251,24 @@ export default class SelectItem extends React.Component {
             title={controlID === 'SelectionInput' ? '设置默认值' : '添加默认值'}
             onClick={this.onSetDefaultValue}
           />
+          {
+            // 单选下拉输入框无全选按钮
+            controlID === 'SelectionMultipleInput' &&
+            (isSelectAll === false
+              ?
+              <Button   // eslint-disable-line
+                icon="check-circle-o"
+                title="全选"
+                onClick={this.onSelectAllClick}
+              />
+              :
+              <Button
+                style={{ color: '#108ee9' }}
+                icon="check-circle"
+                title="全不选"
+                onClick={this.unCheckedAll}
+              />)
+          }
           <Button
             icon="delete"
             style={{ color: 'red' }}

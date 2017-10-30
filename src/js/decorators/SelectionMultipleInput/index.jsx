@@ -9,7 +9,8 @@ import React from 'react';
 import {
   Dropdown,
   Menu,
-  Icon
+  Icon,
+  Button
 } from 'antd';
 import { PopupBox } from './../../components/Common';
 import styles from './index.less';
@@ -52,7 +53,7 @@ export default class SelectionMultipleInput extends React.Component {
     const { entityKey, contentState } = this.props;
     const entityData = contentState.getEntity(entityKey).getData();
     let collectionItems = entityData.defaultVal.split(',');
-    if (collectionItems.every(item => options.key !== item)) {
+    if (collectionItems.every(item => options.key !== item) && options.key.search(/^item_/) === -1) {
       collectionItems.push(options.key);
     } else {
       collectionItems = collectionItems.filter(item => item !== options.key);
@@ -66,8 +67,40 @@ export default class SelectionMultipleInput extends React.Component {
       }
     );
     this.setState({
-      update: true
+      isUpdate: true
     });
+  }
+
+  onSelectedAllClick = () => {
+    // 全选
+    const { entityKey, contentState } = this.props;
+    const entityData = contentState.getEntity(entityKey).getData();
+    const newDefaultVal = entityData.selectItems.map(item => item.val).join(',');
+
+    contentState.replaceEntityData(
+      entityKey,
+      {
+        ...entityData,
+        defaultVal: newDefaultVal
+      }
+    );
+    this.setState({
+      isUpdate: true
+    });
+  }
+
+  onClearItemClick = () => {
+    // 全不选
+    const { entityKey, contentState } = this.props;
+    const entityData = contentState.getEntity(entityKey).getData();
+    contentState.replaceEntityData(
+      entityKey,
+      {
+        ...entityData,
+        defaultVal: ''
+      }
+    );
+    this.setState({ isUpdate: true });
   }
 
   render() {
@@ -76,9 +109,9 @@ export default class SelectionMultipleInput extends React.Component {
     const {
       controlID,
       controlName,
-      defaultVal,
       describeVal,
       entityColor,
+      defaultVal,
       selectItems
     } = contentState.getEntity(entityKey).getData();
 
@@ -99,6 +132,31 @@ export default class SelectionMultipleInput extends React.Component {
               }
             </Item>
           ))
+        }
+        <Menu.Divider />
+        {
+          <Item>
+            <Button.Group
+              style={{ width: '100%' }}
+            >
+              <Button
+                size="small"
+                style={{ width: '50%' }}
+                disabled={defaultVal.split(',').length === selectItems.length}
+                onClick={this.onSelectedAllClick}
+              >
+                全选
+              </Button>
+              <Button
+                size="small"
+                style={{ width: '50%' }}
+                disabled={defaultVal === ''}
+                onClick={this.onClearItemClick}
+              >
+                全不选
+              </Button>
+            </Button.Group>
+          </Item>
         }
       </Menu>
     );
@@ -138,7 +196,7 @@ export default class SelectionMultipleInput extends React.Component {
                   defaultVal.split(',').map((item, index) => {
                     if (index === defaultVal.split(',').length - 1 || (item === '')) {
                       return (<span key={index}>{item}</span>);
-                    } else if (item === '未知') {
+                    } else if (item === '未知' || item.search(/^item_/g) !== -1) {
                       return '';
                     }
                     return (<span key={index}>{item}, </span>);

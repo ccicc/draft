@@ -84,8 +84,8 @@ class InputForm extends React.Component {
     } else {
       newDefaultVal = `${defaultVal},${value}`;
     }
-
     setFieldsValue({ defaultVal: newDefaultVal });
+    return newDefaultVal;
   }
 
   onCleanDefaultVal = () => {
@@ -113,6 +113,7 @@ class InputForm extends React.Component {
     const {
       config,
       controlID,
+      defaultVal,
       onHandleConfirm,
       onHandleCancel,
     } = this.props;
@@ -274,8 +275,10 @@ class InputForm extends React.Component {
               getFieldDecorator('selectItems', { valuePropName: 'selectItems' })(
                 <SelectItem
                   controlID={controlID}
+                  defaultVal={defaultVal}
                   onSetDefaultVal={this.onSetDefaultVal}
                   onAddDefaultVal={this.onAddDefaultVal}
+                  onCleanDefaultVal={this.onCleanDefaultVal}
                 />
               )
             }
