@@ -8,6 +8,28 @@ import styles from './index.less';
 
 const Item = Menu.Item;
 export default class SelectionInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isVisible: false
+    };
+  }
+
+  onHandleInputBlur = (e) => {
+    const { entityKey, contentState } = this.props;
+    const entityData = contentState.getEntity(entityKey).getData();
+    contentState.replaceEntityData(
+      entityKey,
+      {
+        ...entityData,
+        defaultVal: e.target.value || '未知'
+      }
+    );
+    this.setState({
+      isVisible: false
+    });
+  }
+
   onSelectValueChange = (props) => {
     const { entityKey, contentState } = this.props;
     const data = contentState.getEntity(entityKey).getData();
@@ -18,12 +40,28 @@ export default class SelectionInput extends React.Component {
         defaultVal: props.key
       }
     );
+    if (props.key !== 'input') {
+      this.setState({
+        isVisible: false,
+        update: true
+      });
+    }
+  }
+
+  onHandleClick = () => {
     this.setState({
-      updateL: true
+      isVisible: true
+    });
+  }
+
+  onHandleVisibleChange = (visible) => {
+    this.setState({
+      isVisible: visible
     });
   }
 
   render() {
+    const { isVisible } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
       controlID,
@@ -36,6 +74,15 @@ export default class SelectionInput extends React.Component {
 
     const menu = (
       <Menu onClick={this.onSelectValueChange}>
+        <Item key="input">
+          <input
+            type="text"
+            ref={element => this.input = element}
+            className={styles.input}
+            onBlur={this.onHandleInputBlur}
+            placeholder="输入自定义值"
+          />
+        </Item>
         {
           selectItems.map(item => (
             <Item
@@ -61,7 +108,6 @@ export default class SelectionInput extends React.Component {
             controlName &&
             <span
               className={styles.controlName}
-              onClick={this.onHandleClick}
             >{controlName}: </span>
           }
         </PopupBox>
@@ -75,8 +121,15 @@ export default class SelectionInput extends React.Component {
             overlay={menu}
             trigger={['click']}
             placement="bottomCenter"
+            visible={isVisible}
+            onVisibleChange={this.onHandleVisibleChange}
           >
-            <span style={{ color: entityColor }}>{defaultVal}</span>
+            <span
+              style={{ color: entityColor }}
+              onClick={this.onHandleClick}
+            >
+              {defaultVal}
+            </span>
           </Dropdown>
           <i className={styles.rim}> ] </i>
           <span style={{ display: 'none' }}>{children}</span>

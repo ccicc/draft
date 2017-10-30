@@ -6,20 +6,27 @@
 
 export default {
   options: [
-    'inline',
-    'block',
-    'fontSize',
-    'fontFamily',
-    'list',
-    'colorPicker',
-    'PageBreak'
+    { name: 'FontFamily', span: 3, isShow: true },
+    { name: 'FontSize', span: 3, isShow: true },
+    { name: 'BlockTool', span: 3, isShow: true },
+    { name: 'SelectBgColor', span: 2, isShow: true },
+    { name: 'Remove', span: 1.5, isShow: true },
+    { name: 'History', span: 2.5, isShow: true },
+    { name: 'Link', span: 2.5, isShow: true },
+    { name: 'Copy', span: 3.5, isShow: true },
+    { name: 'InputBoxControl', span: 1.5, isShow: true },
+    { name: 'InlineTool', span: 8.5, isShow: true },
+    { name: 'TextAlign', span: 4.5, isShow: true },
+    { name: 'List', span: 4.5, isShow: true },
+    { name: 'Postil', span: 1.5, isShow: true },
+    { name: 'Image', span: 1.5, isShow: true },
+    { name: 'Equation', span: 1.5, isShow: true }
   ],
   inline: {
     component: 'Inline',
     options: [
       { type: 'bold', icon: 'bold', title: '字体加粗' },
       { type: 'italic', icon: 'italic', title: '斜体' },
-      // { type: 'strikethrough', icon: 'strikethrough', title: '删除线' },
       { type: 'subscript', icon: 'subscript', title: '下标' },
       { type: 'superscript', icon: 'superscript', title: '上标' },
       { type: 'code', icon: 'code', title: '等宽字形' },
