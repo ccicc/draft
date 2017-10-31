@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Row
+  Row,
+  Col
 } from 'antd';
 import * as ToolComponent from './../ToolItem';
-import showItemHOC from './showItemHOC';
 import styles from './index.less';
 
 export default class EditorPanel extends React.Component {
@@ -32,16 +32,22 @@ export default class EditorPanel extends React.Component {
         {
           options.map((item, index) => {
             const Component = ToolComponent[item.name];
-            const WrapperComponent = showItemHOC(item)(Component);
-            return (
-              <WrapperComponent
-                key={index}
-                isShow={item.isShow}
-                config={config}
-                editorState={editorState}
-                onEditorStateChange={onEditorStateChange}
-              />
-            );
+            if (item.isShow) {
+              return (
+                <Col
+                  span={item.span}
+                  key={`item-${index}`}
+                >
+                  <Component
+                    key={index}
+                    config={config}
+                    editorState={editorState}
+                    onEditorStateChange={onEditorStateChange}
+                  />
+                </Col>
+              );
+            }
+            return null;
           })
         }
       </Row>
