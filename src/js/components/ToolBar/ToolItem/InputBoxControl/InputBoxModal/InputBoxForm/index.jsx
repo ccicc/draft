@@ -20,7 +20,7 @@ export default class InputBoxForm extends React.Component {
       defaultVal: undefined,
       describeVal: '',
       entityColor: '#333',
-      dataType: '普通文本',
+      dataType: 'string',
       isRequired: true,
       isReadOnly: false,
       dateFormat: 'YYYY-MM-DD HH:mm',

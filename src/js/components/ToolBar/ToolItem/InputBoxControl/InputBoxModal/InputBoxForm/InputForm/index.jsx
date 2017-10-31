@@ -33,35 +33,15 @@ class InputForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dateFormat: 'YYYY-MM-DD HH:mm',
-      isRequired: true,
-      dataTypeRules: [{ required: true, message: '请输入控件值' }],
+      dateFormat: this.props.dataFormat,
+      isRequired: this.props.isRequired,
+      dataTypeRules: [],
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { isRequired, dateFormat } = nextProps;
-    if (
-      isRequired && isRequired !== this.props.isRequired &&
-      dateFormat && dateFormat !== this.props.dateFormat
-    ) {
-      this.setState({
-        isRequired,
-        dateFormat
-      });
-    }
-  }
-
   onSwitchChange = (checked) => {
-    const { dataTypeRules } = this.state;
-    const newRules = dataTypeRules.map(item => {
-      if (item.required !== undefined) {
-        item.required = checked;
-      }
-      return item;
-    });
+    // 是否必填
     this.setState({
-      dataTypeRules: newRules,
       isRequired: checked
     });
   }
@@ -102,7 +82,7 @@ class InputForm extends React.Component {
   }
 
   getRules = (dataTypeRules) => {
-    // 动态获取校验规则
+    // 改变数据类型校验规则
     this.setState({
       dataTypeRules
     });
@@ -140,8 +120,8 @@ class InputForm extends React.Component {
         {
           getFieldDecorator('tags', { valuePropName: 'defaultValue' })(
             <Select
-              size="default"
               allowClear
+              size="default"
               mode="tags"
               tokenSeparators={[',']}
               placeholder="多个标签可用逗号分割"
@@ -176,7 +156,10 @@ class InputForm extends React.Component {
         <FormItem label="控件值" className={styles.defaultVal}>
           {
             getFieldDecorator('defaultVal', {
-              rules: [...dataTypeRules]
+              rules: [
+                ...dataTypeRules,
+                { required: isRequired, message: '请填写控件值' }
+              ]
             })(
               <Input size="default" placeholder="请输入控件值" />
             )

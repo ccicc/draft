@@ -23,6 +23,7 @@ export default class TextInput extends React.Component {
           defaultVal: this.input.value
         }
       );
+      this.input.value = '';
     }
     this.setState({
       update: true
