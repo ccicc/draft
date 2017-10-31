@@ -30,8 +30,24 @@ export default class SelectTodo extends React.Component {
       currentValue: this.props.selectTodos.currentValue,
       inputVal: '',
       inputTitle: '',
-      isSelectedAll: false
     };
+  }
+
+  componentWillMount() {
+    const { items, selectedValues } = this.props.selectTodos;
+    if (
+      items.length !== 0 &&
+      selectedValues.length !== 0 &&
+      items.length === selectedValues.length
+    ) {
+      this.setState({
+        isSelectedAll: true
+      });
+    } else {
+      this.setState({
+        isSelectedAll: false
+      });
+    }
   }
 
   onCheckboxChange = (e) => {
@@ -46,6 +62,12 @@ export default class SelectTodo extends React.Component {
     this.setState({
       values
     });
+    setTimeout(() => {
+      this.props.onChange({
+        ...this.props.selectTodos,
+        selectedValues: this.state.values,
+      });
+    });
   }
 
   onRadioboxChange = (e) => {
@@ -56,6 +78,7 @@ export default class SelectTodo extends React.Component {
     });
     setTimeout(() => {
       this.props.onChange({
+        ...this.props.selectTodos,
         items: this.state.selectItems,
         currentValue: value
       });
@@ -94,6 +117,7 @@ export default class SelectTodo extends React.Component {
 
     setTimeout(() => {
       this.props.onChange({
+        ...this.props.selectTodos,
         items: this.state.selectItems,
         selectedValues: this.state.values,
         currentValue: this.state.currentValue
@@ -110,12 +134,24 @@ export default class SelectTodo extends React.Component {
       values,
       isSelectedAll: true
     });
+    setTimeout(() => {
+      this.props.onChange({
+        ...this.props.selectTodos,
+        selectedValues: this.state.values
+      });
+    });
   }
 
   onClearAllItem = () => {
     this.setState({
       values: [],
       isSelectedAll: false
+    });
+    setTimeout(() => {
+      this.props.onChange({
+        ...this.props.selectTodos,
+        selectedValues: this.state.values
+      });
     });
   }
 
@@ -184,7 +220,6 @@ export default class SelectTodo extends React.Component {
           size="default"
           title="全不选"
           icon="check-circle"
-          disabled={values.length === 0}
           onClick={this.onClearAllItem}
         />)
         :
@@ -193,7 +228,6 @@ export default class SelectTodo extends React.Component {
           size="default"
           title="全选"
           icon="check-circle-o"
-          disabled={values.length === selectItems.length}
           onClick={this.onSelectedAllItem}
         />);
 

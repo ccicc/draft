@@ -53,7 +53,7 @@ export default class SelectionMultipleInput extends React.Component {
     const { entityKey, contentState } = this.props;
     const entityData = contentState.getEntity(entityKey).getData();
     let collectionItems = entityData.defaultVal.split(',');
-    if (collectionItems.every(item => options.key !== item) && options.key.search(/^item_/) === -1) {
+    if (collectionItems.every(item => options.key !== item) && (options.key !== 'item-btn')) {
       collectionItems.push(options.key);
     } else {
       collectionItems = collectionItems.filter(item => item !== options.key);
@@ -135,14 +135,14 @@ export default class SelectionMultipleInput extends React.Component {
         }
         <Menu.Divider />
         {
-          <Item>
+          <Item key="item-btn">
             <Button.Group
               style={{ width: '100%' }}
             >
               <Button
                 size="small"
                 style={{ width: '50%' }}
-                disabled={defaultVal.split(',').length === selectItems.length}
+                disabled={defaultVal.split(',').filter(item => item !== '').length === selectItems.length}
                 onClick={this.onSelectedAllClick}
               >
                 全选
