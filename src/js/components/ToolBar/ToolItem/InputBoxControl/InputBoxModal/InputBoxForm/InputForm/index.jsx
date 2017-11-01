@@ -102,7 +102,7 @@ class InputForm extends React.Component {
     const ControlID = (
       <FormItem label="控件ID">
         {
-          getFieldDecorator('controlID')(<Input disabled size="default" />)
+          getFieldDecorator('controlID')(<Input autoComplete="off" disabled size="default" />)
         }
       </FormItem>
     );
@@ -110,7 +110,7 @@ class InputForm extends React.Component {
     const ControlName = (
       <FormItem label="控件名称">
         {
-          getFieldDecorator('controlName')(<Input size="default" placeholder="请填写控件名称" />)
+          getFieldDecorator('controlName')(<Input autoComplete="off" size="default" placeholder="请填写控件名称" />)
         }
       </FormItem>
     );
@@ -134,7 +134,7 @@ class InputForm extends React.Component {
     const DescribeVal = (
       <FormItem label="控件描述">
         {getFieldDecorator('describeVal')(
-          <Input size="default" placeholder="请输入控件描述信息" />
+          <Input autoComplete="off" size="default" placeholder="请输入控件描述信息" />
         )}
       </FormItem>
     );
@@ -157,11 +157,11 @@ class InputForm extends React.Component {
           {
             getFieldDecorator('defaultVal', {
               rules: [
+                { required: isRequired, message: '请填写控件值' },
                 ...dataTypeRules,
-                { required: isRequired, message: '请填写控件值' }
               ]
             })(
-              <Input size="default" placeholder="请输入控件值" />
+              <Input autoComplete="off" size="default" placeholder="请输入控件值" />
             )
           }
         </FormItem>
@@ -301,12 +301,13 @@ class InputForm extends React.Component {
               onChange={this.onDateFormatChange}
             >
               <Option key="1" value="YYYY-MM-DD">YYYY-MM-DD</Option>
-              <Option key="2" value="YYYY-MM-DD HH:MM">YYYY-MM-DD HH:mm</Option>
-              <Option key="3" value="YYYY-MM-DD HH:MM:SS">YYYY-MM-DD HH:mm:ss</Option>
-              <Option key="4" value="YYYY/MM/DD">YYYY/MM/DD</Option>
-              <Option key="5" value="YYYY/MM/DD HH:MM">YYYY/MM/DD HH:mm</Option>
-              <Option key="6" value="YYYY/MM/DD HH:MM:SS">YYYY/MM/DD HH:mm:ss</Option>
-              <Option key="7" value="YYYY年MM月DD日 HH:mm:ss">年月日 HH:mm:ss</Option>
+              <Option key="2" value="HH:MM">HH:mm</Option>
+              <Option key="3" value="YYYY-MM-DD HH:MM">YYYY-MM-DD HH:mm</Option>
+              <Option key="4" value="YYYY-MM-DD HH:MM:SS">YYYY-MM-DD HH:mm:ss</Option>
+              <Option key="5" value="YYYY/MM/DD">YYYY/MM/DD</Option>
+              <Option key="6" value="YYYY/MM/DD HH:MM">YYYY/MM/DD HH:mm</Option>
+              <Option key="7" value="YYYY/MM/DD HH:MM:SS">YYYY/MM/DD HH:mm:ss</Option>
+              <Option key="8" value="YYYY年MM月DD日 HH:mm:ss">年月日 HH:mm:ss</Option>
             </Select>
           )
         }

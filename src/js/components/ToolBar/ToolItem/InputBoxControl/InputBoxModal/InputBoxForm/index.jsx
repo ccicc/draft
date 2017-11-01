@@ -20,7 +20,11 @@ export default class InputBoxForm extends React.Component {
       defaultVal: undefined,
       describeVal: '',
       entityColor: '#333',
-      dataType: 'string',
+      dataType: {
+        typeVal: 'string',
+        minNum: 0,
+        maxNum: 100
+      },
       isRequired: true,
       isReadOnly: false,
       dateFormat: 'YYYY-MM-DD HH:mm',
@@ -43,6 +47,7 @@ export default class InputBoxForm extends React.Component {
   onHandleConfirm = (err, changeFields) => {
     const { onChange, onHiddenModal } = this.props;
     if (err) return false;
+    console.log(changeFields);
     this.setState({
       entityData: {
         ...changeFields
