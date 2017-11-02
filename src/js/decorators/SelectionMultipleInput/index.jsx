@@ -34,7 +34,7 @@ export default class SelectionMultipleInput extends React.Component {
   }
 
   onBodyClick = (e) => {
-    if (e.target && e.target.matches('li.ant-dropdown-menu-item')) {
+    if (e.target && e.target.matches('li.ant-menu-item')) {
       return;
     }
     this.setState({
@@ -75,7 +75,9 @@ export default class SelectionMultipleInput extends React.Component {
     // 全选
     const { entityKey, contentState } = this.props;
     const entityData = contentState.getEntity(entityKey).getData();
-    const newDefaultVal = entityData.selectItems.map(item => item.val).join(',');
+    const newDefaultVal = entityData.pullDownOptionGroup.selectTabs.map(tab => {
+      return tab.content.map(item => item.val).join(',');
+    }).join(',');
 
     contentState.replaceEntityData(
       entityKey,
@@ -112,52 +114,62 @@ export default class SelectionMultipleInput extends React.Component {
       describeVal,
       entityColor,
       defaultVal,
-      selectItems
+      pullDownOptionGroup
     } = contentState.getEntity(entityKey).getData();
-
+    const { selectTabs } = pullDownOptionGroup;
     const menu = (
       <Menu
         multiple
         onClick={this.onSelectValueChange}
       >
         {
-          selectItems.map((item) => (
-            <Item
-              key={item.val}
+          selectTabs.map((tab, index) => (
+            <Menu
+              key={`menu-${index}`}
+              onClick={this.onSelectValueChange}
             >
-              <span title={item.title}>{item.val}</span>
+              <Item
+                key={`group-${index}`}
+                disabled
+              >
+                {tab.title}
+              </Item>
               {
-                defaultVal.split(',').some(val => val === item.val) &&
-                <Icon type="check" />
+                tab.content.map(item => (
+                  <Item key={item.val}>
+                    <span title={item.title}>{item.val}</span>
+                    {
+                      defaultVal.split(',').some(val => val === item.val) &&
+                      <Icon type="check" />
+                    }
+                  </Item>
+                ))
               }
-            </Item>
+              <Menu.Divider />
+            </Menu>
           ))
         }
-        <Menu.Divider />
-        {
-          <Item key="item-btn">
-            <Button.Group
-              style={{ width: '100%' }}
+        <Item key="item-btn">
+          <Button.Group
+            style={{ width: '100%' }}
+          >
+            <Button
+              size="small"
+              style={{ width: '50%' }}
+              onClick={this.onSelectedAllClick}
             >
-              <Button
-                size="small"
-                style={{ width: '50%' }}
-                disabled={defaultVal.split(',').filter(item => item !== '').length === selectItems.length}
-                onClick={this.onSelectedAllClick}
-              >
-                全选
-              </Button>
-              <Button
-                size="small"
-                style={{ width: '50%' }}
-                disabled={defaultVal === ''}
-                onClick={this.onClearItemClick}
-              >
-                全不选
-              </Button>
-            </Button.Group>
-          </Item>
-        }
+              全选
+            </Button>
+            <Button
+              size="small"
+              style={{ width: '50%' }}
+              disabled={defaultVal === ''}
+              onClick={this.onClearItemClick}
+            >
+              全不选
+            </Button>
+          </Button.Group>
+        </Item>
       </Menu>
     );
 
