@@ -136,6 +136,7 @@ export default class TextInput extends React.Component {
     const content = (
       <div>
         <input
+          autofocus // eslint-disable-line
           type="text"
           className={styles.editorInput}
           ref={element => this.input = element}

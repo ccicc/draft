@@ -23,6 +23,7 @@ export default class SelectItem extends React.Component {
       currentSelected: '',
       inputVal: '',
       inputTitle: '',
+      inputScore: '',
       isSelectAll: false
     };
   }
@@ -38,14 +39,6 @@ export default class SelectItem extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      this.setState({
-        selectItems: nextProps.value
-      });
-    }
-  }
-
   onInputValChange = (e) => {
     this.setState({
       inputVal: e.target.value
@@ -57,6 +50,12 @@ export default class SelectItem extends React.Component {
     });
   }
 
+  onInputScoreChange = (e) => {
+    this.setState({
+      inputScore: e.target.value
+    });
+  }
+
   onSelectChange = (e) => {
     const { selectItems } = this.state;
     const value = e.target.value;
@@ -64,15 +63,15 @@ export default class SelectItem extends React.Component {
     this.setState({
       currentSelected: value,
       inputVal: currentItem.val,
-      inputTitle: currentItem.title
+      inputTitle: currentItem.title,
+      inputScore: currentItem.score
     });
-    // form包装后, 组件本身带有onchange事件
     setTimeout(() => this.props.onChange(this.state.selectItems), 0);
   }
 
   onAddNewItem = () => {
     // 添加新的项
-    const { selectItems, inputVal, inputTitle } = this.state;
+    const { selectItems, inputVal, inputTitle, inputScore } = this.state;
     if (inputVal === '') {
       message.warning('值不能为空', 3);
       return false;
@@ -83,10 +82,11 @@ export default class SelectItem extends React.Component {
     this.setState({
       selectItems: [
         ...selectItems,
-        { val: inputVal, title: inputTitle }
+        { val: inputVal, title: inputTitle, score: inputScore }
       ],
       inputVal: '',
-      inputTitle: ''
+      inputTitle: '',
+      inputScore: ''
     });
     setTimeout(() => this.props.onChange(this.state.selectItems), 0);
     return true;
@@ -99,7 +99,8 @@ export default class SelectItem extends React.Component {
     this.setState({
       selectItems: newItems,
       inputVal: '',
-      inputTitle: ''
+      inputTitle: '',
+      inputScore: ''
     });
   }
 
@@ -179,8 +180,31 @@ export default class SelectItem extends React.Component {
   }
 
   render() {
-    const { selectItems, inputVal, inputTitle, currentSelected, isSelectAll } = this.state;
+    const {
+      selectItems,
+      inputVal,
+      inputTitle,
+      inputScore,
+      currentSelected,
+      isSelectAll
+    } = this.state;
     const { controlID } = this.props;
+
+    const selectedBtn = isSelectAll === false
+      ?
+      (<Button   // eslint-disable-line
+        icon="check-circle-o"
+        title="全选"
+        onClick={this.onSelectAllClick}
+      />)
+      :
+      (<Button
+        style={{ color: '#108ee9' }}
+        icon="check-circle"
+        title="全不选"
+        onClick={this.unCheckedAll}
+      />);
+
     return (
       <div className="root">
         <select
@@ -203,7 +227,7 @@ export default class SelectItem extends React.Component {
         </select>
         <div style={{ width: '100%' }}>
           <Row gutter={15}>
-            <Col span={12}>
+            <Col span={8}>
               <Input
                 size="default"
                 placeholder="输入值"
@@ -212,13 +236,22 @@ export default class SelectItem extends React.Component {
                 onChange={this.onInputValChange}
               />
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Input
                 size="default"
                 placeholder="输入描述"
                 addonBefore="描述"
                 value={inputTitle}
                 onChange={this.onInputTitleChange}
+              />
+            </Col>
+            <Col span={8}>
+              <Input
+                size="default"
+                placeholder="输入分数"
+                addonBefore="分数"
+                value={inputScore}
+                onChange={this.onInputScoreChange}
               />
             </Col>
           </Row>
@@ -251,24 +284,7 @@ export default class SelectItem extends React.Component {
             title={controlID === 'SelectionInput' ? '设置默认值' : '添加默认值'}
             onClick={this.onSetDefaultValue}
           />
-          {
-            // 单选下拉输入框无全选按钮
-            controlID === 'SelectionMultipleInput' &&
-            (isSelectAll === false
-              ?
-              <Button   // eslint-disable-line
-                icon="check-circle-o"
-                title="全选"
-                onClick={this.onSelectAllClick}
-              />
-              :
-              <Button
-                style={{ color: '#108ee9' }}
-                icon="check-circle"
-                title="全不选"
-                onClick={this.unCheckedAll}
-              />)
-          }
+          {controlID === 'SelectionMultipleInput' && selectedBtn}
           <Button
             icon="delete"
             style={{ color: 'red' }}

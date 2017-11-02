@@ -14,21 +14,28 @@ export default class InputBoxForm extends React.Component {
   static defaultProps = {
     controlID: 'TextInput',
     entityData: {
-      controlID: 'TextInput',
-      controlName: '',
-      tags: [],
-      defaultVal: undefined,
-      describeVal: '',
-      entityColor: '#333',
-      dataType: {
+      controlID: 'TextInput', // 控件ID
+      controlName: '', // 控件名
+      defaultVal: undefined, // 控件值
+      describeVal: '', // 控件描述
+      score: 0, // 控件分数
+      dateFormat: 'YYYY-MM-DD HH:mm', // 日期格式
+      entityColor: '#333', // 控件实体颜色
+      tags: [], // 标签
+      dataType: { // 控件值的数据类型
         typeVal: 'string',
-        minNum: 0,
-        maxNum: 100
+        minNum: 0, // 数值类型的默认最小值
+        maxNum: 100 // 数值类型的默认最大值
       },
-      isRequired: true,
-      isReadOnly: false,
-      dateFormat: 'YYYY-MM-DD HH:mm',
-      selectItems: [],
+      isRequired: true, // 是否必填
+      isReadOnly: false, // 是否只读
+      currentActiveKey: 'tab-0', // 默认当前选中分组
+      pullDownOptionGroup: { // 下拉菜单选项组
+        selectTabs: [ // 选项卡分组
+          { title: '默认选项组', content: [], key: 0, group: 0, closable: false }
+        ],
+        currentActiveKey: 'tab-0' // 当前选项卡
+      },
       selectTodos: {
         items: [],
         selectedValues: [],

@@ -7,6 +7,7 @@ import { PopupBox } from './../../components/Common';
 import styles from './index.less';
 
 const Item = Menu.Item;
+
 export default class SelectionInput extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +17,7 @@ export default class SelectionInput extends React.Component {
   }
 
   onHandleInputBlur = (e) => {
+    // 输入框失去焦点时更新实体数据defaultVal
     const { entityKey, contentState } = this.props;
     const entityData = contentState.getEntity(entityKey).getData();
     contentState.replaceEntityData(
@@ -31,6 +33,8 @@ export default class SelectionInput extends React.Component {
   }
 
   onSelectValueChange = (props) => {
+    // 选中项改变时更新entityData
+    console.log(props);
     const { entityKey, contentState } = this.props;
     const data = contentState.getEntity(entityKey).getData();
     contentState.replaceEntityData(
@@ -69,11 +73,13 @@ export default class SelectionInput extends React.Component {
       defaultVal,
       describeVal,
       entityColor,
-      selectItems
+      pullDownOptionGroup
     } = contentState.getEntity(entityKey).getData();
-
+    const { selectTabs } = pullDownOptionGroup;
     const menu = (
-      <Menu onClick={this.onSelectValueChange}>
+      <Menu
+        onClick={this.onSelectValueChange}
+      >
         <Item key="input">
           <input
             type="text"
@@ -84,13 +90,27 @@ export default class SelectionInput extends React.Component {
           />
         </Item>
         {
-          selectItems.map(item => (
-            <Item
-              key={item.val}
-              disabled={item.val === defaultVal}
+          selectTabs.map((tab, index) => (
+            <Menu
+              key={`menu-${index}`}
+              onClick={this.onSelectValueChange}
             >
-              <span title={item.title}>{item.val}</span>
-            </Item>
+              <Item
+                key={`group-${index}`}
+                disabled
+              >{tab.title}</Item>
+              {
+                tab.content.map(item => (
+                  <Item
+                    key={item.val}
+                    title={item.title}
+                  >
+                    {item.val}
+                  </Item>
+                ))
+              }
+              <Menu.Divider />
+            </Menu>
           ))
         }
       </Menu>

@@ -13,8 +13,8 @@ import {
 } from 'antd';
 
 import ColorPicker from './../../../../../../Common/ColorPicker';
+import PullDownOptionGroup from './PullDownOptionGroup';
 import SelectType from './SelectType';
-import SelectItem from './SelectItem';
 import SelectTodo from './SelectTodo';
 
 import styles from './index.less';
@@ -250,24 +250,20 @@ class InputForm extends React.Component {
       </FormItem>
     );
 
-    const SelectItems = (
+    const PullDownOptionGroups = (
       <FormItem>
-        <Tabs type="card">
-          <TabPane tab="自定义选项" key="1">
-            {
-              getFieldDecorator('selectItems', { valuePropName: 'selectItems' })(
-                <SelectItem
-                  controlID={controlID}
-                  defaultVal={defaultVal}
-                  onSetDefaultVal={this.onSetDefaultVal}
-                  onAddDefaultVal={this.onAddDefaultVal}
-                  onCleanDefaultVal={this.onCleanDefaultVal}
-                />
-              )
-            }
-            )
-          </TabPane>
-        </Tabs>
+        {
+          getFieldDecorator('pullDownOptionGroup', { valuePropName: 'pullDownOptionGroup' })(
+            <PullDownOptionGroup
+              controlID={controlID}
+              defaultVal={defaultVal}
+              onSetDefaultVal={this.onSetDefaultVal}
+              onAddDefaultVal={this.onAddDefaultVal}
+              onCleanDefaultVal={this.onCleanDefaultVal}
+            />
+          )
+        }
+        )
       </FormItem>
     );
 
@@ -279,6 +275,10 @@ class InputForm extends React.Component {
               getFieldDecorator('selectTodos', { valuePropName: 'selectTodos' })(
                 <SelectTodo
                   controlID={controlID}
+                  defaultVal={defaultVal}
+                  onSetDefaultVal={this.onSetDefaultVal}
+                  onAddDefaultVal={this.onAddDefaultVal}
+                  onCleanDefaultVal={this.onCleanDefaultVal}
                 />
               )
             }
@@ -338,7 +338,7 @@ class InputForm extends React.Component {
         <Col span={12}> {DescribeVal} </Col>
         <Col span={12}> {EntityColor} </Col>
         <Col span={12}> {DefaultVal} </Col>
-        <Col span={24}> {SelectItems} </Col>
+        <Col span={24}> {PullDownOptionGroups} </Col>
       </Row>
     );
 
@@ -351,7 +351,7 @@ class InputForm extends React.Component {
         <Col span={12}>{DescribeVal}</Col>
         <Col span={12}>{EntityColor}</Col>
         <Col span={12}>{DefaultVal}</Col>
-        <Col span={24}>{SelectItems}</Col>
+        <Col span={24}>{PullDownOptionGroups}</Col>
       </Row>
     );
 
@@ -455,6 +455,9 @@ const WrapperInputForm = Form.create({
       describeVal: {
         value: props.describeVal
       },
+      score: {
+        value: props.score
+      },
       entityColor: {
         value: props.entityColor
       },
@@ -470,8 +473,8 @@ const WrapperInputForm = Form.create({
       dateFormat: {
         value: props.dateFormat
       },
-      selectItems: {
-        value: props.selectItems
+      pullDownOptionGroup: {
+        value: props.pullDownOptionGroup
       },
       selectTodos: {
         value: props.selectTodos
