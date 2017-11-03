@@ -324,8 +324,8 @@ class InputForm extends React.Component {
         <Col span={12}> {DataType} </Col>
         <Col span={12}> {DefaultVal} </Col>
         <Col span={12}> {EntityColor} </Col>
-        <Col span={12}> {IsRequired} </Col>
-        <Col span={12}> {IsReadOnly} </Col>
+        <Col span={24}> {IsRequired} </Col>
+        <Col span={24}> {IsReadOnly} </Col>
       </Row>
     );
 
@@ -365,8 +365,8 @@ class InputForm extends React.Component {
         <Col span={12}>{DateFormat}</Col>
         <Col span={12}>{DefaultVal}</Col>
         <Col span={12}>{EntityColor}</Col>
-        <Col span={12}>{IsRequired}</Col>
-        <Col span={12}>{IsReadOnly}</Col>
+        <Col span={24}>{IsRequired}</Col>
+        <Col span={24}>{IsReadOnly}</Col>
       </Row>
     );
 

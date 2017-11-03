@@ -25,7 +25,9 @@ export default class InputBoxForm extends React.Component {
       dataType: { // 控件值的数据类型
         typeVal: 'string',
         minNum: 0, // 数值类型的默认最小值
-        maxNum: 100 // 数值类型的默认最大值
+        maxNum: 100, // 数值类型的默认最大值,
+        regexp: '', // 自定义正则校验,
+        regexpMsg: '提示信息' // 正则校验提示信息
       },
       isRequired: true, // 是否必填
       isReadOnly: false, // 是否只读

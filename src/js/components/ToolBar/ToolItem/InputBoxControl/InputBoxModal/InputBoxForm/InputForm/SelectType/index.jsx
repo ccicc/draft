@@ -19,12 +19,15 @@ export default class SelectType extends React.Component {
       checkRules: [],
       typeVal: this.props.dataType.typeVal,
       minNum: this.props.dataType.minNum,
-      maxNum: this.props.dataType.maxNum
+      maxNum: this.props.dataType.maxNum,
+      regexp: this.props.dataType.regexp,
+      regexpMsg: this.props.dataType.regexpMsg
     };
   }
 
   componentDidMount() {
-    this.onHandleChange('string');
+    // 初始化时的数据校验类型
+    this.onHandleChange(this.props.dataType.typeVal);
   }
 
   onHandleChange = (typeVal) => {
@@ -60,6 +63,12 @@ export default class SelectType extends React.Component {
               message: '输入的身份证格式错误'
             }
           ],
+        });
+        break;
+      case 'regexp':
+        this.setState({
+          typeVal: 'regexp',
+          checkRules: this.onRegexpCheckRules()
         });
         break;
       default:
@@ -101,7 +110,24 @@ export default class SelectType extends React.Component {
     return numberCheckRules;
   }
 
+  onRegexpCheckRules = () => {
+    // 自定义正则校验
+    const { regexp, regexpMsg } = this.state;
+    const regexpCheckRules = [
+      {
+        message: regexpMsg,
+        pattern: regexp.split('/')[1]
+      }
+    ];
+    this.props.getRules(regexpCheckRules);
+    this.setState({
+      checkRules: regexpCheckRules
+    });
+    return regexpCheckRules;
+  }
+
   onMinNumChange = (e) => {
+    // 最小值受控
     const { value } = e.target;
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if ((!Number.isNaN(value) && reg.test(value)) || value === '' || value === '-') {
@@ -120,6 +146,7 @@ export default class SelectType extends React.Component {
   }
 
   onMaxNumChange = (e) => {
+    // 最大值受控
     const { value } = e.target;
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9])?$/;
     if (
@@ -141,8 +168,40 @@ export default class SelectType extends React.Component {
     }, 0);
   };
 
+  onRegexpChange = (e) => {
+    // 自定义正则受控
+    const { value } = e.target;
+    this.setState({
+      regexp: value
+    });
+    setTimeout(() => {
+      this.onRegexpCheckRules();
+      this.props.onChange({
+        regexp: this.state.regexp,
+        regexpMsg: this.state.regexpMsg,
+        typeVal: this.state.typeVal
+      });
+    }, 0);
+  }
+
+  onRegexpMsgChange = (e) => {
+    // 正则提示信息受控
+    const { value } = e.target;
+    this.setState({
+      regexpMsg: value
+    });
+    setTimeout(() => {
+      this.onRegexpCheckRules();
+      this.props.onChange({
+        regexp: this.state.regexp,
+        regexpMsg: this.state.regexpMsg,
+        typeVal: this.state.typeVal
+      });
+    }, 0);
+  }
+
   render() {
-    const { typeVal, minNum, maxNum } = this.state;
+    const { typeVal, minNum, maxNum, regexp, regexpMsg } = this.state;
     const Option = Select.Option;
 
     return (
@@ -158,6 +217,7 @@ export default class SelectType extends React.Component {
           <Option value="number">数值</Option>
           <Option value="email">邮箱地址</Option>
           <Option value="identityCard">身份证号码</Option>
+          <Option value="regexp">正则表达式</Option>
         </Select>
         {
           typeVal === 'number' &&
@@ -182,6 +242,31 @@ export default class SelectType extends React.Component {
                 value={maxNum}
                 prefix={<Icon type="arrow-up" />}
                 onChange={this.onMaxNumChange}
+              />
+            </Col>
+          </Row>
+        }
+        {
+          typeVal === 'regexp' &&
+          <Row gutter={10}>
+            <Col span={24}>
+              <Input
+                size="default"
+                title="自定义正则表达式"
+                placeholder="请输入自定义正则表达式"
+                value={regexp}
+                prefix={<Icon type="check" />}
+                onChange={this.onRegexpChange}
+              />
+            </Col>
+            <Col span={24}>
+              <Input
+                size="default"
+                title="提示信息"
+                placeholder="请输入错误提示信息"
+                value={regexpMsg}
+                prefix={<Icon type="exclamation-circle-o" />}
+                onChange={this.onRegexpMsgChange}
               />
             </Col>
           </Row>

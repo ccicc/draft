@@ -70,9 +70,15 @@ export default class TextInput extends React.Component {
   }
 
   onHandleInputChange = (e) => {
+    // 输入框受控方法
     const { entityKey, contentState } = this.props;
     const { value } = e.target;
-    const { typeVal, minNum, maxNum } = contentState.getEntity(entityKey).getData().dataType;
+    const {
+      typeVal,
+      minNum,
+      maxNum,
+      regexp
+    } = contentState.getEntity(entityKey).getData().dataType;
     switch (typeVal) {
       case 'number': {
         // 类型为number时的校验规则
@@ -83,20 +89,49 @@ export default class TextInput extends React.Component {
             (Number.parseInt(value, 10) >= minNum)) ||
           value === ''
         ) {
-          this.setState({ value, checked: true });
+          this.setState({ checked: true, value });
           break;
         }
-        this.setState({ checked: false });
+        this.setState({ checked: false, value });
         break;
       }
       case 'string': {
         // 普通文本的校验规则
         const reg = /^[\D]+$/;
         if (reg.test(value) || value === '') {
-          this.setState({ value, checked: true });
+          this.setState({ checked: true, value });
           break;
         }
-        this.setState({ checked: false });
+        this.setState({ checked: false, value });
+        break;
+      }
+      case 'regexp': {
+        // 自定义正则校验规则
+        const reg = new RegExp(regexp.split('/')[1], regexp.split('/')[2]);
+        if (reg.test(value) || value === '') {
+          this.setState({ checked: true, value });
+          break;
+        }
+        this.setState({ checked: false, value });
+        break;
+      }
+      case 'email': {
+        // 邮箱校验
+        const reg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+        if (reg.test(value) || value === '') {
+          this.setState({ checked: true, value });
+          break;
+        }
+        this.setState({ checked: false, value });
+        break;
+      }
+      case 'identityCard': {
+        const reg = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+        if (reg.test(value) || value === '') {
+          this.setState({ checked: true, value });
+          break;
+        }
+        this.setState({ checked: false, value });
         break;
       }
       default:
@@ -108,7 +143,7 @@ export default class TextInput extends React.Component {
   }
 
   render() {
-    const { value, checked, isRequired } = this.state;
+    const { value, isRequired, checked } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
       controlID,
@@ -132,11 +167,11 @@ export default class TextInput extends React.Component {
     const stringContent = (
       <p>请输入普通文本,<span style={{ color: 'red' }}>不能输入数值</span></p>
     );
+    const regexpContent = (<p>{dataType.regexpMsg}</p>);
 
     const content = (
       <div>
         <input
-          autofocus // eslint-disable-line
           type="text"
           className={styles.editorInput}
           ref={element => this.input = element}
@@ -144,8 +179,9 @@ export default class TextInput extends React.Component {
           onChange={this.onHandleInputChange}
         />
         {isRequired && value === '' && requiredContent}
-        {dataType.typeVal === 'number' && !checked && numberContent}
-        {dataType.typeVal === 'string' && !checked && stringContent}
+        {dataType.typeVal === 'number' && numberContent}
+        {dataType.typeVal === 'string' && stringContent}
+        {dataType.typeVal === 'regexp' && regexpContent}
       </div>
     );
 
@@ -177,7 +213,7 @@ export default class TextInput extends React.Component {
               style={{ color: entityColor }}
               className={styles.editorWrapper}
             >
-              {value}
+              {checked && value}
             </span>
             <i className={styles.rim}> ] </i>
             <span style={{ display: 'none' }}>{children}</span>
