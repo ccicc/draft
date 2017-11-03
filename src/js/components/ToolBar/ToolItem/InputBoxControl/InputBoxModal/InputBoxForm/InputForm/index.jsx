@@ -35,6 +35,7 @@ class InputForm extends React.Component {
     this.state = {
       dateFormat: this.props.dataFormat,
       isRequired: this.props.isRequired,
+      isPrefix: this.props.isPrefix,
       dataTypeRules: [],
     };
   }
@@ -43,6 +44,13 @@ class InputForm extends React.Component {
     // 是否必填
     this.setState({
       isRequired: checked
+    });
+  }
+
+  onIsPrefixChange = (checked) => {
+    // 有无前缀
+    this.setState({
+      isPrefix: checked
     });
   }
 
@@ -97,7 +105,7 @@ class InputForm extends React.Component {
       onHandleConfirm,
       onHandleCancel,
     } = this.props;
-    const { dataTypeRules, isRequired, dateFormat } = this.state;
+    const { dataTypeRules, isRequired, isPrefix, dateFormat } = this.state;
 
     const ControlID = (
       <FormItem label="控件ID">
@@ -231,8 +239,47 @@ class InputForm extends React.Component {
       >
         {
           getFieldDecorator('isReadOnly', { valuePropName: 'defaultChecked' })(
-            <Switch size="default" checkedChildren="是" unCheckedChildren="否" />
+            <Switch
+              size="default"
+              checkedChildren="是"
+              unCheckedChildren="否"
+            />
           )
+        }
+      </FormItem>
+    );
+
+    const IsPrefix = (
+      <FormItem
+        label="有无前后缀"
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 12, offset: 2 }}
+      >
+        {
+          getFieldDecorator('isPrefix', { valuePropName: 'checked' })(
+            <Switch
+              size="default"
+              checkedChildren="是"
+              unCheckedChildren="否"
+              onChange={this.onIsPrefixChange}
+            />
+          )
+        }
+      </FormItem>
+    );
+
+    const itemPrefix = (
+      <FormItem>
+        {
+          getFieldDecorator('itemPrefix')(<Input size="default" addonBefore="前缀" />)
+        }
+      </FormItem>
+    );
+
+    const itemSuffix = (
+      <FormItem>
+        {
+          getFieldDecorator('itemSuffix')(<Input size="default" addonAfter="后缀" />)
         }
       </FormItem>
     );
@@ -351,6 +398,9 @@ class InputForm extends React.Component {
         <Col span={12}>{DescribeVal}</Col>
         <Col span={12}>{EntityColor}</Col>
         <Col span={12}>{DefaultVal}</Col>
+        <Col span={24}>{IsPrefix}</Col>
+        <Col span={6}>{ isPrefix && itemPrefix }</Col>
+        <Col span={6}>{ isPrefix && itemSuffix }</Col>
         <Col span={24}>{PullDownOptionGroups}</Col>
       </Row>
     );
@@ -469,6 +519,15 @@ const WrapperInputForm = Form.create({
       },
       isReadOnly: {
         value: props.isReadOnly
+      },
+      isPrefix: {
+        value: props.isPrefix
+      },
+      itemPrefix: {
+        value: props.itemPrefix
+      },
+      itemSuffix: {
+        value: props.itemSuffix
       },
       dateFormat: {
         value: props.dateFormat

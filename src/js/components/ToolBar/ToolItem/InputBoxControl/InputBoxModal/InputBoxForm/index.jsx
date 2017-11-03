@@ -31,6 +31,9 @@ export default class InputBoxForm extends React.Component {
       },
       isRequired: true, // 是否必填
       isReadOnly: false, // 是否只读
+      isPrefix: false, // 有无前后缀
+      itemPrefix: '有', // 前缀
+      itemSuffix: '无', // 后缀
       currentActiveKey: 'tab-0', // 默认当前选中分组
       pullDownOptionGroup: { // 下拉菜单选项组
         selectTabs: [],

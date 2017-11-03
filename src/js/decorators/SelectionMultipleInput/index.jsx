@@ -49,7 +49,7 @@ export default class SelectionMultipleInput extends React.Component {
   }
 
   onSelectValueChange = (options) => {
-    // 增减子项并更新contentState对象
+    // 增减子项并更新到contentState对象
     const { entityKey, contentState } = this.props;
     const entityData = contentState.getEntity(entityKey).getData();
     let collectionItems = entityData.defaultVal.split(',');
@@ -114,7 +114,10 @@ export default class SelectionMultipleInput extends React.Component {
       describeVal,
       entityColor,
       defaultVal,
-      pullDownOptionGroup
+      pullDownOptionGroup,
+      isPrefix,
+      itemPrefix,
+      itemSuffix
     } = contentState.getEntity(entityKey).getData();
     const { selectTabs } = pullDownOptionGroup;
     const menu = (
@@ -207,11 +210,19 @@ export default class SelectionMultipleInput extends React.Component {
                   ?
                   defaultVal.split(',').map((item, index) => {
                     if (index === defaultVal.split(',').length - 1 || (item === '')) {
-                      return (<span key={index}>{item}</span>);
+                      const newItem = isPrefix ?
+                        (<span key={index}>{itemPrefix}{item}</span>)
+                        :
+                        (<span key={index}>{item}</span>);
+                      return newItem;
                     } else if (item === '未知' || item.search(/^item_/g) !== -1) {
                       return '';
                     }
-                    return (<span key={index}>{item}, </span>);
+                    const newItem = isPrefix ?
+                      (<span key={index}>{itemPrefix}{item}{itemSuffix}, </span>)
+                      :
+                      (<span key={index}>{item}</span>);
+                    return newItem;
                   })
                   :
                   (<span>未 知</span>)
