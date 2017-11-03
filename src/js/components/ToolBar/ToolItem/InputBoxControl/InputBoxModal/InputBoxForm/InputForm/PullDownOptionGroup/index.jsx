@@ -16,6 +16,16 @@ export default class PullDownOptionGroup extends React.Component {
     };
   }
 
+  componentWillMount() {
+    if (this.props.pullDownOptionGroup.selectTabs.length === 0) {
+      this.setState({
+        selectTabs: [
+          { title: '默认选项', key: 0, group: 0, content: [], closable: false }
+        ]
+      });
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const { selectTabs } = nextProps;
     if (selectTabs !== this.props.selectTabs) {
@@ -49,7 +59,7 @@ export default class PullDownOptionGroup extends React.Component {
     setTimeout(() => {
       this.props.onChange({
         selectTabs: this.state.selectTabs,
-        currentActiveKey: this.state.currentActiveKey
+        currentActiveKey: this.state.activeKey
       });
     }, 0);
   }
@@ -60,10 +70,16 @@ export default class PullDownOptionGroup extends React.Component {
     const group = selectTabs[selectTabs.length - 1].group + 1;
     const key = selectTabs[selectTabs.length - 1].key + 1;
     const tabTitle = (<TabTitle title={`分组-${group}`} />);
+    const activeKey = `tab-${key}`;
     selectTabs.push({ title: tabTitle, content: [], key, group });
+    const newTabs = selectTabs.slice(0);
     this.setState({
+      selectTabs: newTabs,
+      activeKey
+    });
+    this.props.onChange({
       selectTabs,
-      activeKey: `tab-${key}`
+      currentActiveKey: activeKey
     });
   }
 
@@ -83,6 +99,10 @@ export default class PullDownOptionGroup extends React.Component {
     this.setState({
       selectTabs,
       activeKey
+    });
+    this.props.onChange({
+      selectTabs,
+      currentActiveKey: activeKey
     });
   }
 
@@ -117,22 +137,23 @@ export default class PullDownOptionGroup extends React.Component {
       >
         {
           selectTabs.map((panel) => {
-            return (<TabPane
-              key={`tab-${panel.key}`}
-              tab={panel.title}
-              onChange={this.onTabsChange}
-              closable={panel.closable}
-            >
-              <SelectItem
-                controlID={controlID}
-                selectItems={panel.content}
-                defaultVal={defaultVal}
-                onSetDefaultVal={onSetDefaultVal}
-                onAddDefaultVal={onAddDefaultVal}
-                onCleanDefaultVal={onCleanDefaultVal}
-                onChange={this.onSelectItemChange}
-              />
-            </TabPane>);
+            return (
+              <TabPane
+                key={`tab-${panel.key}`}
+                tab={panel.title}
+                onChange={this.onTabsChange}
+                closable={panel.closable}
+              >
+                <SelectItem
+                  controlID={controlID}
+                  selectItems={panel.content}
+                  defaultVal={defaultVal}
+                  onSetDefaultVal={onSetDefaultVal}
+                  onAddDefaultVal={onAddDefaultVal}
+                  onCleanDefaultVal={onCleanDefaultVal}
+                  onChange={this.onSelectItemChange}
+                />
+              </TabPane>);
           })
         }
       </Tabs>

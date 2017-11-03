@@ -31,9 +31,7 @@ export default class InputBoxForm extends React.Component {
       isReadOnly: false, // 是否只读
       currentActiveKey: 'tab-0', // 默认当前选中分组
       pullDownOptionGroup: { // 下拉菜单选项组
-        selectTabs: [ // 选项卡分组
-          { title: '默认选项组', content: [], key: 0, group: 0, closable: false }
-        ],
+        selectTabs: [],
         currentActiveKey: 'tab-0' // 当前选项卡
       },
       selectTodos: {
@@ -70,8 +68,9 @@ export default class InputBoxForm extends React.Component {
   }
 
   render() {
-    const { controlID, entityData } = this.state;
+    const { controlID, entityData } = this.props;
     const { config } = this.props;
+
     return (
       <WrapperInputForm
         {...entityData}
