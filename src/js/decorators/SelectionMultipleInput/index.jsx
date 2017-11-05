@@ -116,10 +116,35 @@ export default class SelectionMultipleInput extends React.Component {
       defaultVal,
       pullDownOptionGroup,
       isPrefix,
-      itemPrefix,
-      itemSuffix
+      prefixSuffix
     } = contentState.getEntity(entityKey).getData();
     const { selectTabs } = pullDownOptionGroup;
+
+    // 所有选项
+    const allItems = selectTabs.length !== 0
+      ?
+      selectTabs
+        .map(tab => tab.content)
+        .reduce((total, item) => [...total, ...item])
+        .map(item => item.val)
+      :
+      [];
+
+    // 所有选中选项
+    const allSelectedItems = defaultVal.split(',');
+
+    // 所有未选中选项
+    const allUnSelectItems = allItems.filter(item => !allSelectedItems.includes(item));
+
+    const {
+      activePrefix,
+      activeSuffix,
+      prefix,
+      suffix,
+      connector,
+      separator
+    } = prefixSuffix || {};
+
     const menu = (
       <Menu
         multiple
@@ -176,6 +201,65 @@ export default class SelectionMultipleInput extends React.Component {
       </Menu>
     );
 
+    const selectValue = isPrefix ?
+      // 带有前后缀
+      (
+        <span style={{ color: entityColor }}>
+          {/* 选中项 */}
+          {
+            allSelectedItems.map((item, index) => {
+              if (item === '') {
+                return '';
+              } else if (item === '未知' || item.search(/^item_/g) !== -1) {
+                return '';
+              } else if (index === allSelectedItems.length - 1) {
+                return (<span key={`selected-${index}`}>{activePrefix}{item}{activeSuffix}</span>);
+              }
+              return (<span key={`selected-${index}`}>{activePrefix}{item}{activeSuffix}{connector}</span>);
+            })
+          }
+          {/* 分隔符 */}
+          {
+            (defaultVal !== '' && defaultVal !== '未知') && allUnSelectItems.length !== 0 &&
+            separator
+          }
+          {/* 未选中项 */}
+          {
+            allUnSelectItems.map((item, index) => {
+              if (item === '') {
+                return '';
+              } else if (item === '未知' || item.search(/^item_/g) !== -1) {
+                return '';
+              } else if (index === allUnSelectItems.length - 1) {
+                return (<span key={`unSelected-${index}`}>{prefix}{item}{suffix}</span>);
+              }
+              return (<span key={`unSelected-${index}`}>{prefix}{item}{suffix}{connector}</span>);
+            })
+          }
+        </span>
+      )
+      :
+      // 不带前后缀
+      (
+        <span style={{ color: entityColor }}>
+          {
+            defaultVal
+              ?
+              allSelectedItems.map((item, index) => {
+                // 最后一位不加连接符
+                if (index === allSelectedItems.length - 1 || (item === '')) {
+                  return (<span key={index}>{item}</span>);
+                } else if (item === '未知' || item.search(/^item_/g) !== -1) {
+                  return '';
+                }
+                return (<span key={index}>{item}、</span>);
+              })
+              :
+              (<span>未 知</span>)
+          }
+        </span>
+      );
+
     return (
       <span className={styles.root}>
         <PopupBox
@@ -204,30 +288,7 @@ export default class SelectionMultipleInput extends React.Component {
             trigger={['click']}
             placement="bottomCenter"
           >
-            <span style={{ color: entityColor }}>
-              {
-                defaultVal
-                  ?
-                  defaultVal.split(',').map((item, index) => {
-                    if (index === defaultVal.split(',').length - 1 || (item === '')) {
-                      const newItem = isPrefix ?
-                        (<span key={index}>{itemPrefix}{item}</span>)
-                        :
-                        (<span key={index}>{item}</span>);
-                      return newItem;
-                    } else if (item === '未知' || item.search(/^item_/g) !== -1) {
-                      return '';
-                    }
-                    const newItem = isPrefix ?
-                      (<span key={index}>{itemPrefix}{item}{itemSuffix}, </span>)
-                      :
-                      (<span key={index}>{item}</span>);
-                    return newItem;
-                  })
-                  :
-                  (<span>未 知</span>)
-              }
-            </span>
+            {selectValue}
           </Dropdown>
           <i className={styles.rim}> ] </i>
           <span style={{ display: 'none' }}>{children}</span>

@@ -16,6 +16,7 @@ import ColorPicker from './../../../../../../Common/ColorPicker';
 import PullDownOptionGroup from './PullDownOptionGroup';
 import SelectType from './SelectType';
 import SelectTodo from './SelectTodo';
+import PrefixSuffix from './PrefixSuffix/';
 
 import styles from './index.less';
 
@@ -36,7 +37,7 @@ class InputForm extends React.Component {
       dateFormat: this.props.dataFormat,
       isRequired: this.props.isRequired,
       isPrefix: this.props.isPrefix,
-      dataTypeRules: [],
+      dataTypeRules: []
     };
   }
 
@@ -268,18 +269,12 @@ class InputForm extends React.Component {
       </FormItem>
     );
 
-    const itemPrefix = (
+    const PrefixSuffixs = (
       <FormItem>
         {
-          getFieldDecorator('itemPrefix')(<Input size="default" addonBefore="前缀" />)
-        }
-      </FormItem>
-    );
-
-    const itemSuffix = (
-      <FormItem>
-        {
-          getFieldDecorator('itemSuffix')(<Input size="default" addonAfter="后缀" />)
+          getFieldDecorator('prefixSuffix', { valuePropName: 'prefixSuffix' })(
+            <PrefixSuffix />
+          )
         }
       </FormItem>
     );
@@ -399,8 +394,7 @@ class InputForm extends React.Component {
         <Col span={12}>{EntityColor}</Col>
         <Col span={12}>{DefaultVal}</Col>
         <Col span={24}>{IsPrefix}</Col>
-        <Col span={6}>{ isPrefix && itemPrefix }</Col>
-        <Col span={6}>{ isPrefix && itemSuffix }</Col>
+        <Col span={24}> {isPrefix && PrefixSuffixs} </Col>
         <Col span={24}>{PullDownOptionGroups}</Col>
       </Row>
     );
@@ -523,11 +517,8 @@ const WrapperInputForm = Form.create({
       isPrefix: {
         value: props.isPrefix
       },
-      itemPrefix: {
-        value: props.itemPrefix
-      },
-      itemSuffix: {
-        value: props.itemSuffix
+      prefixSuffix: {
+        value: props.prefixSuffix
       },
       dateFormat: {
         value: props.dateFormat
