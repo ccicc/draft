@@ -6,6 +6,7 @@
 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Dropdown,
   Menu,
@@ -18,6 +19,12 @@ import styles from './index.less';
 const Item = Menu.Item;
 
 export default class SelectionMultipleInput extends React.Component {
+  static propTypes = {
+    entityKey: PropTypes.string,
+    contentState: PropTypes.object,
+    children: PropTypes.array
+  };
+
   constructor(props) {
     super(props);
     this.state = {

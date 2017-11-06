@@ -1,22 +1,29 @@
 import React from 'react';
-import {
-  Popover
-} from 'antd';
+import PropTypes from 'prop-types';
+import { Popover } from 'antd';
 import { PopupBox } from './../../components/Common';
 import styles from './index.less';
 
 export default class TextInput extends React.Component {
+  static propTypes = {
+    entityKey: PropTypes.string,
+    children: PropTypes.array,
+    contentState: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       update: false,
       value: '',
       checked: true,
-      isReuqired: true
+      isReuqired: true,
+      isEditor: false
     };
   }
 
   componentWillMount() {
+    // 从实体中获取数据并初始化状态
     const { entityKey, contentState } = this.props;
     const {
       defaultVal,
@@ -26,6 +33,10 @@ export default class TextInput extends React.Component {
       value: defaultVal,
       isRequired
     });
+  }
+
+  componentDidMount() {
+    this.input && this.input.focus();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,26 +50,26 @@ export default class TextInput extends React.Component {
     }
   }
 
-  onHandleVisibleChange = () => {
+  onHandleClick = () => {
+    // 点击控件时设置编辑器全局只读状态
+    this.setState({
+      isEditor: true
+    });
+    this.props.onReadOnlyChange(true);
+    this.input && this.input.focus();
+  }
+
+  onHandleBlur = () => {
     // 弹出窗口显示或隐藏的回调函数
-    const { value, isRequired } = this.state;
+    const { value, isRequired, checked } = this.state;
     const { contentState, entityKey } = this.props;
     const entityData = contentState.getEntity(entityKey).getData();
-    if (value && value !== '') {
-      contentState.replaceEntityData(
-        entityKey,
-        {
-          ...entityData,
-          defaultVal: value
-        }
-      );
-      return true;
-    } else if (isRequired && value === '') {
-      // 必填项中如果值为空则设回原值
+    if ((isRequired && value === '') || !checked) {
+      // 必填项中如果值为空或校验失败则设回原值
       this.setState({
         value: entityData.defaultVal
       });
-      return true;
+      return;
     }
     contentState.replaceEntityData(
       entityKey,
@@ -67,6 +78,11 @@ export default class TextInput extends React.Component {
         defaultVal: value
       }
     );
+    this.setState({
+      isEditor: false
+    });
+    // 设置全局只读为false
+    this.props.onReadOnlyChange(false);
   }
 
   onHandleInputChange = (e) => {
@@ -126,6 +142,7 @@ export default class TextInput extends React.Component {
         break;
       }
       case 'identityCard': {
+        // 身份证校验
         const reg = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
         if (reg.test(value) || value === '') {
           this.setState({ checked: true, value });
@@ -143,7 +160,7 @@ export default class TextInput extends React.Component {
   }
 
   render() {
-    const { value, isRequired, checked } = this.state;
+    const { value, isRequired, isEditor } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
       controlID,
@@ -164,26 +181,46 @@ export default class TextInput extends React.Component {
         <span style={{ color: 'red' }}>数值</span>
       </p>
     );
-    const stringContent = (
-      <p>请输入普通文本,<span style={{ color: 'red' }}>不能输入数值</span></p>
-    );
     const regexpContent = (<p>{dataType.regexpMsg}</p>);
-
-    const content = (
-      <div>
-        <input
-          type="text"
-          className={styles.editorInput}
-          ref={element => this.input = element}
-          value={this.state.value}
-          onChange={this.onHandleInputChange}
-        />
+    const stringContent = (<p>请输入普通文本,<span style={{ color: 'red' }}>不能输入数值</span></p>);
+    const emailContent = (<p>请输入<span style={{ color: 'red' }}>邮箱地址</span></p>);
+    const identityCard = (<p>请输入<span style={{ color: 'red' }}>身份证</span>号码</p>);
+    const hitContent = (
+      <span>
         {isRequired && value === '' && requiredContent}
         {dataType.typeVal === 'number' && numberContent}
         {dataType.typeVal === 'string' && stringContent}
         {dataType.typeVal === 'regexp' && regexpContent}
-      </div>
+        {dataType.typeVal === 'email' && emailContent}
+        {dataType.typeVal === 'identityCard' && identityCard}
+      </span>
     );
+
+    const textInputContent = isEditor ?
+      (
+        <Popover
+          placement="top"
+          trigger="click"
+          content={hitContent}
+        >
+          <input
+            autoFocus  // eslint-disable-line
+            type="text"
+            className={styles.editorInput}
+            ref={element => this.input = element}
+            value={this.state.value}
+            onChange={this.onHandleInputChange}
+            onBlur={this.onHandleBlur}
+          />
+        </Popover>
+      )
+      :
+      (<span
+        style={{ color: entityColor }}
+        className={styles.editorWrapper}
+      >
+        {value}
+      </span>);
 
     return (
       <span
@@ -202,22 +239,10 @@ export default class TextInput extends React.Component {
           title={describeVal}
           onClick={this.onHandleClick}
         >
-          <Popover
-            placement="topLeft"
-            trigger="click"
-            content={content}
-            onVisibleChange={this.onHandleVisibleChange}
-          >
-            <i className={styles.rim}> [ </i>
-            <span
-              style={{ color: entityColor }}
-              className={styles.editorWrapper}
-            >
-              {checked && value}
-            </span>
-            <i className={styles.rim}> ] </i>
-            <span style={{ display: 'none' }}>{children}</span>
-          </Popover>
+          <i className={styles.rim}> [ </i>
+          {textInputContent}
+          <i className={styles.rim}> ] </i>
+          <span style={{ display: 'none' }}>{children}</span>
         </span>
       </span>
     );

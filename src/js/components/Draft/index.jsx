@@ -86,6 +86,12 @@ export default class Draft extends React.Component {
     }
   }
 
+  onHandleReadonlyChange = (value) => {
+    this.setState({
+      isReadOnly: value
+    });
+  }
+
   getEditorState = () => this.state.editorState;
 
   getCompositeDecorator = () => {
@@ -108,6 +114,7 @@ export default class Draft extends React.Component {
       return (
         <Component
           {...props}
+          onReadOnlyChange={this.onHandleReadonlyChange}
         />
       );
     };
@@ -118,12 +125,12 @@ export default class Draft extends React.Component {
       };
     };
     const decorators = [
+      createDecorator('TEXTINPUT', TextInput),
       createDecorator('CUSTOMTHROUGH', CustomThrough),
       createDecorator('LINK', Link),
       createDecorator('EQUATION', Equation),
       createDecorator('POSTIL', Postil),
       createDecorator('SELECTIONINPUT', SelectionInput),
-      createDecorator('TEXTINPUT', TextInput),
       createDecorator('DATEINPUT', DateInput),
       createDecorator('SELECTIONMULTIPLEINPUT', SelectionMultipleInput),
       createDecorator('CHECKBOXINPUT', CheckboxInput),
@@ -158,7 +165,7 @@ export default class Draft extends React.Component {
   }
 
   render() {
-    const { editorState } = this.state;
+    const { editorState, isReadOnly } = this.state;
     return (
       <div
         className={styles.root}
@@ -178,6 +185,7 @@ export default class Draft extends React.Component {
         >
           <Editor
             onTab={this.onTab}
+            readOnly={isReadOnly}
             editorState={editorState}
             onChange={this.onChange}
             customStyleMap={getCustomStyleMap()}

@@ -31,7 +31,8 @@
 }
 
 .controlVal{
-  position: relative;
+  display: inline-block;
+  width: auto;
   padding: 0 5px;
   color: #333;
   cursor: pointer;
@@ -40,7 +41,6 @@
   &:hover{
     background-color: #add8e6;
   }
-
   :global{
     .ant-popover-inner-content{
       padding: 8px 10px;
@@ -50,7 +50,9 @@
 
 .editorInput{
   outline: none;
+  width: auto;
   font-size: 13px;
+  background: #f5f5f5;
   color: #333;
   border: none;
   border-bottom: 1px solid #ccc;
