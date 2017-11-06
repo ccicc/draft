@@ -1,5 +1,5 @@
-/* eslint-disable */
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Input,
   Row,
@@ -7,6 +7,17 @@ import {
 } from 'antd';
 
 export default class PrefixSuffix extends React.Component {
+  static prefixSuffix = {
+    prefixsuffix: PropTypes.shape({
+      activePrefix: PropTypes.string,
+      prefix: PropTypes.string,
+      activeSuffix: PropTypes.string,
+      sufffix: PropTypes.string,
+      connector: PropTypes.string,
+      separator: PropTypes.string
+    })
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -32,7 +43,7 @@ export default class PrefixSuffix extends React.Component {
         connector: this.props.prefixSuffix.connector,
         separator: this.props.prefixSuffix.separator
       }
-    })
+    });
   }
 
   onActivePrefix = (e) => {
@@ -174,6 +185,6 @@ export default class PrefixSuffix extends React.Component {
           />
         </Col>
       </Row>
-    )
+    );
   }
 }

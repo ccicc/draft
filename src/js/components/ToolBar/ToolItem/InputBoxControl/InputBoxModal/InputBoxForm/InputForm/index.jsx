@@ -293,6 +293,7 @@ class InputForm extends React.Component {
     );
 
     const PullDownOptionGroups = (
+      // 下拉多选菜单
       <FormItem>
         {
           getFieldDecorator('pullDownOptionGroup', { valuePropName: 'pullDownOptionGroup' })(
