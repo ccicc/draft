@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Tabs,
   Button
@@ -8,6 +9,14 @@ import TabTitle from './TabTitle';
 
 const TabPane = Tabs.TabPane;
 export default class PullDownOptionGroup extends React.Component {
+  static propTypes = {
+    controlID: PropTypes.string.isRequired,
+    defaultVal: PropTypes.string,
+    onSetDefaultVal: PropTypes.func.isRequired,
+    onAddDefaultVal: PropTypes.func.isRequired,
+    onCleanDefaultVal: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -36,6 +45,7 @@ export default class PullDownOptionGroup extends React.Component {
   }
 
   onTabsChange = (activeKey) => {
+    // 选项卡切换回调
     this.setState({
       activeKey
     });
@@ -64,6 +74,11 @@ export default class PullDownOptionGroup extends React.Component {
     }, 0);
   }
 
+  onTabTitleChange = () => {
+    const { selectTabs } = this.state;
+    
+  }
+
   add = () => {
     // 添加分组并切换到当前分组
     const { selectTabs } = this.state;
@@ -78,7 +93,7 @@ export default class PullDownOptionGroup extends React.Component {
       activeKey
     });
     this.props.onChange({
-      selectTabs,
+      selectTabs: newTabs,
       currentActiveKey: activeKey
     });
   }

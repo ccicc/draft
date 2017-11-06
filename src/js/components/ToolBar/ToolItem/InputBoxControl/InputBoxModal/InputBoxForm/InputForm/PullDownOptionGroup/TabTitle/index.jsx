@@ -1,7 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styles from './index.less';
 
 export default class TabTitle extends React.Component {
+  static propTypes = {
+    title: PropTypes.string.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -22,9 +27,10 @@ export default class TabTitle extends React.Component {
     });
   }
 
-  onHandleBlur = () => {
+  onHandleBlur = (e) => {
     this.setState({
-      isEditor: false
+      isEditor: false,
+      title: e.target.value
     });
   }
 

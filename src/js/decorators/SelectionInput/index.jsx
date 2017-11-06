@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Dropdown,
   Menu
@@ -9,11 +10,43 @@ import styles from './index.less';
 const Item = Menu.Item;
 
 export default class SelectionInput extends React.Component {
+  static propTypes = {
+    entityKey: PropTypes.string,
+    contentState: PropTypes.object,
+    children: PropTypes.array
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      isVisible: false
+      isVisible: false,
+      isEditor: false,
+      value: ''
     };
+  }
+
+  componentWillMount() {
+    const { entityKey, contentState } = this.props;
+    const { defaultVal } = contentState.getEntity(entityKey).getData();
+    this.setState({
+      value: defaultVal
+    });
+  }
+
+  onHandleValueChange = (e) => {
+    const { value } = e.target;
+    this.setState({
+      value
+    });
+  }
+
+  onDoubleClick = () => {
+    // 双击切换输入框
+    this.setState({
+      isEditor: true
+    });
+    this.props.onReadOnlyChange(true);
+    this.input && this.input.focus();
   }
 
   onHandleInputBlur = (e) => {
@@ -28,13 +61,14 @@ export default class SelectionInput extends React.Component {
       }
     );
     this.setState({
-      isVisible: false
+      isEditor: false,
+      value: e.target.value || '未知'
     });
+    this.props.onReadOnlyChange(false);
   }
 
   onSelectValueChange = (props) => {
     // 选中项改变时更新entityData
-    console.log(props);
     const { entityKey, contentState } = this.props;
     const data = contentState.getEntity(entityKey).getData();
     contentState.replaceEntityData(
@@ -44,12 +78,10 @@ export default class SelectionInput extends React.Component {
         defaultVal: props.key
       }
     );
-    if (props.key !== 'input') {
-      this.setState({
-        isVisible: false,
-        update: true
-      });
-    }
+    this.setState({
+      isVisible: false,
+      value: props.key
+    });
   }
 
   onHandleClick = () => {
@@ -65,7 +97,7 @@ export default class SelectionInput extends React.Component {
   }
 
   render() {
-    const { isVisible } = this.state;
+    const { isVisible, isEditor, value } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
       controlID,
@@ -76,19 +108,24 @@ export default class SelectionInput extends React.Component {
       pullDownOptionGroup
     } = contentState.getEntity(entityKey).getData();
     const { selectTabs } = pullDownOptionGroup;
+
+    const inputContent = (
+      <input
+        autoFocus // eslint-disable-line
+        type="text"
+        value={value}
+        ref={element => this.input = element}
+        className={styles.input}
+        onBlur={this.onHandleInputBlur}
+        onChange={this.onHandleValueChange}
+        placeholder="输入自定义值"
+      />
+    );
+
     const menu = (
       <Menu
         onClick={this.onSelectValueChange}
       >
-        <Item key="input">
-          <input
-            type="text"
-            ref={element => this.input = element}
-            className={styles.input}
-            onBlur={this.onHandleInputBlur}
-            placeholder="输入自定义值"
-          />
-        </Item>
         {
           selectTabs.map((tab, index) => (
             <Menu
@@ -134,23 +171,29 @@ export default class SelectionInput extends React.Component {
         <span
           className={styles.controlVal}
           title={describeVal}
-          onClick={this.onSelectClick}
         >
           <i className={styles.rim}> [ </i>
-          <Dropdown
-            overlay={menu}
-            trigger={['click']}
-            placement="bottomCenter"
-            visible={isVisible}
-            onVisibleChange={this.onHandleVisibleChange}
-          >
-            <span
-              style={{ color: entityColor }}
-              onClick={this.onHandleClick}
-            >
-              {defaultVal}
-            </span>
-          </Dropdown>
+          {
+            isEditor
+              ?
+              inputContent
+              :
+              (<Dropdown
+                overlay={menu}
+                placement="bottomCenter"
+                visible={isVisible}
+                trigger={['click']}
+                onVisibleChange={this.onHandleVisibleChange}
+              >
+                <span
+                  style={{ color: entityColor }}
+                  onDoubleClick={this.onDoubleClick}
+                  onClick={this.onHandleClick}
+                >
+                  {defaultVal}
+                </span>
+              </Dropdown>)
+          }
           <i className={styles.rim}> ] </i>
           <span style={{ display: 'none' }}>{children}</span>
         </span>

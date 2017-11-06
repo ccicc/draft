@@ -60,7 +60,7 @@ export default class TextInput extends React.Component {
   }
 
   onHandleBlur = () => {
-    // 弹出窗口显示或隐藏的回调函数
+    // 失去焦点时的回调
     const { value, isRequired, checked } = this.state;
     const { contentState, entityKey } = this.props;
     const entityData = contentState.getEntity(entityKey).getData();
