@@ -13,7 +13,6 @@ import {
   Icon,
   Button
 } from 'antd';
-import { PopupBox } from './../../components/Common';
 import styles from './index.less';
 
 const Item = Menu.Item;
@@ -116,8 +115,6 @@ export default class SelectionMultipleInput extends React.Component {
     const { isExpand } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
-      controlID,
-      controlName,
       describeVal,
       entityColor,
       defaultVal,
@@ -269,20 +266,6 @@ export default class SelectionMultipleInput extends React.Component {
 
     return (
       <span className={styles.root}>
-        <PopupBox
-          editorCommand="selectionMultipleEditor"
-          deleteCommand="selectionMultipleDelete"
-          controlID={controlID}
-          controlName={controlName}
-        >
-          {
-            controlName &&
-            <span
-              className={styles.controlName}
-              onClick={this.onHandleClick}
-            >{controlName}: </span>
-          }
-        </PopupBox>
         <span
           className={styles.controlVal}
           title={describeVal}

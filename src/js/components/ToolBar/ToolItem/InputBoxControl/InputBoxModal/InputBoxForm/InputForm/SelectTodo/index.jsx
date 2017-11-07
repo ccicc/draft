@@ -16,7 +16,8 @@ export default class SelectTodo extends React.Component {
     selectTodos: PropTypes.shape({
       items: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string,
-        title: PropTypes.string
+        title: PropTypes.string,
+        score: PropTypes.string
       })),
       values: PropTypes.arrayOf(PropTypes.string),
       currentValue: PropTypes.string
@@ -30,6 +31,7 @@ export default class SelectTodo extends React.Component {
       currentValue: this.props.selectTodos.currentValue,
       inputVal: '',
       inputTitle: '',
+      inputScore: ''
     };
   }
 
@@ -97,8 +99,14 @@ export default class SelectTodo extends React.Component {
     });
   }
 
+  onInputScoreChange = (e) => {
+    this.setState({
+      inputScore: e.target.value
+    });
+  }
+
   onAddNewItem = () => {
-    const { inputVal, inputTitle, selectItems } = this.state;
+    const { inputVal, inputTitle, inputScore, selectItems } = this.state;
     if (inputVal === '') {
       message.warning('值不能为空', 3);
       return false;
@@ -109,10 +117,11 @@ export default class SelectTodo extends React.Component {
     this.setState({
       selectItems: [
         ...selectItems,
-        { value: inputVal, title: inputTitle }
+        { value: inputVal, title: inputTitle, score: inputScore }
       ],
       inputVal: '',
-      inputTitle: ''
+      inputTitle: '',
+      inputScore: ''
     });
 
     setTimeout(() => {
@@ -211,7 +220,15 @@ export default class SelectTodo extends React.Component {
   }
 
   render() {
-    const { inputVal, inputTitle, selectItems, values, currentValue, isSelectedAll } = this.state;
+    const {
+      values,
+      inputVal,
+      inputTitle,
+      inputScore,
+      selectItems,
+      currentValue,
+      isSelectedAll
+    } = this.state;
 
     const selectedBtn =
       isSelectedAll ?
@@ -258,7 +275,7 @@ export default class SelectTodo extends React.Component {
           </ul>
         </div>
         <Row gutter={15}>
-          <Col span={12}>
+          <Col span={8}>
             <Input
               size="default"
               placeholder="输入值"
@@ -267,13 +284,22 @@ export default class SelectTodo extends React.Component {
               onChange={this.onInputValueChange}
             />
           </Col>
-          <Col span={12}>
+          <Col span={8}>
             <Input
               size="default"
               placeholder="输入描述"
               addonBefore="描述"
               value={inputTitle}
               onChange={this.onInputTitleChange}
+            />
+          </Col>
+          <Col span={8}>
+            <Input
+              size="default"
+              placeholder="输入分数"
+              addonBefore="分数"
+              value={inputScore}
+              onChange={this.onInputScoreChange}
             />
           </Col>
           <Col span={12}>

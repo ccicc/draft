@@ -4,7 +4,6 @@ import {
   Dropdown,
   Menu
 } from 'antd';
-import { PopupBox } from './../../components/Common';
 import styles from './index.less';
 
 const Item = Menu.Item;
@@ -100,8 +99,6 @@ export default class SelectionInput extends React.Component {
     const { isVisible, isEditor, value } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
-      controlID,
-      controlName,
       defaultVal,
       describeVal,
       entityColor,
@@ -155,19 +152,6 @@ export default class SelectionInput extends React.Component {
 
     return (
       <span className={styles.root}>
-        <PopupBox
-          editorCommand="selectionInputEditor"
-          deleteCommand="selectionInputDelete"
-          controlID={controlID}
-          controlName={controlName}
-        >
-          {
-            controlName &&
-            <span
-              className={styles.controlName}
-            >{controlName}: </span>
-          }
-        </PopupBox>
         <span
           className={styles.controlVal}
           title={describeVal}

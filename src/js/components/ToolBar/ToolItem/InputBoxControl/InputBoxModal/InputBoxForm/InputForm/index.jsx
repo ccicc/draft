@@ -338,8 +338,10 @@ class InputForm extends React.Component {
           })(
             <Select
               showSearch
+              mode="combobox"
               size="default"
               placeholder="选择日期格式"
+              notFoundContent="自定义格式"
               optionFilterprop="children"
               onChange={this.onDateFormatChange}
             >

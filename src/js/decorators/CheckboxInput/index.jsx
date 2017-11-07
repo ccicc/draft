@@ -47,42 +47,35 @@ export default class CheckboxInput extends React.Component {
           controlID={controlID}
           controlName={controlName}
         >
-          {
-            controlName &&
-            <span
-              className={styles.controlName}
-              onClick={this.onHandleClick}
-            >{controlName}：</span>
-          }
+          <span
+            className={styles.controlVal}
+            title={describeVal}
+          >
+            <span className={styles.rim}> [ </span>
+            {
+              items.map((item, index) => (
+                <span
+                  key={index}
+                  className={styles.item}
+                  style={{ color: entityColor }}
+                >
+                  <label className={styles.itemLabel}>
+                    <input
+                      className={styles.input}
+                      type="checkbox"
+                      value={item.value}
+                      checked={selectedValues.indexOf(item.value) !== -1}
+                      onChange={this.onHandleChange}
+                    />
+                    {item.value},
+                  </label>
+                </span>
+              ))
+            }
+            <span className={styles.rim}> ] </span>
+            <span style={{ display: 'none' }}>{children}</span>
+          </span>
         </PopupBox>
-        <span
-          className={styles.controlVal}
-          title={describeVal}
-        >
-          <span className={styles.rim}> [ </span>
-          {
-            items.map((item, index) => (
-              <span
-                key={index}
-                className={styles.item}
-                style={{ color: entityColor }}
-              >
-                <label className={styles.itemLabel}>
-                  <input
-                    className={styles.input}
-                    type="checkbox"
-                    value={item.value}
-                    checked={selectedValues.indexOf(item.value) !== -1}
-                    onChange={this.onHandleChange}
-                  />
-                  {item.value},
-                </label>
-              </span>
-            ))
-          }
-          <span className={styles.rim}> ] </span>
-          <span style={{ display: 'none' }}>{children}</span>
-        </span>
       </span>
     );
   }

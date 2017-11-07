@@ -1,8 +1,14 @@
+/* eslint-disable */ 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { PopupBox } from './../../components/Common';
 import styles from './index.less';
 
 export default class RadioboxInput extends React.Component {
+  static propTypes = {
+    entityKey: PropTypes.string,
+    contentState: PropTypes.object
+  };
   onHandleChange = (e) => {
     const { value } = e.target;
     const { entityKey, contentState } = this.props;
@@ -34,20 +40,13 @@ export default class RadioboxInput extends React.Component {
     const { items, currentValue } = selectTodos;
     return (
       <span className={styles.root}>
-        <PopupBox
+        {/* <PopupBox
           editorCommand="radioBoxInputEditor"
           deleteCommand="radioBoxInputDelete"
           controlID={controlID}
           controlName={controlName}
         >
-          {
-            controlName &&
-            <span
-              className={styles.controlName}
-              onClick={this.onHandleClick}
-            >{controlName}: </span>
-          }
-        </PopupBox>
+        </PopupBox> */}
         <span
           className={styles.controlVal}
           title={describeVal}
@@ -69,7 +68,7 @@ export default class RadioboxInput extends React.Component {
                     onChange={this.onHandleChange}
                   />
                   {item.value}、
-                </label>
+                  </label>
               </span>
             ))
           }

@@ -232,18 +232,17 @@ export default class TextInput extends React.Component {
           controlID={controlID}
           controlName={controlName}
         >
-          {controlName && <span className={styles.controlName}>{controlName} : </span>}
+          <span
+            className={styles.controlVal}
+            title={describeVal}
+            onDoubleClick={this.onHandleClick}
+          >
+            <i className={styles.rim}> [ </i>
+            {textInputContent}
+            <i className={styles.rim}> ] </i>
+            <span style={{ display: 'none' }}>{children}</span>
+          </span>
         </PopupBox>
-        <span
-          className={styles.controlVal}
-          title={describeVal}
-          onClick={this.onHandleClick}
-        >
-          <i className={styles.rim}> [ </i>
-          {textInputContent}
-          <i className={styles.rim}> ] </i>
-          <span style={{ display: 'none' }}>{children}</span>
-        </span>
       </span>
     );
   }
