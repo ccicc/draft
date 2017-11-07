@@ -74,11 +74,6 @@ export default class PullDownOptionGroup extends React.Component {
     }, 0);
   }
 
-  onTabTitleChange = () => {
-    const { selectTabs } = this.state;
-    
-  }
-
   add = () => {
     // 添加分组并切换到当前分组
     const { selectTabs } = this.state;

@@ -170,7 +170,7 @@ export default class Draft extends React.Component {
       <div
         className={styles.root}
       >
-        <Affix offsetTop={64}>
+        <Affix offsetTop={60}>
           <div className={styles.toolbar}>
             <Toolbar
               config={config}

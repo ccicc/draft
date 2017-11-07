@@ -6,18 +6,18 @@
 
 export default {
   options: [
-    { name: 'FontFamily', span: 3, isShow: true },
-    { name: 'FontSize', span: 3, isShow: true },
-    { name: 'BlockTool', span: 3, isShow: true },
-    { name: 'SelectBgColor', span: 2, isShow: true },
-    { name: 'Remove', span: 1.5, isShow: true },
-    { name: 'History', span: 2.5, isShow: true },
-    { name: 'Link', span: 2.5, isShow: true },
-    { name: 'Copy', span: 3.5, isShow: true },
-    { name: 'InputBoxControl', span: 1.5, isShow: true },
+    { name: 'FontFamily', span: 2, isShow: false },
+    { name: 'FontSize', span: 2, isShow: true },
+    { name: 'BlockTool', span: 2, isShow: true },
     { name: 'InlineTool', span: 8.5, isShow: true },
+    { name: 'SelectBgColor', span: 1, isShow: true },
+    { name: 'Remove', span: 1.5, isShow: true },
     { name: 'TextAlign', span: 4.5, isShow: true },
     { name: 'List', span: 4.5, isShow: true },
+    { name: 'History', span: 2.5, isShow: true },
+    { name: 'Link', span: 2.5, isShow: false },
+    { name: 'Copy', span: 3.5, isShow: false },
+    { name: 'InputBoxControl', span: 1.5, isShow: true },
     { name: 'Postil', span: 1.5, isShow: true },
     { name: 'Image', span: 1.5, isShow: true },
     { name: 'Equation', span: 1.5, isShow: true }
@@ -29,7 +29,7 @@ export default {
       { type: 'italic', icon: 'italic', title: '斜体' },
       { type: 'subscript', icon: 'subscript', title: '下标' },
       { type: 'superscript', icon: 'superscript', title: '上标' },
-      { type: 'code', icon: 'code', title: '等宽字形' },
+      // { type: 'code', icon: 'code', title: '等宽字形' },
       { type: 'underline', icon: 'underline', title: '下划线' },
     ]
   },

@@ -42,7 +42,7 @@
       filename: 'style/[name].vundle.css'
     }),
     new HtmlWebpackPlugin({
-      title: 'pproduction',
+      title: 'production',
       filename: 'index.html',
       template: path.resolve(__dirname, './src/index.html'),
       hash: true,
