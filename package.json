@@ -63,6 +63,7 @@
     "draft-js-resizeable-plugin": "^1.0.8",
     "draft-js-static-toolbar-plugin": "^2.0.0-rc4",
     "draftjs-utils": "^0.8.07",
+    "immutable": "^3.8.2",
     "katex": "^0.9.0-alpha",
     "moment": "^2.19.1",
     "prop-types": "^15.6.0",

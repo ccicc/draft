@@ -154,11 +154,13 @@ export default function inputBoxHOC(currInputBox) {
       }
 
       render() {
-        const { config, onHiddenModal } = this.props;
+        const { config, onHiddenModal, editorState, onEditorStateChange } = this.props;
         const { selectionText, entityData } = this.getCurrentValue();
         const controlID = (entityData && entityData.controlID) || currInputBox;
         return (
           <Component
+            editorState={editorState}
+            onEditorStateChange={onEditorStateChange}
             entityData={entityData}
             controlID={controlID}
             config={config}

@@ -14,11 +14,11 @@ export default class TextInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      update: false,
-      value: '',
-      checked: true,
+      value: '', // 文本控件值
+      checked: true, // 是否校验
       isReuqired: true,
-      isEditor: false
+      isEditor: false,
+      controlShow: true // 逻辑质控
     };
   }
 
@@ -27,8 +27,9 @@ export default class TextInput extends React.Component {
     const { entityKey, contentState } = this.props;
     const {
       defaultVal,
-      isRequired
+      isRequired,
     } = contentState.getEntity(entityKey).getData();
+
     this.setState({
       value: defaultVal,
       isRequired
@@ -37,17 +38,20 @@ export default class TextInput extends React.Component {
 
   componentDidMount() {
     this.input && this.input.focus();
+    this.onLogicalControlJudge();
   }
 
   componentWillReceiveProps(nextProps) {
     const { entityKey, contentState } = nextProps;
     if (contentState !== this.contentState) {
-      const { defaultVal, isRequired } = contentState.getEntity(entityKey).getData();
+      const { defaultVal, isRequired, controlShow } = contentState.getEntity(entityKey).getData();
       this.setState({
         value: defaultVal,
-        isRequired
+        isRequired,
+        controlShow: !(controlShow === 'hidden')
       });
     }
+    setTimeout(() => this.onLogicalControlJudge(), 0);
   }
 
   onHandleClick = () => {
@@ -159,8 +163,58 @@ export default class TextInput extends React.Component {
     }
   }
 
+  onLogicalControlJudge = () => {
+    const { value } = this.state;
+    const { entityKey, contentState } = this.props;
+    const { logicalControl } = contentState.getEntity(entityKey).getData();
+    // 逻辑质控
+    if (logicalControl) {
+      const { condition, judgeVal, isShow, targetEntityKeys } = logicalControl;
+      let result;
+      switch (condition) {
+        case '>':
+          result = value > judgeVal;
+          break;
+        case '>=':
+          result = value >= judgeVal;
+          break;
+        case '<':
+          result = value < judgeVal;
+          break;
+        case '<=':
+          result = value <= judgeVal;
+          break;
+        case '==':
+          result = value === judgeVal;
+          break;
+        case '!=':
+          result = value !== judgeVal;
+          break;
+        default:
+          result = false;
+      }
+      result && targetEntityKeys.forEach(key => {
+        this.onModifyEntityData(key, isShow);
+        console.log(`targetKey: ${key}, ${isShow}`);
+      });
+    }
+  }
+
+  onModifyEntityData = (entityKey, isShow) => {
+    // 逻辑质控, 更改受控控件实体数据controlShow,实现显示，隐藏
+    const { contentState } = this.props;
+    const otherEntityData = contentState.getEntity(entityKey).getData();
+    contentState.replaceEntityData(
+      entityKey,
+      {
+        ...otherEntityData,
+        controlShow: isShow
+      }
+    );
+  }
+
   render() {
-    const { value, isRequired, isEditor } = this.state;
+    const { value, isRequired, isEditor, controlShow } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
       controlID,
@@ -170,6 +224,7 @@ export default class TextInput extends React.Component {
       dataType
     } = contentState.getEntity(entityKey).getData();
 
+    // 校验文本
     const requiredContent = (<p>该项为<span style={{ color: 'red' }}>必填项</span>,请输入控件值</p>);
     const numberContent = (
       <p>
@@ -185,7 +240,7 @@ export default class TextInput extends React.Component {
     const stringContent = (<p>请输入普通文本,<span style={{ color: 'red' }}>不能输入数值</span></p>);
     const emailContent = (<p>请输入<span style={{ color: 'red' }}>邮箱地址</span></p>);
     const identityCard = (<p>请输入<span style={{ color: 'red' }}>身份证</span>号码</p>);
-    const hitContent = (
+    const checkedContent = (
       <span>
         {isRequired && value === '' && requiredContent}
         {dataType.typeVal === 'number' && numberContent}
@@ -196,33 +251,36 @@ export default class TextInput extends React.Component {
       </span>
     );
 
-    const textInputContent = isEditor ?
-      (
-        <Popover
-          placement="top"
-          trigger="click"
-          content={hitContent}
+    // 为真时渲染为输入框
+    const textInputContent =
+      isEditor
+        ?
+        (
+          <Popover
+            placement="top"
+            trigger="click"
+            content={checkedContent}
+          >
+            <input
+              autoFocus  // eslint-disable-line
+              type="text"
+              className={styles.editorInput}
+              ref={element => this.input = element}
+              value={this.state.value}
+              onChange={this.onHandleInputChange}
+              onBlur={this.onHandleBlur}
+            />
+          </Popover>
+        )
+        :
+        (<span
+          style={{ color: entityColor }}
+          className={styles.editorWrapper}
         >
-          <input
-            autoFocus  // eslint-disable-line
-            type="text"
-            className={styles.editorInput}
-            ref={element => this.input = element}
-            value={this.state.value}
-            onChange={this.onHandleInputChange}
-            onBlur={this.onHandleBlur}
-          />
-        </Popover>
-      )
-      :
-      (<span
-        style={{ color: entityColor }}
-        className={styles.editorWrapper}
-      >
-        {value}
-      </span>);
+          {value}
+        </span>);
 
-    return (
+    const textInputComponent = (
       <span
         className={styles.root}
       >
@@ -245,5 +303,7 @@ export default class TextInput extends React.Component {
         </PopupBox>
       </span>
     );
+    console.log(controlShow);
+    return controlShow && textInputComponent;
   }
 }

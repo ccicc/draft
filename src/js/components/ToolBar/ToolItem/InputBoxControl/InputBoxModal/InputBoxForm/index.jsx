@@ -4,6 +4,8 @@ import WrapperInputForm from './InputForm';
 
 export default class InputBoxForm extends React.Component {
   static propTypes = {
+    editorState: PropTypes.object.isRequired,
+    onEditorStateChange: PropTypes.func.isRequired,
     controlID: PropTypes.string.isRequired,
     entityData: PropTypes.object,
     config: PropTypes.object.isRequired,
@@ -79,12 +81,14 @@ export default class InputBoxForm extends React.Component {
   }
 
   render() {
-    const { controlID, entityData } = this.props;
+    const { controlID, entityData, editorState, onEditorStateChange } = this.props;
     const { config } = this.props;
 
     return (
       <WrapperInputForm
         {...entityData}
+        editorState={editorState}
+        onEditorStateChange={onEditorStateChange}
         config={config}
         controlID={controlID}
         onHandleConfirm={this.onHandleConfirm}

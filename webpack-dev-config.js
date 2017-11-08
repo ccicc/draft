@@ -166,12 +166,6 @@ module.exports = {
               options: {
                 sourceMap: true
               }
-            },
-            {
-              loader: 'less-loader',
-              options: {
-                sourceMap: true
-              }
             }
           ]
         }),

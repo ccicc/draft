@@ -12,11 +12,18 @@ import {
   DatePicker
 } from 'antd';
 
+// 颜色选择
 import ColorPicker from './../../../../../../Common/ColorPicker';
+// 下拉选项组
 import PullDownOptionGroup from './PullDownOptionGroup';
+// 文本类型
 import SelectType from './SelectType';
+// 单选，多选选项组
 import SelectTodo from './SelectTodo';
+// 前后缀
 import PrefixSuffix from './PrefixSuffix/';
+// 逻辑质控
+import LogicalControl from './LogicalControl';
 
 import styles from './index.less';
 
@@ -26,6 +33,8 @@ const Option = Select.Option;
 
 class InputForm extends React.Component {
   static propTypes = {
+    editorState: PropTypes.object.isRequired,
+    onEditorStateChange: PropTypes.func.isRequired,
     config: PropTypes.object,
     controlID: PropTypes.string.isRequired,
     onHandleConfirm: PropTypes.func.isRequired,
@@ -34,6 +43,7 @@ class InputForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      defaultVal: this.props.defaultVal,
       dateFormat: this.props.dataFormat,
       isRequired: this.props.isRequired,
       isPrefix: this.props.isPrefix,
@@ -83,6 +93,11 @@ class InputForm extends React.Component {
     setFieldsValue({ defaultVal: '未知' });
   }
 
+  onDefaultValChange = (e) => {
+    // 控件受控方法
+    this.setState({ defaultVal: e.target.value });
+  }
+
   onDateFormatChange = (value) => {
     // 日期格式更改
     this.setState({
@@ -97,18 +112,21 @@ class InputForm extends React.Component {
     });
   }
 
+
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
+    const { dataTypeRules, isRequired, isPrefix, dateFormat, defaultVal } = this.state;
     const {
       config,
       controlID,
-      defaultVal,
       onHandleConfirm,
       onHandleCancel,
+      editorState,
+      onEditorStateChange
     } = this.props;
-    const { dataTypeRules, isRequired, isPrefix, dateFormat } = this.state;
 
     const ControlID = (
+      // 控件ID
       <FormItem label="控件ID">
         {
           getFieldDecorator('controlID')(<Input autoComplete="off" disabled size="default" />)
@@ -117,14 +135,20 @@ class InputForm extends React.Component {
     );
 
     const ControlName = (
+      // 控件名称
       <FormItem label="控件名称">
         {
-          getFieldDecorator('controlName')(<Input autoComplete="off" size="default" placeholder="请填写控件名称" />)
+          getFieldDecorator('controlName', {
+            rules: [
+              { required: isRequired, message: '请填写控件名称' }
+            ]
+          })(<Input autoComplete="off" size="default" placeholder="请填写控件名称" />)
         }
       </FormItem>
     );
 
     const Tags = (
+      // 控件标签
       <FormItem label="标签">
         {
           getFieldDecorator('tags', { valuePropName: 'defaultValue' })(
@@ -141,6 +165,7 @@ class InputForm extends React.Component {
     );
 
     const DescribeVal = (
+      // 控件描述
       <FormItem label="控件描述">
         {getFieldDecorator('describeVal')(
           <Input autoComplete="off" size="default" placeholder="请输入控件描述信息" />
@@ -149,6 +174,7 @@ class InputForm extends React.Component {
     );
 
     const EntityColor = (
+      // 实体颜色
       <FormItem label="字体颜色">
         {
           getFieldDecorator('entityColor', { valuePropName: 'entityColor' })(
@@ -159,7 +185,7 @@ class InputForm extends React.Component {
     );
 
     let DefaultVal;
-
+    // 控件值
     if (controlID === 'TextInput') {
       DefaultVal = (
         <FormItem label="控件值" className={styles.defaultVal}>
@@ -170,7 +196,7 @@ class InputForm extends React.Component {
                 ...dataTypeRules,
               ]
             })(
-              <Input autoComplete="off" size="default" placeholder="请输入控件值" />
+              <Input autoComplete="off" size="default" placeholder="请输入控件值" onChange={this.onDefaultValChange} />
             )
           }
         </FormItem>
@@ -359,6 +385,20 @@ class InputForm extends React.Component {
       </FormItem>
     );
 
+    const LogicalControls = (
+      <FormItem label="逻辑质控">
+        {
+          getFieldDecorator('logicalControl', { valuePropName: 'logicalControl' })(
+            <LogicalControl
+              defaultVal={defaultVal}
+              editorState={editorState}
+              onEditorStateChange={onEditorStateChange}
+            />
+          )
+        }
+      </FormItem>
+    );
+
     // 文本输入框
     const TextInput = (
       <Row gutter={15}>
@@ -369,8 +409,9 @@ class InputForm extends React.Component {
         <Col span={12}> {DataType} </Col>
         <Col span={12}> {DefaultVal} </Col>
         <Col span={12}> {EntityColor} </Col>
-        <Col span={24}> {IsRequired} </Col>
-        <Col span={24}> {IsReadOnly} </Col>
+        <Col span={12}> {IsRequired} </Col>
+        <Col span={12}> {IsReadOnly} </Col>
+        <Col span={24}> {LogicalControls} </Col>
       </Row>
     );
 
@@ -384,6 +425,8 @@ class InputForm extends React.Component {
         <Col span={12}> {EntityColor} </Col>
         <Col span={12}> {DefaultVal} </Col>
         <Col span={24}> {PullDownOptionGroups} </Col>
+        <Col span={12}>{IsRequired}</Col>
+        <Col span={12}>{IsReadOnly}</Col>
       </Row>
     );
 
@@ -399,6 +442,8 @@ class InputForm extends React.Component {
         <Col span={24}>{IsPrefix}</Col>
         <Col span={24}> {isPrefix && PrefixSuffixs} </Col>
         <Col span={24}>{PullDownOptionGroups}</Col>
+        <Col span={12}>{IsRequired}</Col>
+        <Col span={12}>{IsReadOnly}</Col>
       </Row>
     );
 
@@ -412,8 +457,8 @@ class InputForm extends React.Component {
         <Col span={12}>{DateFormat}</Col>
         <Col span={12}>{DefaultVal}</Col>
         <Col span={12}>{EntityColor}</Col>
-        <Col span={24}>{IsRequired}</Col>
-        <Col span={24}>{IsReadOnly}</Col>
+        <Col span={12}>{IsRequired}</Col>
+        <Col span={12}>{IsReadOnly}</Col>
       </Row>
     );
 
