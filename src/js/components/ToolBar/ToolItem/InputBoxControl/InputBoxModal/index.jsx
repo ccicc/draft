@@ -76,25 +76,23 @@ export default class InputBoxModal extends React.Component {
         title="插入控件"
         visible={isVisible}
         onCancel={onHiddenModal}
-        width={500}
+        width={1000}
         footer={null}
       >
-        <div>
-          <Select
-            showSearch
-            value={currentInputBox}
-            optionFilterProp="children"
-            onChange={this.onSelectChange}
-            style={{ width: '100%' }}
-          >
-            <Option value="TextInput">文本输入框</Option>
-            <Option value="DateInput">日期输入框</Option>
-            <Option value="SelectionInput">下拉单选输入框</Option>
-            <Option value="SelectionMultipleInput">下拉多选输入框</Option>
-            <Option value="CheckBoxInput">复选框</Option>
-            <Option value="RadioBoxInput">单选框</Option>
-          </Select>
-        </div>
+        <Select
+          showSearch
+          value={currentInputBox}
+          optionFilterProp="children"
+          onChange={this.onSelectChange}
+          style={{ width: '49%' }}
+        >
+          <Option value="TextInput">文本输入框</Option>
+          <Option value="DateInput">日期输入框</Option>
+          <Option value="SelectionInput">下拉单选输入框</Option>
+          <Option value="SelectionMultipleInput">下拉多选输入框</Option>
+          <Option value="CheckBoxInput">复选框</Option>
+          <Option value="RadioBoxInput">单选框</Option>
+        </Select>
         <WrapperInputBoxForm
           config={config}
           editorState={editorState}

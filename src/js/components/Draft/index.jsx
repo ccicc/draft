@@ -115,6 +115,8 @@ export default class Draft extends React.Component {
         <Component
           {...props}
           onReadOnlyChange={this.onHandleReadonlyChange}
+          onEditorStateChange={this.onChange}
+          onGetEditorState={this.getEditorState}
         />
       );
     };

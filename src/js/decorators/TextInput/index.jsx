@@ -28,30 +28,35 @@ export default class TextInput extends React.Component {
     const {
       defaultVal,
       isRequired,
+      controlShow
     } = contentState.getEntity(entityKey).getData();
-
+    this.onLogicalControlJudge();
     this.setState({
       value: defaultVal,
-      isRequired
+      isRequired,
+      controlShow: controlShow !== 'hidden'
     });
   }
 
   componentDidMount() {
     this.input && this.input.focus();
-    this.onLogicalControlJudge();
   }
 
   componentWillReceiveProps(nextProps) {
     const { entityKey, contentState } = nextProps;
     if (contentState !== this.contentState) {
-      const { defaultVal, isRequired, controlShow } = contentState.getEntity(entityKey).getData();
+      const {
+        defaultVal,
+        isRequired,
+        controlShow
+      } = contentState.getEntity(entityKey).getData();
       this.setState({
         value: defaultVal,
         isRequired,
-        controlShow: !(controlShow === 'hidden')
+        controlShow: controlShow !== 'hidden'
       });
+      setTimeout(() => this.onLogicalControlJudge(), 0);
     }
-    setTimeout(() => this.onLogicalControlJudge(), 0);
   }
 
   onHandleClick = () => {
@@ -86,6 +91,7 @@ export default class TextInput extends React.Component {
       isEditor: false
     });
     // 设置全局只读为false
+    this.onLogicalControlJudge();
     this.props.onReadOnlyChange(false);
   }
 
@@ -169,7 +175,7 @@ export default class TextInput extends React.Component {
     const { logicalControl } = contentState.getEntity(entityKey).getData();
     // 逻辑质控
     if (logicalControl) {
-      const { condition, judgeVal, isShow, targetEntityKeys } = logicalControl;
+      const { condition, judgeVal, isShow, targetKeys } = logicalControl;
       let result;
       switch (condition) {
         case '>':
@@ -193,15 +199,26 @@ export default class TextInput extends React.Component {
         default:
           result = false;
       }
-      result && targetEntityKeys.forEach(key => {
-        this.onModifyEntityData(key, isShow);
-        console.log(`targetKey: ${key}, ${isShow}`);
-      });
+      console.log(`result: ${result}`);
+      if (result) {
+        // 满足质控条件
+        targetKeys.forEach(key => {
+          this.onModifyEntityData(key, isShow);
+          console.log(`conditionTrue: ${key}, ${isShow}`);
+        });
+      } else {
+        const newDisplay = isShow === 'show' ? 'hidden' : 'show';
+        targetKeys.forEach(key => {
+          this.onModifyEntityData(key, newDisplay);
+          console.log(`conditionFalse: ${key}, ${newDisplay}`);
+        });
+      }
     }
+    this.setState({ update: true });
   }
 
   onModifyEntityData = (entityKey, isShow) => {
-    // 逻辑质控, 更改受控控件实体数据controlShow,实现显示，隐藏
+    // 逻辑质控, 更改目标控件实体数据controlShow,实现显示，隐藏
     const { contentState } = this.props;
     const otherEntityData = contentState.getEntity(entityKey).getData();
     contentState.replaceEntityData(
@@ -280,30 +297,32 @@ export default class TextInput extends React.Component {
           {value}
         </span>);
 
-    const textInputComponent = (
-      <span
-        className={styles.root}
-      >
-        <PopupBox
-          editorCommand="textInputEditor"
-          deleteCommand="textInputDelete"
-          controlID={controlID}
-          controlName={controlName}
+    const textInputComponent = controlShow ?
+      (
+        <span
+          className={styles.root}
         >
-          <span
-            className={styles.controlVal}
-            title={describeVal}
-            onDoubleClick={this.onHandleClick}
+          <PopupBox
+            editorCommand="textInputEditor"
+            deleteCommand="textInputDelete"
+            controlID={controlID}
+            controlName={controlName}
           >
-            <i className={styles.rim}> [ </i>
-            {textInputContent}
-            <i className={styles.rim}> ] </i>
-            <span style={{ display: 'none' }}>{children}</span>
-          </span>
-        </PopupBox>
-      </span>
-    );
+            <span
+              className={styles.controlVal}
+              title={describeVal}
+              onDoubleClick={this.onHandleClick}
+            >
+              <i className={styles.rim}> [ </i>
+              {textInputContent}
+              <i className={styles.rim}> ] </i>
+              <span style={{ display: 'none' }}>{children}</span>
+            </span>
+          </PopupBox>
+        </span>
+      ) :
+      null;
     console.log(controlShow);
-    return controlShow && textInputComponent;
+    return textInputComponent;
   }
 }

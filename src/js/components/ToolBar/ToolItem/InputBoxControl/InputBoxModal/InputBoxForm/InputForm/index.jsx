@@ -401,17 +401,21 @@ class InputForm extends React.Component {
 
     // 文本输入框
     const TextInput = (
-      <Row gutter={15}>
-        <Col span={12}> {ControlID} </Col>
-        <Col span={12}> {ControlName} </Col>
-        <Col span={12}> {Tags} </Col>
-        <Col span={12}> {DescribeVal} </Col>
-        <Col span={12}> {DataType} </Col>
-        <Col span={12}> {DefaultVal} </Col>
-        <Col span={12}> {EntityColor} </Col>
-        <Col span={12}> {IsRequired} </Col>
-        <Col span={12}> {IsReadOnly} </Col>
-        <Col span={24}> {LogicalControls} </Col>
+      <Row gutter={20}>
+        <Col span={12}>
+          <Row gutter={10}>
+            <Col span={12}> {ControlID} </Col>
+            <Col span={12}> {ControlName} </Col>
+            <Col span={12}> {Tags} </Col>
+            <Col span={12}> {DescribeVal} </Col>
+            <Col span={12}> {DataType} </Col>
+            <Col span={12}> {DefaultVal} </Col>
+            <Col span={12}> {EntityColor} </Col>
+            <Col span={12}> {IsRequired} </Col>
+            <Col span={12}> {IsReadOnly} </Col>
+          </Row>
+        </Col>
+        <Col span={12}> {LogicalControls} </Col>
       </Row>
     );
 
@@ -500,6 +504,7 @@ class InputForm extends React.Component {
           {this.props.controlID === 'CheckBoxInput' && CheckBoxInput}
           {this.props.controlID === 'RadioBoxInput' && RadioBoxInput}
           <Button
+            size="large"
             key="submit"
             type="primary"
             style={{ marginTop: '15px' }}
@@ -508,6 +513,7 @@ class InputForm extends React.Component {
             确定
           </Button>
           <Button
+            size="large"
             key="cancel"
             style={{ marginLeft: '10px' }}
             onClick={onHandleCancel}
@@ -573,6 +579,9 @@ const WrapperInputForm = Form.create({
       },
       pullDownOptionGroup: {
         value: props.pullDownOptionGroup
+      },
+      logicalControl: {
+        value: props.logicalControl
       },
       selectTodos: {
         value: props.selectTodos

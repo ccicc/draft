@@ -2,43 +2,47 @@ import React from 'react';
 import {
   Row,
   Col,
-  Input,
   Radio,
-  Select,
   Transfer,
   Button
 } from 'antd';
 import PropTypes from 'prop-types';
+// 控制条件
+import ControlCondition from './ControlCondition';
+// 获取所有实体
 import getEntities from './../../../../../../../../customUtils/getEntities';
 
-const Option = Select.Option;
 const RadioGroup = Radio.Group;
+
 export default class LogicalControl extends React.Component {
   static PropTypes = {
     editorState: PropTypes.object.isRequired,
     onEditorStateChange: PropTypes.object.isRequired,
-    defaultVal: PropTypes.string
+    defaultVal: PropTypes.string,
+    isShow: PropTypes.string,
+    allEntitys: PropTypes.string,
+    targetKeys: PropTypes.arrayOf(PropTypes.string),
+    selectedKeys: PropTypes.string
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      defaultVal: this.props.defaultVal, // 当前控件值
-      condition: '', // 判断条件
-      judgeVal: '', // 条件值
-      isShow: 'show', // 目标控件显示
-      allEntitys: [], // 所有实体 { key: 'entitKey', type: '',title: '', desc: ''}
-      targetEntityKeys: [], // 受控实体Key值
-      selectedKeys: [] // 已选中的项
+      controlConditions: this.props.logicalControl.controlConditions,
+      defaultVal: '', // 当前控件值
+      isShow: this.props.logicalControl.isShow, // 目标控件显示
+      allEntitys: this.props.logicalControl.allEntitys, // 所有实体
+      targetKeys: this.props.logicalControl.targetKeys, // 受控实体Key值
+      selectedKeys: this.props.logicalControl.selectedKeys // 已选中的项
     };
   }
 
   componentDidMount() {
-    // const { targetEntityKeys } = this.state;
+    const { targetKeys } = this.state;
     // 排除已在targetEntityKey中的实体
     const allEntitys = this.getAllEntityMap();
-    // const unSelectedEntitys = allEntitys.filter(item => !targetEntityKeys.includes(item.key));
-    this.setState({ allEntitys: allEntitys }); //eslint-disable-line
+    const unSelectedEntitys = allEntitys.filter(item => !targetKeys.includes(item.key));
+    this.setState({ allEntitys: unSelectedEntitys }); //eslint-disable-line
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,14 +52,25 @@ export default class LogicalControl extends React.Component {
     }
   }
 
-  onConditionChange = (value) => {
-    this.setState({ condition: value });
+  onControlConditionChange = (item, index) => {
+    const { controlConditions } = this.state;
+    controlConditions[index] = item;
+    this.setState({
+      controlConditions
+    });
     setTimeout(() => this.props.onChange(this.state), 0);
   }
 
-  onJudgeValChange = (e) => {
-    this.setState({ judgeVal: e.target.value });
-    setTimeout(() => this.props.onChange(this.state), 0);
+  onAddCondition = () => {
+    const { controlConditions } = this.state;
+    controlConditions.push({
+      condition: '',
+      judgeVal: '',
+      logicalOperater: ''
+    });
+    this.setState({
+      controlConditions
+    });
   }
 
   onRadioChange = (e) => {
@@ -79,7 +94,7 @@ export default class LogicalControl extends React.Component {
 
   onTransferChange = (targetKeys) => {
     // 切换时的回调
-    this.setState({ targetEntityKeys: targetKeys });
+    this.setState({ targetKeys });
     setTimeout(() => this.props.onChange(this.state), 0);
   }
 
@@ -112,44 +127,37 @@ export default class LogicalControl extends React.Component {
   render() {
     const {
       isShow,
-      condition,
-      judgeVal,
       defaultVal,
       allEntitys,
-      targetEntityKeys
+      targetKeys,
+      selectedKeys,
+      controlConditions
     } = this.state;
 
     return (
       <Row gutter={10}>
-        <Col span={12}>
-          <Input
-            disabled
-            size="default"
-            addonBefore="控件值"
-            value={defaultVal}
-          />
-        </Col>
-        <Col span={4}>
-          <Select
-            mode="combobox"
-            notFoundContent=""
-            value={condition}
-            onChange={this.onConditionChange}
-          >
-            <Option value=">">大于</Option>
-            <Option value="<">小于</Option>
-            <Option value="==">等于</Option>
-            <Option value="!=">不等于</Option>
-            <Option value=">=">大于等于</Option>
-            <Option value="<=">小于等于</Option>
-          </Select>
-        </Col>
-        <Col span={8}>
-          <Input
-            size="default"
-            addonBefore="判断值"
-            value={judgeVal}
-            onChange={this.onJudgeValChange}
+        <Col span={24}>
+          {
+            controlConditions.map((item, index) => (
+              <ControlCondition
+                index={index}
+                key={`condition-${index}`}
+                onChange={this.onControlConditionChange}
+                defaultVal={defaultVal}
+                condition={item.condition}
+                judgeVal={item.judgeVal}
+                logicalOperater={item.logicalOperater}
+                controlConditions={controlConditions}
+              />
+            ))
+          }
+          <Button
+            size="small"
+            icon="plus"
+            type="primary"
+            title="添加控制条件"
+            onClick={this.onAddCondition}
+            disabled={controlConditions.length >= 3}
           />
         </Col>
         <Col span={24}>
@@ -166,7 +174,8 @@ export default class LogicalControl extends React.Component {
           <Transfer
             showSearch
             dataSource={allEntitys}
-            targetKeys={targetEntityKeys}
+            targetKeys={[...targetKeys]}
+            selectedKeys={selectedKeys}
             titles={['全部控件', '受控控件']}
             notFoundContent="列表为空"
             listStyle={{ width: '45%' }}
