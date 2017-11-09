@@ -48,10 +48,10 @@ export default class InputBoxForm extends React.Component {
         currentActiveKey: 'tab-0' // 当前选项卡
       },
       logicalControl: {
-        controlConditions: [{ condition: '===', judgeVal: '', logicalOperater: '&&' }],
+        controlConditions: [{ condition: '===', judgeVal: '', logicalOperater: '&&' }], // 控制条件
         isShow: 'show',
-        allEntitys: [],
-        targetKeys: [],
+        allEntitys: [], // 所有实体
+        targetKeys: [], // 受控实体
         selectedKeys: []
       },
       selectTodos: {
@@ -69,6 +69,7 @@ export default class InputBoxForm extends React.Component {
     };
   }
 
+  // from表单回调
   onHandleConfirm = (err, changeFields) => {
     const { onChange, onHiddenModal } = this.props;
     if (err) return false;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Row,
   Col,
@@ -6,7 +7,6 @@ import {
   Transfer,
   Button
 } from 'antd';
-import PropTypes from 'prop-types';
 // 控制条件
 import ControlCondition from './ControlCondition';
 // 获取所有实体
@@ -29,7 +29,7 @@ export default class LogicalControl extends React.Component {
     super(props);
     this.state = {
       controlConditions: this.props.logicalControl.controlConditions,
-      defaultVal: '', // 当前控件值
+      defaultVal: this.props.defaultVal, // 当前控件值
       isShow: this.props.logicalControl.isShow, // 目标控件显示
       allEntitys: this.props.logicalControl.allEntitys, // 所有实体
       targetKeys: this.props.logicalControl.targetKeys, // 受控实体Key值
@@ -38,11 +38,10 @@ export default class LogicalControl extends React.Component {
   }
 
   componentDidMount() {
-    const { targetKeys } = this.state;
     // 排除已在targetEntityKey中的实体
     const allEntitys = this.getAllEntityMap();
-    const unSelectedEntitys = allEntitys.filter(item => !targetKeys.includes(item.key));
-    this.setState({ allEntitys: unSelectedEntitys }); //eslint-disable-line
+    // const unSelectedEntitys = allEntitys.filter(item => !targetKeys.includes(item.key));
+    this.setState({ allEntitys }); //eslint-disable-line
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,12 +61,24 @@ export default class LogicalControl extends React.Component {
   }
 
   onAddCondition = () => {
+    // 添加控制条件
     const { controlConditions } = this.state;
-    controlConditions.push({
-      condition: '',
-      judgeVal: '',
-      logicalOperater: ''
+    this.setState({
+      controlConditions: [
+        ...controlConditions,
+        {
+          condition: '===',
+          judgeVal: '',
+          logicalOperater: '&&'
+        }
+      ]
     });
+  }
+
+  onRemoveCondition = () => {
+    // 移除控制条件
+    const { controlConditions } = this.state;
+    controlConditions.pop();
     this.setState({
       controlConditions
     });
@@ -151,14 +162,24 @@ export default class LogicalControl extends React.Component {
               />
             ))
           }
-          <Button
-            size="small"
-            icon="plus"
-            type="primary"
-            title="添加控制条件"
-            onClick={this.onAddCondition}
-            disabled={controlConditions.length >= 3}
-          />
+          <Button.Group>
+            <Button
+              size="small"
+              icon="plus"
+              type="primary"
+              title="添加控制条件"
+              onClick={this.onAddCondition}
+              disabled={controlConditions.length >= 3}
+            />
+            <Button
+              size="small"
+              icon="minus"
+              type="danger"
+              title="移除控制条件"
+              onClick={this.onRemoveCondition}
+              disabled={controlConditions.length === 1}
+            />
+          </Button.Group>
         </Col>
         <Col span={24}>
           <span style={{ marginRight: 20, color: '#333' }}>操作: </span>
@@ -174,16 +195,19 @@ export default class LogicalControl extends React.Component {
           <Transfer
             showSearch
             dataSource={allEntitys}
-            targetKeys={[...targetKeys]}
+            targetKeys={targetKeys}
             selectedKeys={selectedKeys}
             titles={['全部控件', '受控控件']}
             notFoundContent="列表为空"
-            listStyle={{ width: '45%' }}
             onChange={this.onTransferChange}
             onSelectChange={this.onSelectedChange}
-            render={item => `${item.title || '无'} - ${item.description || '无'}`}
+            render={item => `${item.title || '没有标题'} - ${item.description || '没有描述'}`}
             searchPlaceholder="查找控件"
             footer={this.renderTransferFooter}
+            listStyle={{
+              width: '45%',
+              height: 250
+            }}
           />
         </Col>
       </Row>

@@ -415,7 +415,7 @@ class InputForm extends React.Component {
             <Col span={12}> {IsReadOnly} </Col>
           </Row>
         </Col>
-        <Col span={12}> {LogicalControls} </Col>
+        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}> {LogicalControls} </Col>
       </Row>
     );
 

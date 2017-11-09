@@ -30,7 +30,6 @@ export default class TextInput extends React.Component {
       isRequired,
       controlShow
     } = contentState.getEntity(entityKey).getData();
-    this.onLogicalControlJudge();
     this.setState({
       value: defaultVal,
       isRequired,
@@ -40,6 +39,7 @@ export default class TextInput extends React.Component {
 
   componentDidMount() {
     this.input && this.input.focus();
+    this.onLogicalControlJudge();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -174,31 +174,17 @@ export default class TextInput extends React.Component {
     const { entityKey, contentState } = this.props;
     const { logicalControl } = contentState.getEntity(entityKey).getData();
     // 逻辑质控
+    let result;
     if (logicalControl) {
-      const { condition, judgeVal, isShow, targetKeys } = logicalControl;
-      let result;
-      switch (condition) {
-        case '>':
-          result = value > judgeVal;
-          break;
-        case '>=':
-          result = value >= judgeVal;
-          break;
-        case '<':
-          result = value < judgeVal;
-          break;
-        case '<=':
-          result = value <= judgeVal;
-          break;
-        case '==':
-          result = value === judgeVal;
-          break;
-        case '!=':
-          result = value !== judgeVal;
-          break;
-        default:
-          result = false;
-      }
+      const { controlConditions, isShow, targetKeys } = logicalControl;
+      const expression = controlConditions.reduce((total, item, index, current) => {
+        if (current.length !== 1 && (index !== current.length - 1)) {
+          const judgeVal = item.judgeVal === '' ? ' ' : item.judgeVal;
+          return `${total} '${value}' ${item.condition} '${judgeVal}' ${item.logicalOperater}`;
+        }
+        return `${total} '${value}' ${item.condition} '${item.judgeVal}'`;
+      }, '');
+      result = eval(expression);  // eslint-disable-line
       console.log(`result: ${result}`);
       if (result) {
         // 满足质控条件
