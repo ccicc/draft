@@ -11,7 +11,11 @@ const TabPane = Tabs.TabPane;
 export default class PullDownOptionGroup extends React.Component {
   static propTypes = {
     controlID: PropTypes.string.isRequired,
-    defaultVal: PropTypes.string,
+    defaultVal: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.object
+    ]),
     onSetDefaultVal: PropTypes.func.isRequired,
     onAddDefaultVal: PropTypes.func.isRequired,
     onCleanDefaultVal: PropTypes.func.isRequired

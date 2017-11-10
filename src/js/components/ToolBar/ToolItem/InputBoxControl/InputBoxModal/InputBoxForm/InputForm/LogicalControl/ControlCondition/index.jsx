@@ -13,9 +13,13 @@ const Option = Select.Option;
 export default class ControlCondition extends React.Component {
   static propTypes = {
     condition: PropTypes.string,
+    defaultVal: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.object
+    ]),
     judgeVal: PropTypes.string,
     logicalOperater: PropTypes.string,
-    defaultVal: PropTypes.string,
     index: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
   };
@@ -35,9 +39,8 @@ export default class ControlCondition extends React.Component {
     setTimeout(() => this.props.onChange(this.state, index), 0);
   }
 
-  onJudgeValChange = (e) => {
+  onJudgeValChange = (value) => {
     const { index } = this.props;
-    const { value } = e.target;
     this.setState({ judgeVal: value });
     setTimeout(() => this.props.onChange(this.state, index), 0);
   }
@@ -51,8 +54,7 @@ export default class ControlCondition extends React.Component {
 
   render() {
     const { condition, judgeVal, logicalOperater } = this.state;
-    const { index, defaultVal, controlConditions } = this.props;
-
+    const { index, defaultVal, controlConditions, allEntitys } = this.props;
     let operaterContent = null;
     if (
       (controlConditions.length !== 1) &&
@@ -90,17 +92,56 @@ export default class ControlCondition extends React.Component {
           >
             <Option value="===">等于</Option>
             <Option value="!==">不等于</Option>
-            <Option value=">">大于</Option>
-            <Option value="<">小于</Option>
-            <Option value=">=">大于等于</Option>
-            <Option value="<=">小于等于</Option>
+            <Option value="in">包含</Option>
+            <Option value="not">不包含</Option>
+            <Option
+              value=">"
+              disabled={Number.isNaN(Number.parseInt(defaultVal, 10))}
+            >
+              大于
+            </Option>
+            <Option
+              value="<"
+              disabled={Number.isNaN(Number.parseInt(defaultVal, 10))}
+            >
+              小于
+            </Option>
+            <Option
+              value=">="
+              disabled={Number.isNaN(Number.parseInt(defaultVal, 10))}
+            >
+              大于等于
+            </Option>
+            <Option
+              value="<="
+              disabled={Number.isNaN(Number.parseInt(defaultVal, 10))}
+            >
+              小于等于
+            </Option>
           </Select>
-          <Input
-            style={{ width: '40%' }}
+          <Select
+            showSearch
+            allowClear
+            size="small"
+            mode="combobox"
             value={judgeVal}
+            style={{ width: '40%' }}
             placeholder="输入判断值"
+            notFoundContent="没有其他控件值"
             onChange={this.onJudgeValChange}
-          />
+          >
+            {
+              allEntitys.map((item, order) => (
+                <Option
+                  key={`jidgeVal-${order}`}
+                  title={`控件名: ${item.title} - 控件值: ${item.value}`}
+                  value={item.value}
+                >
+                  {item.title}: {item.value}
+                </Option>
+              ))
+            }
+          </Select>
         </InputGroup>
         {operaterContent}
       </div>

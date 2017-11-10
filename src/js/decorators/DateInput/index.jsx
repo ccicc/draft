@@ -1,23 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  DatePicker
-} from 'antd';
 import moment from 'moment';
+import { DatePicker } from 'antd';
 import { PopupBox } from './../../components/Common';
+
 import styles from './index.less';
 
 export default class DateInput extends React.Component {
   static propTypes = {
     entityKey: PropTypes.string,
     contentState: PropTypes.object,
-    children: PropTypes.array
+    children: PropTypes.array,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false
+      isOpen: false,
     };
   }
 
@@ -26,6 +25,7 @@ export default class DateInput extends React.Component {
       isOpen: true
     });
   }
+
   onHandleOkClick = () => {
     this.setState({
       isOpen: false

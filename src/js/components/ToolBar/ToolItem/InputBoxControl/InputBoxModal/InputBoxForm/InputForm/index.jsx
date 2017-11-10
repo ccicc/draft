@@ -37,6 +37,10 @@ class InputForm extends React.Component {
     onEditorStateChange: PropTypes.func.isRequired,
     config: PropTypes.object,
     controlID: PropTypes.string.isRequired,
+    defaultVal: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
     onHandleConfirm: PropTypes.func.isRequired,
     onHandleCancel: PropTypes.func.isRequired
   };
@@ -93,9 +97,14 @@ class InputForm extends React.Component {
     setFieldsValue({ defaultVal: '未知' });
   }
 
-  onDefaultValChange = (e) => {
+  onDefaultValChange = (prop) => {
     // 控件受控方法
-    this.setState({ defaultVal: e.target.value });
+    if (this.props.controlID === 'TextInput') {
+      this.setState({ defaultVal: prop.target.value });
+    }
+    if (this.props.controlID === 'DateInput') {
+      this.setState({ defaultVal: prop.valueOf() });
+    }
   }
 
   onDateFormatChange = (value) => {
@@ -232,6 +241,7 @@ class InputForm extends React.Component {
                 style={{ width: '100%' }}
                 placeholder="请选择时间"
                 format={dateFormat}
+                onChange={this.onDefaultValChange}
               />
             )
           }
@@ -421,76 +431,111 @@ class InputForm extends React.Component {
 
     // 下拉单选输入框
     const SelectionInput = (
-      <Row gutter={15}>
-        <Col span={12}> {ControlID} </Col>
-        <Col span={12}> {ControlName} </Col>
-        <Col span={12}> {Tags} </Col>
-        <Col span={12}> {DescribeVal} </Col>
-        <Col span={12}> {EntityColor} </Col>
-        <Col span={12}> {DefaultVal} </Col>
-        <Col span={24}> {PullDownOptionGroups} </Col>
-        <Col span={12}>{IsRequired}</Col>
-        <Col span={12}>{IsReadOnly}</Col>
+      <Row gutter={20}>
+        <Col span={12}>
+          <Row gutter={10}>
+            <Col span={12}> {ControlID} </Col>
+            <Col span={12}> {ControlName} </Col>
+            <Col span={12}> {Tags} </Col>
+            <Col span={12}> {DescribeVal} </Col>
+            <Col span={12}> {EntityColor} </Col>
+            <Col span={12}> {DefaultVal} </Col>
+            <Col span={24}> {PullDownOptionGroups} </Col>
+            <Col span={12}>{IsRequired}</Col>
+            <Col span={12}>{IsReadOnly}</Col>
+          </Row>
+        </Col>
+        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}>
+          {LogicalControls}
+        </Col>
       </Row>
     );
 
     // 下拉多选输入框
     const SelectionMultipleInput = (
-      <Row gutter={15}>
-        <Col span={12}>{ControlID}</Col>
-        <Col span={12}>{ControlName}</Col>
-        <Col span={12}>{Tags}</Col>
-        <Col span={12}>{DescribeVal}</Col>
-        <Col span={12}>{EntityColor}</Col>
-        <Col span={12}>{DefaultVal}</Col>
-        <Col span={24}>{IsPrefix}</Col>
-        <Col span={24}> {isPrefix && PrefixSuffixs} </Col>
-        <Col span={24}>{PullDownOptionGroups}</Col>
-        <Col span={12}>{IsRequired}</Col>
-        <Col span={12}>{IsReadOnly}</Col>
+      <Row gutter={20}>
+        <Col span={12}>
+          <Row gutter={10}>
+            <Col span={12}>{ControlID}</Col>
+            <Col span={12}>{ControlName}</Col>
+            <Col span={12}>{Tags}</Col>
+            <Col span={12}>{DescribeVal}</Col>
+            <Col span={12}>{EntityColor}</Col>
+            <Col span={12}>{DefaultVal}</Col>
+            <Col span={24}>{IsPrefix}</Col>
+            <Col span={24}> {isPrefix && PrefixSuffixs} </Col>
+            <Col span={24}>{PullDownOptionGroups}</Col>
+            <Col span={12}>{IsRequired}</Col>
+            <Col span={12}>{IsReadOnly}</Col>
+          </Row>
+        </Col>
+        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}>
+          {LogicalControls}
+        </Col>
       </Row>
     );
 
     // 日期输入框
     const DateInput = (
-      <Row gutter={15}>
-        <Col span={12}>{ControlID}</Col>
-        <Col span={12}>{ControlName}</Col>
-        <Col span={12}>{Tags}</Col>
-        <Col span={12}>{DescribeVal}</Col>
-        <Col span={12}>{DateFormat}</Col>
-        <Col span={12}>{DefaultVal}</Col>
-        <Col span={12}>{EntityColor}</Col>
-        <Col span={12}>{IsRequired}</Col>
-        <Col span={12}>{IsReadOnly}</Col>
+      <Row gutter={20}>
+        <Col span={12}>
+          <Row gutter={10}>
+            <Col span={12}>{ControlID}</Col>
+            <Col span={12}>{ControlName}</Col>
+            <Col span={12}>{Tags}</Col>
+            <Col span={12}>{DescribeVal}</Col>
+            <Col span={12}>{DateFormat}</Col>
+            <Col span={12}>{DefaultVal}</Col>
+            <Col span={12}>{EntityColor}</Col>
+            <Col span={12}>{IsRequired}</Col>
+            <Col span={12}>{IsReadOnly}</Col>
+          </Row>
+        </Col>
+        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}>
+          {LogicalControls}
+        </Col>
       </Row>
     );
 
     // 多选输入框
     const CheckBoxInput = (
-      <Row gutter={15}>
-        <Col span={12}>{ControlID}</Col>
-        <Col span={12}>{ControlName}</Col>
-        <Col span={12}>{Tags}</Col>
-        <Col span={12}>{DescribeVal}</Col>
-        <Col span={12}>{EntityColor}</Col>
-        <Col span={12}>{IsRequired}</Col>
-        <Col span={12}>{IsReadOnly}</Col>
-        <Col span={24}>{SelectTodos}</Col>
+      <Row gutter={20}>
+        <Col span={12}>
+          <Row gutter={10}>
+            <Col span={12}>{ControlID}</Col>
+            <Col span={12}>{ControlName}</Col>
+            <Col span={12}>{Tags}</Col>
+            <Col span={12}>{DescribeVal}</Col>
+            <Col span={12}>{EntityColor}</Col>
+            <Col span={12}>{IsRequired}</Col>
+            <Col span={12}>{IsReadOnly}</Col>
+            <Col span={24}>{SelectTodos}</Col>
+          </Row>
+        </Col>
+        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}>
+          {LogicalControls}
+        </Col>
       </Row>
     );
 
     // 单选输入框
     const RadioBoxInput = (
-      <Row gutter={15}>
-        <Col span={12}>{ControlID}</Col>
-        <Col span={12}>{ControlName}</Col>
-        <Col span={12}>{Tags}</Col>
-        <Col span={12}>{DescribeVal}</Col>
-        <Col span={12}>{EntityColor}</Col>
-        <Col span={12}>{IsRequired}</Col>
-        <Col span={12}>{IsReadOnly}</Col>
-        <Col span={24}>{SelectTodos}</Col>
+      <Row gutter={20}>
+        <Col span={12}>
+          <Row gutter={10}>
+            <Col span={12}>{ControlID}</Col>
+            <Col span={12}>{ControlName}</Col>
+            <Col span={12}>{Tags}</Col>
+            <Col span={12}>{DescribeVal}</Col>
+            <Col span={12}>{EntityColor}</Col>
+            <Col span={12}>{IsRequired}</Col>
+            <Col span={12}>{IsReadOnly}</Col>
+            <Col span={24}>{SelectTodos}</Col>
+          </Row>
+        </Col>
+        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}>
+          {LogicalControls}
+        </Col>
       </Row>
     );
 

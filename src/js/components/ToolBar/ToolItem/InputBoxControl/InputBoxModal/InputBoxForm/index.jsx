@@ -52,7 +52,7 @@ export default class InputBoxForm extends React.Component {
         isShow: 'show',
         allEntitys: [], // 所有实体
         targetKeys: [], // 受控实体
-        selectedKeys: []
+        selectedKeys: [] // 选中实体
       },
       selectTodos: {
         items: [],
@@ -76,7 +76,7 @@ export default class InputBoxForm extends React.Component {
     console.log(changeFields);
     this.setState({
       entityData: {
-        ...changeFields
+        changeFields
       }
     });
     onChange(changeFields.controlID, changeFields);

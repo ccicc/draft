@@ -2,13 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Popover } from 'antd';
 import { PopupBox } from './../../components/Common';
+import logicalControlHOC from './../LogicalControlHOC';
+
 import styles from './index.less';
 
-export default class TextInput extends React.Component {
+class TextInput extends React.Component {
   static propTypes = {
     entityKey: PropTypes.string,
     children: PropTypes.array,
-    contentState: PropTypes.object
+    contentState: PropTypes.object,
+    onLogicalControl: PropTypes.func.isRequired, // 逻辑质控方法
+    onReadOnlyChange: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -16,9 +20,9 @@ export default class TextInput extends React.Component {
     this.state = {
       value: '', // 文本控件值
       checked: true, // 是否校验
-      isReuqired: true,
-      isEditor: false,
-      controlShow: true // 逻辑质控
+      isReuqired: true, // 是否必填
+      isEditor: false, // 是否只读
+      controlShow: true // 逻辑质控 是否显示
     };
   }
 
@@ -39,24 +43,22 @@ export default class TextInput extends React.Component {
 
   componentDidMount() {
     this.input && this.input.focus();
-    this.onLogicalControlJudge();
+    this.props.onLogicalControl(this.state.value);
   }
 
   componentWillReceiveProps(nextProps) {
     const { entityKey, contentState } = nextProps;
-    if (contentState !== this.contentState) {
-      const {
-        defaultVal,
-        isRequired,
-        controlShow
-      } = contentState.getEntity(entityKey).getData();
-      this.setState({
-        value: defaultVal,
-        isRequired,
-        controlShow: controlShow !== 'hidden'
-      });
-      setTimeout(() => this.onLogicalControlJudge(), 0);
-    }
+    const {
+      defaultVal,
+      isRequired,
+      controlShow
+    } = contentState.getEntity(entityKey).getData();
+    this.setState({
+      value: defaultVal,
+      isRequired,
+      controlShow: controlShow !== 'hidden'
+    });
+    this.props.onLogicalControl(defaultVal);
   }
 
   onHandleClick = () => {
@@ -90,8 +92,8 @@ export default class TextInput extends React.Component {
     this.setState({
       isEditor: false
     });
+    this.props.onLogicalControl(value);
     // 设置全局只读为false
-    this.onLogicalControlJudge();
     this.props.onReadOnlyChange(false);
   }
 
@@ -167,53 +169,6 @@ export default class TextInput extends React.Component {
           checked: true
         });
     }
-  }
-
-  onLogicalControlJudge = () => {
-    const { value } = this.state;
-    const { entityKey, contentState } = this.props;
-    const { logicalControl } = contentState.getEntity(entityKey).getData();
-    // 逻辑质控
-    let result;
-    if (logicalControl) {
-      const { controlConditions, isShow, targetKeys } = logicalControl;
-      const expression = controlConditions.reduce((total, item, index, current) => {
-        if (current.length !== 1 && (index !== current.length - 1)) {
-          const judgeVal = item.judgeVal === '' ? ' ' : item.judgeVal;
-          return `${total} '${value}' ${item.condition} '${judgeVal}' ${item.logicalOperater}`;
-        }
-        return `${total} '${value}' ${item.condition} '${item.judgeVal}'`;
-      }, '');
-      result = eval(expression);  // eslint-disable-line
-      console.log(`result: ${result}`);
-      if (result) {
-        // 满足质控条件
-        targetKeys.forEach(key => {
-          this.onModifyEntityData(key, isShow);
-          console.log(`conditionTrue: ${key}, ${isShow}`);
-        });
-      } else {
-        const newDisplay = isShow === 'show' ? 'hidden' : 'show';
-        targetKeys.forEach(key => {
-          this.onModifyEntityData(key, newDisplay);
-          console.log(`conditionFalse: ${key}, ${newDisplay}`);
-        });
-      }
-    }
-    this.setState({ update: true });
-  }
-
-  onModifyEntityData = (entityKey, isShow) => {
-    // 逻辑质控, 更改目标控件实体数据controlShow,实现显示，隐藏
-    const { contentState } = this.props;
-    const otherEntityData = contentState.getEntity(entityKey).getData();
-    contentState.replaceEntityData(
-      entityKey,
-      {
-        ...otherEntityData,
-        controlShow: isShow
-      }
-    );
   }
 
   render() {
@@ -308,7 +263,8 @@ export default class TextInput extends React.Component {
         </span>
       ) :
       null;
-    console.log(controlShow);
     return textInputComponent;
   }
 }
+
+export default logicalControlHOC(TextInput);
