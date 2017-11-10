@@ -73,6 +73,9 @@ class InputForm extends React.Component {
     // 单选下拉框设置默认值
     const { setFieldsValue } = this.props.form;
     setFieldsValue({
+      defaultVal: value,
+    });
+    this.setState({
       defaultVal: value
     });
   }
@@ -90,6 +93,9 @@ class InputForm extends React.Component {
       newDefaultVal = `${defaultVal},${value}`;
     }
     setFieldsValue({
+      defaultVal: newDefaultVal
+    });
+    this.setState({
       defaultVal: newDefaultVal
     });
     return newDefaultVal;

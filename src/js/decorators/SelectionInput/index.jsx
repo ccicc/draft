@@ -123,7 +123,7 @@ class SelectionInput extends React.Component {
   }
 
   render() {
-    const { isVisible, isEditor, value } = this.state;
+    const { isVisible, isEditor, value, controlShow } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
       defaultVal,
@@ -178,37 +178,42 @@ class SelectionInput extends React.Component {
     );
 
     return (
-      <span className={styles.root}>
-        <span
-          className={styles.controlVal}
-          title={describeVal}
-        >
-          <i className={styles.rim}> [ </i>
-          {
-            isEditor
-              ?
-              inputContent
-              :
-              (<Dropdown
-                overlay={menu}
-                placement="bottomCenter"
-                visible={isVisible}
-                trigger={['click']}
-                onVisibleChange={this.onHandleVisibleChange}
-              >
-                <span
-                  style={{ color: entityColor }}
-                  onDoubleClick={this.onDoubleClick}
-                  onClick={this.onHandleClick}
-                >
-                  {defaultVal}
-                </span>
-              </Dropdown>)
-          }
-          <i className={styles.rim}> ] </i>
-          <span style={{ display: 'none' }}>{children}</span>
-        </span>
-      </span>
+      <div>
+        {
+          controlShow &&
+          <span className={styles.root}>
+            <span
+              className={styles.controlVal}
+              title={describeVal}
+            >
+              <i className={styles.rim}> [ </i>
+              {
+                isEditor
+                  ?
+                  inputContent
+                  :
+                  (<Dropdown
+                    overlay={menu}
+                    placement="bottomCenter"
+                    visible={isVisible}
+                    trigger={['click']}
+                    onVisibleChange={this.onHandleVisibleChange}
+                  >
+                    <span
+                      style={{ color: entityColor }}
+                      onDoubleClick={this.onDoubleClick}
+                      onClick={this.onHandleClick}
+                    >
+                      {defaultVal}
+                    </span>
+                  </Dropdown>)
+              }
+              <i className={styles.rim}> ] </i>
+              <span style={{ display: 'none' }}>{children}</span>
+            </span>
+          </span>
+        }
+      </div>
     );
   }
 }
