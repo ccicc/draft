@@ -4,15 +4,18 @@ import {
   Dropdown,
   Menu
 } from 'antd';
+import logicalControlHOC from './../LogicalControlHOC';
 import styles from './index.less';
 
 const Item = Menu.Item;
 
-export default class SelectionInput extends React.Component {
+class SelectionInput extends React.Component {
   static propTypes = {
     entityKey: PropTypes.string,
     contentState: PropTypes.object,
-    children: PropTypes.array
+    children: PropTypes.array,
+    onLogicalControl: PropTypes.func.isRequired,
+    onReadOnlyChange: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -20,16 +23,38 @@ export default class SelectionInput extends React.Component {
     this.state = {
       isVisible: false,
       isEditor: false,
-      value: ''
+      value: '',
+      controlShow: true
     };
   }
 
   componentWillMount() {
     const { entityKey, contentState } = this.props;
-    const { defaultVal } = contentState.getEntity(entityKey).getData();
+    const {
+      defaultVal,
+      controlShow
+    } = contentState.getEntity(entityKey).getData();
     this.setState({
-      value: defaultVal
+      value: defaultVal,
+      controlShow: controlShow !== 'hidden'
     });
+  }
+
+  componentDidMount() {
+    this.props.onLogicalControl(this.state.value);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { entityKey, contentState } = nextProps;
+    const {
+      defaultVal,
+      controlShow
+    } = contentState.getEntity(entityKey).getData();
+    this.setState({
+      value: defaultVal,
+      controlShow: controlShow !== 'hidden'
+    });
+    this.props.onLogicalControl(defaultVal);
   }
 
   onHandleValueChange = (e) => {
@@ -63,6 +88,7 @@ export default class SelectionInput extends React.Component {
       isEditor: false,
       value: e.target.value || '未知'
     });
+    this.props.onLogicalControl(e.target.value);
     this.props.onReadOnlyChange(false);
   }
 
@@ -81,6 +107,7 @@ export default class SelectionInput extends React.Component {
       isVisible: false,
       value: props.key
     });
+    this.props.onLogicalControl(props.key);
   }
 
   onHandleClick = () => {
@@ -185,3 +212,5 @@ export default class SelectionInput extends React.Component {
     );
   }
 }
+
+export default logicalControlHOC(SelectionInput);

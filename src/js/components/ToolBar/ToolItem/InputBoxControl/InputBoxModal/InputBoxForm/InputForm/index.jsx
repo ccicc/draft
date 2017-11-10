@@ -72,7 +72,9 @@ class InputForm extends React.Component {
   onSetDefaultVal = (value) => {
     // 单选下拉框设置默认值
     const { setFieldsValue } = this.props.form;
-    setFieldsValue({ defaultVal: value });
+    setFieldsValue({
+      defaultVal: value
+    });
   }
 
   onAddDefaultVal = (value) => {
@@ -87,7 +89,9 @@ class InputForm extends React.Component {
     } else {
       newDefaultVal = `${defaultVal},${value}`;
     }
-    setFieldsValue({ defaultVal: newDefaultVal });
+    setFieldsValue({
+      defaultVal: newDefaultVal
+    });
     return newDefaultVal;
   }
 
@@ -99,12 +103,10 @@ class InputForm extends React.Component {
 
   onDefaultValChange = (prop) => {
     // 控件受控方法
-    if (this.props.controlID === 'TextInput') {
-      this.setState({ defaultVal: prop.target.value });
-    }
     if (this.props.controlID === 'DateInput') {
       this.setState({ defaultVal: prop.valueOf() });
     }
+    this.setState({ defaultVal: prop.target.value });
   }
 
   onDateFormatChange = (value) => {
@@ -120,7 +122,6 @@ class InputForm extends React.Component {
       dataTypeRules
     });
   }
-
 
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
