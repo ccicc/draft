@@ -13,26 +13,57 @@ import {
   Icon,
   Button
 } from 'antd';
+import logicalControlHOC from './../LogicalControlHOC';
+
 import styles from './index.less';
 
 const Item = Menu.Item;
 
-export default class SelectionMultipleInput extends React.Component {
+class SelectionMultipleInput extends React.Component {
   static propTypes = {
     entityKey: PropTypes.string,
     contentState: PropTypes.object,
-    children: PropTypes.array
+    children: PropTypes.array,
+    onLogicalControl: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      isExpand: false
+      value: '',
+      isExpand: false,
+      controlShow: true
     };
+  }
+
+  componentWillMount() {
+    const { entityKey, contentState } = this.props;
+    const {
+      defaultVal,
+      controlShow
+    } = contentState.getEntity(entityKey).getData();
+    this.setState({
+      value: defaultVal,
+      controwShow: controlShow !== 'hidden'
+    });
   }
 
   componentDidMount() {
     document.body.addEventListener('click', this.onBodyClick, false);
+    this.props.onLogicalControl(this.state.value);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { entityKey, contentState } = nextProps;
+    const {
+      defaultVal,
+      controlShow
+    } = contentState.getEntity(entityKey).getData();
+    this.setState({
+      value: defaultVal,
+      controlShow: controlShow !== 'hidden'
+    });
+    this.props.onLogicalControl(defaultVal);
   }
 
   componentWillUnmount() {
@@ -73,8 +104,9 @@ export default class SelectionMultipleInput extends React.Component {
       }
     );
     this.setState({
-      isUpdate: true
+      value: newDefaultVal
     });
+    this.props.onLogicalControl(newDefaultVal);
   }
 
   onSelectedAllClick = () => {
@@ -93,7 +125,7 @@ export default class SelectionMultipleInput extends React.Component {
       }
     );
     this.setState({
-      isUpdate: true
+      value: newDefaultVal
     });
   }
 
@@ -108,16 +140,17 @@ export default class SelectionMultipleInput extends React.Component {
         defaultVal: ''
       }
     );
-    this.setState({ isUpdate: true });
+    this.setState({
+      value: ''
+    });
   }
 
   render() {
-    const { isExpand } = this.state;
+    const { isExpand, value, controlShow } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
       describeVal,
       entityColor,
-      defaultVal,
       pullDownOptionGroup,
       isPrefix,
       prefixSuffix
@@ -135,7 +168,7 @@ export default class SelectionMultipleInput extends React.Component {
       [];
 
     // 所有选中选项
-    const allSelectedItems = defaultVal.split(',');
+    const allSelectedItems = value.split(',');
 
     // 所有未选中选项
     const allUnSelectItems = allItems.filter(item => !allSelectedItems.includes(item));
@@ -171,7 +204,7 @@ export default class SelectionMultipleInput extends React.Component {
                   <Item key={item.val}>
                     <span title={item.title}>{item.val}</span>
                     {
-                      defaultVal.split(',').some(val => val === item.val) &&
+                      value.split(',').some(val => val === item.val) &&
                       <Icon type="check" />
                     }
                   </Item>
@@ -195,7 +228,7 @@ export default class SelectionMultipleInput extends React.Component {
             <Button
               size="small"
               style={{ width: '50%' }}
-              disabled={defaultVal === ''}
+              disabled={value === ''}
               onClick={this.onClearItemClick}
             >
               全不选
@@ -224,7 +257,7 @@ export default class SelectionMultipleInput extends React.Component {
           }
           {/* 分隔符 */}
           {
-            (defaultVal !== '' && defaultVal !== '未知') && allUnSelectItems.length !== 0 &&
+            (value !== '' && value !== '未知') && allUnSelectItems.length !== 0 &&
             separator
           }
           {/* 未选中项 */}
@@ -247,7 +280,7 @@ export default class SelectionMultipleInput extends React.Component {
       (
         <span style={{ color: entityColor }}>
           {
-            defaultVal
+            value
               ?
               allSelectedItems.map((item, index) => {
                 // 最后一位不加连接符
@@ -264,26 +297,31 @@ export default class SelectionMultipleInput extends React.Component {
         </span>
       );
 
-    return (
-      <span className={styles.root}>
-        <span
-          className={styles.controlVal}
-          title={describeVal}
-          onClick={this.onHandleExpand}
-        >
-          <i className={styles.rim}> [ </i>
-          <Dropdown
-            overlay={menu}
-            visible={isExpand}
-            trigger={['click']}
-            placement="bottomCenter"
+    const selectionMultipleInputContent = controlShow &&
+      (
+        <span className={styles.root}>
+          <span
+            className={styles.controlVal}
+            title={describeVal}
+            onClick={this.onHandleExpand}
           >
-            {selectValue}
-          </Dropdown>
-          <i className={styles.rim}> ] </i>
-          <span style={{ display: 'none' }}>{children}</span>
+            <i className={styles.rim}> [ </i>
+            <Dropdown
+              overlay={menu}
+              visible={isExpand}
+              trigger={['click']}
+              placement="bottomCenter"
+            >
+              {selectValue}
+            </Dropdown>
+            <i className={styles.rim}> ] </i>
+            <span style={{ display: 'none' }}>{children}</span>
+          </span>
         </span>
-      </span>
-    );
+      );
+
+    return selectionMultipleInputContent;
   }
 }
+
+export default logicalControlHOC(SelectionMultipleInput);

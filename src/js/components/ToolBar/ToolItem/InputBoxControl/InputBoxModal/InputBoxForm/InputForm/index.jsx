@@ -70,11 +70,14 @@ class InputForm extends React.Component {
   }
 
   onSetDefaultVal = (value) => {
-    // 单选下拉框设置默认值
+    // 设置默认值
+    const { controlID } = this.props;
     const { setFieldsValue } = this.props.form;
-    setFieldsValue({
-      defaultVal: value,
-    });
+    if (controlID === 'SelectionInput' || controlID === 'SelectionMultipleInput') {
+      setFieldsValue({
+        defaultVal: value,
+      });
+    }
     this.setState({
       defaultVal: value
     });
@@ -105,6 +108,9 @@ class InputForm extends React.Component {
     // 清除输入框默认值
     const { setFieldsValue } = this.props.form;
     setFieldsValue({ defaultVal: '未知' });
+    this.setState({
+      defaultVal: ''
+    });
   }
 
   onDefaultValChange = (prop) => {
@@ -361,7 +367,6 @@ class InputForm extends React.Component {
               getFieldDecorator('selectTodos', { valuePropName: 'selectTodos' })(
                 <SelectTodo
                   controlID={controlID}
-                  defaultVal={defaultVal}
                   onSetDefaultVal={this.onSetDefaultVal}
                   onAddDefaultVal={this.onAddDefaultVal}
                   onCleanDefaultVal={this.onCleanDefaultVal}

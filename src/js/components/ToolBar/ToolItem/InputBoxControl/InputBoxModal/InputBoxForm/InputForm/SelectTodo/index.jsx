@@ -20,7 +20,8 @@ export default class SelectTodo extends React.Component {
         score: PropTypes.string
       })),
       values: PropTypes.arrayOf(PropTypes.string),
-      currentValue: PropTypes.string
+      currentValue: PropTypes.string,
+      onSetDefaultVal: PropTypes.func.isRequried
     })
   };
   constructor(props) {
@@ -64,11 +65,11 @@ export default class SelectTodo extends React.Component {
     this.setState({
       values
     });
-    setTimeout(() => {
-      this.props.onChange({
-        ...this.props.selectTodos,
-        selectedValues: this.state.values,
-      });
+
+    this.props.onSetDefaultVal(values.join(','));
+    this.props.onChange({
+      ...this.props.selectTodos,
+      selectedValues: values,
     });
   }
 
@@ -78,34 +79,37 @@ export default class SelectTodo extends React.Component {
     this.setState({
       currentValue: value
     });
-    setTimeout(() => {
-      this.props.onChange({
-        ...this.props.selectTodos,
-        items: this.state.selectItems,
-        currentValue: value
-      });
-    }, 0);
+    this.props.onSetDefaultVal(value);
+    this.props.onChange({
+      ...this.props.selectTodos,
+      items: this.state.selectItems,
+      currentValue: value
+    });
   }
 
   onInputValueChange = (e) => {
+    // 值
     this.setState({
       inputVal: e.target.value
     });
   }
 
   onInputTitleChange = (e) => {
+    // 描述
     this.setState({
       inputTitle: e.target.value
     });
   }
 
   onInputScoreChange = (e) => {
+    // 受控
     this.setState({
       inputScore: e.target.value
     });
   }
 
   onAddNewItem = () => {
+    // 添加项
     const { inputVal, inputTitle, inputScore, selectItems } = this.state;
     if (inputVal === '') {
       message.warning('值不能为空', 3);
@@ -135,6 +139,7 @@ export default class SelectTodo extends React.Component {
   }
 
   onSelectedAllItem = () => {
+    // 全选
     const { selectItems, values } = this.state;
     selectItems.forEach(item => {
       values.push(item.value);
@@ -152,6 +157,7 @@ export default class SelectTodo extends React.Component {
   }
 
   onClearAllItem = () => {
+    // 清除所有项
     this.setState({
       values: [],
       isSelectedAll: false

@@ -58,6 +58,7 @@ class TextInput extends React.Component {
       isRequired,
       controlShow: controlShow !== 'hidden'
     });
+    this.props.onLogicalControl(defaultVal);
   }
 
   onHandleClick = () => {

@@ -177,44 +177,42 @@ class SelectionInput extends React.Component {
       </Menu>
     );
 
-    return (
-      <div>
-        {
-          controlShow &&
-          <span className={styles.root}>
-            <span
-              className={styles.controlVal}
-              title={describeVal}
-            >
-              <i className={styles.rim}> [ </i>
-              {
-                isEditor
-                  ?
-                  inputContent
-                  :
-                  (<Dropdown
-                    overlay={menu}
-                    placement="bottomCenter"
-                    visible={isVisible}
-                    trigger={['click']}
-                    onVisibleChange={this.onHandleVisibleChange}
+    const selectionInputContent = controlShow &&
+      (
+        <span className={styles.root}>
+          <span
+            className={styles.controlVal}
+            title={describeVal}
+          >
+            <i className={styles.rim}> [ </i>
+            {
+              isEditor
+                ?
+                inputContent
+                :
+                (<Dropdown
+                  overlay={menu}
+                  placement="bottomCenter"
+                  visible={isVisible}
+                  trigger={['click']}
+                  onVisibleChange={this.onHandleVisibleChange}
+                >
+                  <span
+                    style={{ color: entityColor }}
+                    onDoubleClick={this.onDoubleClick}
+                    onClick={this.onHandleClick}
                   >
-                    <span
-                      style={{ color: entityColor }}
-                      onDoubleClick={this.onDoubleClick}
-                      onClick={this.onHandleClick}
-                    >
-                      {defaultVal}
-                    </span>
-                  </Dropdown>)
-              }
-              <i className={styles.rim}> ] </i>
-              <span style={{ display: 'none' }}>{children}</span>
-            </span>
+                    {defaultVal}
+                  </span>
+                </Dropdown>)
+            }
+            <i className={styles.rim}> ] </i>
+            <span style={{ display: 'none' }}>{children}</span>
           </span>
-        }
-      </div>
-    );
+        </span>
+      );
+
+    return selectionInputContent;
   }
 }
 

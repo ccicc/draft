@@ -105,7 +105,7 @@ export default function inputBoxHOC(currInputBox) {
           .createEntity(currInputBox.toUpperCase(), 'IMMUTABLE', { ...entityData })
           .getLastCreatedEntityKey();
 
-        const placeholderText = `${entityData.controlName || ''}: [ ${entityData.defaultVal || ''} ]`;
+        const placeholderText = `[ ${entityData.defaultVal || ''} ]`;
         let contentState = Modifier.replaceText(
           editorState.getCurrentContent(),
           selectionState,

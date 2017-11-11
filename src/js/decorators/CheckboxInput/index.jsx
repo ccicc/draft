@@ -1,8 +1,53 @@
 import React from 'react';
-import { PopupBox } from './../../components/Common';
+import PropTypes from 'prop-types';
+import logicalControlHOC from './../LogicalControlHOC';
 import styles from './index.less';
 
-export default class CheckboxInput extends React.Component {
+class CheckboxInput extends React.Component {
+  static propTypes = {
+    entityKey: PropTypes.string,
+    children: PropTypes.array,
+    contentState: PropTypes.object,
+    onLogicalControl: PropTypes.func.isRequired
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedValues: [],
+      controlShow: true
+    };
+  }
+
+  componentWillMount() {
+    const { entityKey, contentState } = this.props;
+    const {
+      selectTodos,
+      controlShow
+    } = contentState.getEntity(entityKey).getData();
+    this.setState({
+      selectedValues: selectTodos.selectedValues,
+      controlShow: controlShow !== 'hidden'
+    });
+  }
+
+  componentDidMount() {
+    this.props.onLogicalControl(this.state.selectedValues.join(','));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { entityKey, contentState } = nextProps;
+    const {
+      selectTodos,
+      controlShow
+    } = contentState.getEntity(entityKey).getData();
+    this.setState({
+      selectedValues: selectTodos.selectedValues,
+      controlShow: controlShow !== 'hidden'
+    });
+    this.props.onLogicalControl(selectTodos.selectedValues.join(','));
+  }
+
   onHandleChange = (e) => {
     const { checked, value } = e.target;
     const { entityKey, contentState } = this.props;
@@ -23,30 +68,25 @@ export default class CheckboxInput extends React.Component {
         }
       }
     );
+
     this.setState({
-      updateData: true
+      selectedValues
     });
+    this.props.onLogicalControl(selectedValues.join(','));
   }
 
   render() {
+    const { selectedValues, controlShow } = this.state;
     const { entityKey, contentState, children } = this.props;
     const {
-      controlID,
-      controlName,
       describeVal,
       entityColor,
       selectTodos
     } = contentState.getEntity(entityKey).getData();
-    const { items, selectedValues } = selectTodos;
-
-    return (
-      <span className={styles.root}>
-        <PopupBox
-          editorCommand="checkBoxInputEditor"
-          deleteCommand="checkBoxInputDelete"
-          controlID={controlID}
-          controlName={controlName}
-        >
+    const { items } = selectTodos;
+    const checkBoxInput = controlShow &&
+      (
+        <span className={styles.root}>
           <span
             className={styles.controlVal}
             title={describeVal}
@@ -75,8 +115,10 @@ export default class CheckboxInput extends React.Component {
             <span className={styles.rim}> ] </span>
             <span style={{ display: 'none' }}>{children}</span>
           </span>
-        </PopupBox>
-      </span>
-    );
+        </span>
+      );
+    return checkBoxInput;
   }
 }
+
+export default logicalControlHOC(CheckboxInput);

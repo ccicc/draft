@@ -1,14 +1,52 @@
-/* eslint-disable */ 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PopupBox } from './../../components/Common';
+import logicalControlHOC from './../LogicalControlHOC';
 import styles from './index.less';
 
-export default class RadioboxInput extends React.Component {
+class RadioboxInput extends React.Component {
   static propTypes = {
     entityKey: PropTypes.string,
-    contentState: PropTypes.object
+    contentState: PropTypes.object,
+    onLogicalControl: PropTypes.func.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: '',
+      controlShow: true
+    };
+  }
+
+  componentWillMount() {
+    const { entityKey, contentState } = this.props;
+    const {
+      selectTodos,
+      controlShow
+    } = contentState.getEntity(entityKey).getData();
+    this.setState({
+      value: selectTodos.currentValue,
+      controlShow: controlShow !== 'hidden'
+    });
+  }
+
+  componentDidMount() {
+    this.props.onLogicalControl(this.state.value);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { entityKey, contentState } = nextProps;
+    const {
+      selectTodos,
+      controlShow
+    } = contentState.getEntity(entityKey).getData();
+    this.setState({
+      value: selectTodos.currentValue,
+      controlShow: controlShow !== 'hidden'
+    });
+    this.props.onLogicalControl(selectTodos.currentValue);
+  }
+
   onHandleChange = (e) => {
     const { value } = e.target;
     const { entityKey, contentState } = this.props;
@@ -25,56 +63,56 @@ export default class RadioboxInput extends React.Component {
         }
       }
     );
-    this.setState({});
+    this.setState({
+      value: currentValue
+    });
+    this.props.onLogicalControl(currentValue);
   };
 
   render() {
-    const { entityKey, contentState } = this.props;
+    const { value, controlShow } = this.state;
+    const { entityKey, contentState, children } = this.props;
     const {
-      controlID,
-      controlName,
       describeVal,
       entityColor,
       selectTodos
     } = contentState.getEntity(entityKey).getData();
-    const { items, currentValue } = selectTodos;
-    return (
-      <span className={styles.root}>
-        {/* <PopupBox
-          editorCommand="radioBoxInputEditor"
-          deleteCommand="radioBoxInputDelete"
-          controlID={controlID}
-          controlName={controlName}
-        >
-        </PopupBox> */}
-        <span
-          className={styles.controlVal}
-          title={describeVal}
-        >
-          <span className={styles.rim}> [ </span>
-          {
-            items.map((item, index) => (
-              <span
-                key={index}
-                className={styles.item}
-                style={{ color: entityColor }}
-              >
-                <label className={styles.itemLabel}>
-                  <input
-                    className={styles.input}
-                    type="radio"
-                    value={item.value}
-                    checked={item.value === currentValue}
-                    onChange={this.onHandleChange}
-                  />
-                  {item.value}、
+    const { items } = selectTodos;
+    const radioInputContent = controlShow &&
+      (
+        <span className={styles.root}>
+          <span
+            className={styles.controlVal}
+            title={describeVal}
+          >
+            <span className={styles.rim}> [ </span>
+            {
+              items.map((item, index) => (
+                <span
+                  key={index}
+                  className={styles.item}
+                  style={{ color: entityColor }}
+                >
+                  <label className={styles.itemLabel}>
+                    <input
+                      className={styles.input}
+                      type="radio"
+                      value={item.value}
+                      checked={item.value === value}
+                      onChange={this.onHandleChange}
+                    />
+                    {item.value}、
                   </label>
-              </span>
-            ))
-          }
-          <span className={styles.rim}> ] </span>
+                </span>
+              ))
+            }
+            <span className={styles.rim}> ] </span>
+            <span style={{ display: 'none' }}>{children}</span>
+          </span>
         </span>
-      </span>
-    );
+      );
+    return radioInputContent;
   }
 }
+
+export default logicalControlHOC(RadioboxInput);
