@@ -16,32 +16,15 @@ const RadioGroup = Radio.Group;
 
 export default class LogicalControl extends React.Component {
   static PropTypes = {
+    controlID: PropTypes.string.isRequired,
     editorState: PropTypes.object.isRequired,
     onEditorStateChange: PropTypes.object.isRequired,
-    isShow: PropTypes.string,
-    defaultVal: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.object,
-      PropTypes.number
-    ]),
-    allEntitys: PropTypes.arrayOf(PropTypes.shape({
-      key: PropTypes.string,
-      type: PropTypes.string,
-      title: PropTypes.string,
-      value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.object
-      ])
-    })),
-    targetKeys: PropTypes.arrayOf(PropTypes.string),
-    selectedKeys: PropTypes.string
   };
 
   constructor(props) {
     super(props);
     this.state = {
       controlConditions: this.props.logicalControl.controlConditions, // 控制条件组
-      defaultVal: this.props.defaultVal, // 当前控件值
       isShow: this.props.logicalControl.isShow, // 目标控件显示
       allEntitys: this.props.logicalControl.allEntitys, // 所有实体
       targetKeys: this.props.logicalControl.targetKeys, // 受控实体Key值
@@ -53,13 +36,6 @@ export default class LogicalControl extends React.Component {
     // 获取所有实体
     const allEntitys = this.getAllEntityMap();
     this.setState({ allEntitys }); //eslint-disable-line
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { defaultVal } = nextProps;
-    if (defaultVal !== this.props.defaultVal) {
-      this.setState({ defaultVal });
-    }
   }
 
   onControlConditionChange = (item, index) => {
@@ -79,9 +55,10 @@ export default class LogicalControl extends React.Component {
       controlConditions: [
         ...controlConditions,
         {
-          condition: '===',
-          judgeVal: '',
-          logicalOperater: '&&'
+          targetEntityKey: '', // 目标实体key
+          itselfEntitykey: '', // 当前实体key
+          condition: '===', // 控制条件
+          logicalOperater: '&&' // 逻辑条件
         }
       ]
     });
@@ -97,6 +74,7 @@ export default class LogicalControl extends React.Component {
   }
 
   onRadioChange = (e) => {
+    // 显示隐藏
     this.setState({ isShow: e.target.value });
     setTimeout(() => this.props.onChange(this.state), 0);
   }
@@ -127,7 +105,6 @@ export default class LogicalControl extends React.Component {
     // 获取所有实体
     const { editorState } = this.props;
     const allEntities = getEntities(editorState);
-    console.log(allEntities);
     const allEntitys = allEntities.map(item => ({
       key: item.entityKey,
       type: item.entity.toJS().data.controlID,
@@ -196,13 +173,13 @@ export default class LogicalControl extends React.Component {
       selectedKeys,
       controlConditions
     } = this.state;
-
     return (
       <Row gutter={10}>
         <Col span={24}>
           {
             controlConditions.map((item, index) => (
               <ControlCondition
+                controlID={this.props.controlID}
                 index={index}
                 key={`condition-${index}`}
                 onChange={this.onControlConditionChange}

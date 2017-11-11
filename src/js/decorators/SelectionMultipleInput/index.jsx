@@ -71,7 +71,7 @@ class SelectionMultipleInput extends React.Component {
   }
 
   onBodyClick = (e) => {
-    if (e.target && e.target.matches('li.ant-menu-item')) {
+    if (e.target && (e.target.matches('li.ant-menu-item') || e.target.matches('span'))) {
       return;
     }
     this.setState({
@@ -205,7 +205,7 @@ class SelectionMultipleInput extends React.Component {
                     <span title={item.title}>{item.val}</span>
                     {
                       value.split(',').some(val => val === item.val) &&
-                      <Icon type="check" />
+                      <span className={styles.itemIcon}><Icon type="check" /></span>
                     }
                   </Item>
                 ))

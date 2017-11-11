@@ -14,6 +14,7 @@ const logicalControlHOC = Component =>
       const { entityKey, contentState } = this.props;
       // 从实体中获取控制条件
       const { logicalControl } = contentState.getEntity(entityKey).getData();
+
       let result;
       if (logicalControl) {
         const { controlConditions, isShow, targetKeys } = logicalControl;

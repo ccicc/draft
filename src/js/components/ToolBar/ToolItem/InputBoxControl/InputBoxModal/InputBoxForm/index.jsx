@@ -48,7 +48,7 @@ export default class InputBoxForm extends React.Component {
         currentActiveKey: 'tab-0' // 当前选项卡
       },
       logicalControl: {
-        controlConditions: [{ condition: '===', judgeVal: '', logicalOperater: '&&' }], // 控制条件
+        controlConditions: [{ condition: '===', itselfEntityKey: '', targetEntityKey: '', logicalOperater: '&&' }], // 控制条件
         isShow: 'show',
         allEntitys: [], // 所有实体
         targetKeys: [], // 受控实体

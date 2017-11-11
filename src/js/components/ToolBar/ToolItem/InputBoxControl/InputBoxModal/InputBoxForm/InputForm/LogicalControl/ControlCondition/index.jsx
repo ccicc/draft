@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import {
   Input,
   Select,
-  Radio
+  Radio,
+  DatePicker
 } from 'antd';
 
 const InputGroup = Input.Group;
@@ -12,13 +13,7 @@ const Option = Select.Option;
 
 export default class ControlCondition extends React.Component {
   static propTypes = {
-    condition: PropTypes.string,
-    defaultVal: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.object
-    ]),
-    judgeVal: PropTypes.string,
+    condition: PropTypes.string, // 判断条件
     logicalOperater: PropTypes.string,
     index: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -28,7 +23,6 @@ export default class ControlCondition extends React.Component {
     super(props);
     this.state = {
       condition: this.props.condition, // 判断条件
-      judgeVal: this.props.judgeVal, // 判断值
       logicalOperater: this.props.logicalOperater // 逻辑运算符
     };
   }
@@ -36,12 +30,6 @@ export default class ControlCondition extends React.Component {
   onConditionChange = (value) => {
     const { index } = this.props;
     this.setState({ condition: value });
-    setTimeout(() => this.props.onChange(this.state, index), 0);
-  }
-
-  onJudgeValChange = (value) => {
-    const { index } = this.props;
-    this.setState({ judgeVal: value });
     setTimeout(() => this.props.onChange(this.state, index), 0);
   }
 
@@ -53,8 +41,9 @@ export default class ControlCondition extends React.Component {
   }
 
   render() {
-    const { condition, judgeVal, logicalOperater } = this.state;
-    const { index, defaultVal, controlConditions, allEntitys } = this.props;
+    const { condition, logicalOperater } = this.state;
+    const { controlID, index, controlConditions, allEntitys } = this.props;
+
     let operaterContent = null;
     if (
       (controlConditions.length !== 1) &&
@@ -71,6 +60,40 @@ export default class ControlCondition extends React.Component {
         </RadioGroup>
       );
     }
+
+    const judgeComponent = controlID === 'DateInput' ?
+      (
+        <DatePicker
+          showTime
+          format="YYYY-MM-DD hh:mm"
+          placeholder="选择时间"
+          onChange={this.onJudgeValChange}
+        />
+      ) :
+      (
+        <Select
+          showSearch
+          allowClear
+          size="small"
+          mode="combobox"
+          style={{ width: '40%' }}
+          placeholder="输入判断值"
+          notFoundContent="没有其他控件值"
+          onChange={this.onJudgeValChange}
+        >
+          {
+            allEntitys.map((item, order) => (
+              <Option
+                key={`jidgeVal-${order}`}
+                title={`控件名: ${item.title} - 控件值: ${item.value}`}
+                value={item.value}
+              >
+                {item.title}: {item.value}
+              </Option>
+            ))
+          }
+        </Select>
+      );
 
     return (
       <div>
@@ -119,29 +142,7 @@ export default class ControlCondition extends React.Component {
               小于等于
             </Option>
           </Select>
-          <Select
-            showSearch
-            allowClear
-            size="small"
-            mode="combobox"
-            value={judgeVal}
-            style={{ width: '40%' }}
-            placeholder="输入判断值"
-            notFoundContent="没有其他控件值"
-            onChange={this.onJudgeValChange}
-          >
-            {
-              allEntitys.map((item, order) => (
-                <Option
-                  key={`jidgeVal-${order}`}
-                  title={`控件名: ${item.title} - 控件值: ${item.value}`}
-                  value={item.value}
-                >
-                  {item.title}: {item.value}
-                </Option>
-              ))
-            }
-          </Select>
+          { judgeComponent }
         </InputGroup>
         {operaterContent}
       </div>

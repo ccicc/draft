@@ -116,7 +116,8 @@ class InputForm extends React.Component {
   onDefaultValChange = (prop) => {
     // 控件受控方法
     if (this.props.controlID === 'DateInput') {
-      this.setState({ defaultVal: prop.valueOf() });
+      this.setState({ defaultVal: prop.format('YYYY-MM-DD HH:mm') });
+      return;
     }
     this.setState({ defaultVal: prop.target.value });
   }
@@ -412,7 +413,7 @@ class InputForm extends React.Component {
         {
           getFieldDecorator('logicalControl', { valuePropName: 'logicalControl' })(
             <LogicalControl
-              defaultVal={defaultVal}
+              controlID={controlID}
               editorState={editorState}
               onEditorStateChange={onEditorStateChange}
             />
