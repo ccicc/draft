@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import {
   Row,
@@ -51,6 +52,7 @@ class InputForm extends React.Component {
       dateFormat: this.props.dataFormat,
       isRequired: this.props.isRequired,
       isPrefix: this.props.isPrefix,
+      isLogicalControl: this.props.isLogicalControl,
       dataTypeRules: []
     };
   }
@@ -66,6 +68,13 @@ class InputForm extends React.Component {
     // 有无前缀
     this.setState({
       isPrefix: checked
+    });
+  }
+
+  onIsLogicalChange = (checked) => {
+    // 逻辑质控
+    this.setState({
+      isLogicalControl: checked
     });
   }
 
@@ -138,14 +147,21 @@ class InputForm extends React.Component {
 
   render() {
     const { getFieldDecorator, validateFields } = this.props.form;
-    const { dataTypeRules, isRequired, isPrefix, dateFormat, defaultVal } = this.state;
+    const {
+      dataTypeRules,
+      isRequired,
+      isPrefix,
+      isLogicalControl,
+      dateFormat,
+      defaultVal,
+    } = this.state;
     const {
       config,
       controlID,
       onHandleConfirm,
       onHandleCancel,
       editorState,
-      onEditorStateChange
+      onEditorStateChange,
     } = this.props;
 
     const ControlID = (
@@ -265,9 +281,9 @@ class InputForm extends React.Component {
 
     const IsRequired = (
       <FormItem
-        label="是否必填"
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 6, offset: 2 }}
+        label="必填"
+        labelCol={{ span: 10 }}
+        wrapperCol={{ span: 14 }}
       >
         {
           getFieldDecorator('isRequired', { valuePropName: 'defaultChecked' })(
@@ -284,9 +300,9 @@ class InputForm extends React.Component {
 
     const IsReadOnly = (
       <FormItem
-        label="是否只读"
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 6, offset: 2 }}
+        label="只读"
+        labelCol={{ span: 10 }}
+        wrapperCol={{ span: 14 }}
       >
         {
           getFieldDecorator('isReadOnly', { valuePropName: 'defaultChecked' })(
@@ -302,9 +318,9 @@ class InputForm extends React.Component {
 
     const IsPrefix = (
       <FormItem
-        label="有无前后缀"
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 12, offset: 2 }}
+        label="前后缀"
+        labelCol={{ span: 10 }}
+        wrapperCol={{ span: 14 }}
       >
         {
           getFieldDecorator('isPrefix', { valuePropName: 'checked' })(
@@ -313,6 +329,25 @@ class InputForm extends React.Component {
               checkedChildren="是"
               unCheckedChildren="否"
               onChange={this.onIsPrefixChange}
+            />
+          )
+        }
+      </FormItem>
+    );
+
+    const IsLogicalControl = (
+      <FormItem
+        label="逻辑质控"
+        labelCol={{ span: 10 }}
+        wrapperCol={{ span: 14 }}
+      >
+        {
+          getFieldDecorator('isLogicalControl', { valuePropName: 'defaultChecked' })(
+            <Switch
+              size="default"
+              checkedChildren="是"
+              unCheckedChildren="否"
+              onChange={this.onIsLogicalChange}
             />
           )
         }
@@ -409,7 +444,12 @@ class InputForm extends React.Component {
     );
 
     const LogicalControls = (
-      <FormItem label="逻辑质控">
+      <FormItem
+        label="逻辑质控"
+        className={classnames({
+          [`${styles.logicalHide}`]: !isLogicalControl
+        })}
+      >
         {
           getFieldDecorator('logicalControl', { valuePropName: 'logicalControl' })(
             <LogicalControl
@@ -425,7 +465,7 @@ class InputForm extends React.Component {
     // 文本输入框
     const TextInput = (
       <Row gutter={20}>
-        <Col span={12}>
+        <Col span={24}>
           <Row gutter={10}>
             <Col span={12}> {ControlID} </Col>
             <Col span={12}> {ControlName} </Col>
@@ -434,18 +474,23 @@ class InputForm extends React.Component {
             <Col span={12}> {DataType} </Col>
             <Col span={12}> {DefaultVal} </Col>
             <Col span={12}> {EntityColor} </Col>
-            <Col span={12}> {IsRequired} </Col>
-            <Col span={12}> {IsReadOnly} </Col>
           </Row>
+          <Row gutter={10}>
+            <Col span={8}> {IsRequired} </Col>
+            <Col span={8}> {IsReadOnly} </Col>
+            <Col span={8}> {IsLogicalControl} </Col>
+          </Row>
+          <Col span={24}>
+            {LogicalControls}
+          </Col>
         </Col>
-        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}> {LogicalControls} </Col>
       </Row>
     );
 
     // 下拉单选输入框
     const SelectionInput = (
       <Row gutter={20}>
-        <Col span={12}>
+        <Col span={24}>
           <Row gutter={10}>
             <Col span={12}> {ControlID} </Col>
             <Col span={12}> {ControlName} </Col>
@@ -454,12 +499,15 @@ class InputForm extends React.Component {
             <Col span={12}> {EntityColor} </Col>
             <Col span={12}> {DefaultVal} </Col>
             <Col span={24}> {PullDownOptionGroups} </Col>
-            <Col span={12}>{IsRequired}</Col>
-            <Col span={12}>{IsReadOnly}</Col>
           </Row>
-        </Col>
-        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}>
-          {LogicalControls}
+          <Row gutter={10}>
+            <Col span={8}> {IsRequired} </Col>
+            <Col span={8}> {IsReadOnly} </Col>
+            <Col span={8}> {IsLogicalControl} </Col>
+          </Row>
+          <Col span={24}>
+            {LogicalControls}
+          </Col>
         </Col>
       </Row>
     );
@@ -491,7 +539,7 @@ class InputForm extends React.Component {
     // 日期输入框
     const DateInput = (
       <Row gutter={20}>
-        <Col span={12}>
+        <Col span={24}>
           <Row gutter={10}>
             <Col span={12}>{ControlID}</Col>
             <Col span={12}>{ControlName}</Col>
@@ -500,12 +548,15 @@ class InputForm extends React.Component {
             <Col span={12}>{DateFormat}</Col>
             <Col span={12}>{DefaultVal}</Col>
             <Col span={12}>{EntityColor}</Col>
-            <Col span={12}>{IsRequired}</Col>
-            <Col span={12}>{IsReadOnly}</Col>
           </Row>
-        </Col>
-        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}>
-          {LogicalControls}
+          <Row gutter={10}>
+            <Col span={8}> {IsRequired} </Col>
+            <Col span={8}> {IsReadOnly} </Col>
+            <Col span={8}> {IsLogicalControl} </Col>
+          </Row>
+          <Col span={24}>
+            {LogicalControls}
+          </Col>
         </Col>
       </Row>
     );
@@ -628,6 +679,9 @@ const WrapperInputForm = Form.create({
       },
       isPrefix: {
         value: props.isPrefix
+      },
+      isLogicalControl: {
+        value: props.isLogicalControl
       },
       prefixSuffix: {
         value: props.prefixSuffix

@@ -43,7 +43,7 @@ class TextInput extends React.Component {
 
   componentDidMount() {
     this.input && this.input.focus();
-    this.props.onLogicalControl(this.state.value);
+    this.props.onLogicalControl();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,7 +58,7 @@ class TextInput extends React.Component {
       isRequired,
       controlShow: controlShow !== 'hidden'
     });
-    this.props.onLogicalControl(defaultVal);
+    this.props.onLogicalControl();
   }
 
   onHandleClick = () => {
@@ -92,7 +92,7 @@ class TextInput extends React.Component {
     this.setState({
       isEditor: false
     });
-    this.props.onLogicalControl(value);
+    this.props.onLogicalControl();
     // 设置全局只读为false
     this.props.onReadOnlyChange(false);
   }

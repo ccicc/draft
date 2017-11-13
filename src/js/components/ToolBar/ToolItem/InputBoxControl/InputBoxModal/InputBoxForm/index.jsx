@@ -21,7 +21,7 @@ export default class InputBoxForm extends React.Component {
       defaultVal: undefined, // 控件值
       describeVal: '', // 控件描述
       score: 0, // 控件分数
-      dateFormat: 'YYYY-MM-DD HH:mm', // 日期格式
+      dateFormat: 'YYYY-MM-DD', // 日期格式
       entityColor: '#333', // 控件实体颜色
       tags: [], // 标签
       dataType: { // 控件值的数据类型
@@ -33,7 +33,8 @@ export default class InputBoxForm extends React.Component {
       },
       isRequired: true, // 是否必填
       isReadOnly: false, // 是否只读
-      isPrefix: false, // 有无前后缀
+      isPrefix: false, // 有无前后缀,
+      isLogicalControl: false, // 有无逻辑控制
       prefixSuffix: {
         activePrefix: '有', // 选中前缀
         prefix: '无', // 未选中前缀
@@ -48,7 +49,17 @@ export default class InputBoxForm extends React.Component {
         currentActiveKey: 'tab-0' // 当前选项卡
       },
       logicalControl: {
-        controlConditions: [{ condition: '===', itselfEntityKey: '', targetEntityKey: '', logicalOperater: '&&' }], // 控制条件
+        controlConditions: [
+          {
+            condition: '===',
+            itselfEntityKey: '',
+            targetEntityKey: '',
+            logicalOperater: '&&',
+            customVal: '',
+            dateVal: '',
+            inputType: 'targetKey'
+          }
+        ], // 控制条件
         isShow: 'show',
         allEntitys: [], // 所有实体
         targetKeys: [], // 受控实体
@@ -65,7 +76,7 @@ export default class InputBoxForm extends React.Component {
     super(props);
     this.state = {
       controlID: this.props.controlID,
-      entityData: this.props.entityData
+      entityData: this.props.entityData,
     };
   }
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import {
   Row,
@@ -24,12 +25,32 @@ export default class LogicalControl extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      controlConditions: this.props.logicalControl.controlConditions, // 控制条件组
-      isShow: this.props.logicalControl.isShow, // 目标控件显示
-      allEntitys: this.props.logicalControl.allEntitys, // 所有实体
-      targetKeys: this.props.logicalControl.targetKeys, // 受控实体Key值
-      selectedKeys: this.props.logicalControl.selectedKeys // 已选中的项
+      controlConditions: [], // 控制条件组
+      isShow: true, // 目标控件显示
+      allEntitys: [], // 所有实体
+      targetKeys: [], // 受控实体Key值
+      selectedKeys: [] // 已选中的项
     };
+  }
+
+  componentWillMount() {
+    if (this.props.logicalControl) {
+      const {
+        controlConditions,
+        isShow,
+        allEntitys,
+        targetKeys,
+        selectedKeys
+      } = this.props.logicalControl;
+
+      this.setState({
+        controlConditions,
+        isShow,
+        allEntitys,
+        targetKeys,
+        selectedKeys
+      });
+    }
   }
 
   componentDidMount() {
@@ -116,12 +137,14 @@ export default class LogicalControl extends React.Component {
 
   renderTransferItem = (item) => {
     let type;
+    let value = item.value;
     switch (item.type) {
       case 'TextInput':
         type = '文本输入框';
         break;
       case 'DateInput':
         type = '日期输入框';
+        value = moment(value).format('YYYY-MM-DD HH:mm');
         break;
       case 'SelectionInput':
         type = '下拉菜单输入框';
@@ -140,9 +163,9 @@ export default class LogicalControl extends React.Component {
     }
     const customItem = (
       <span
-        title={`${type} 控件名:${item.title} - 控件值:${item.value}`}
+        title={`${type} 控件名:${item.title} - 控件值:${value}`}
       >
-        {item.title} - {item.value}
+        {item.title} - {value}
       </span>
     );
 
@@ -167,7 +190,6 @@ export default class LogicalControl extends React.Component {
   render() {
     const {
       isShow,
-      defaultVal,
       allEntitys,
       targetKeys,
       selectedKeys,
@@ -183,9 +205,9 @@ export default class LogicalControl extends React.Component {
                 index={index}
                 key={`condition-${index}`}
                 onChange={this.onControlConditionChange}
-                defaultVal={defaultVal}
                 condition={item.condition}
-                judgeVal={item.judgeVal}
+                itselfEntityKey={item.itselfEntityKey}
+                targetEntityKey={item.targetEntityKey}
                 logicalOperater={item.logicalOperater}
                 controlConditions={controlConditions}
                 allEntitys={allEntitys}

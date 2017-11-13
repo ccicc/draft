@@ -76,7 +76,7 @@ export default class InputBoxModal extends React.Component {
         title="插入控件"
         visible={isVisible}
         onCancel={onHiddenModal}
-        width={1000}
+        width={520}
         footer={null}
       >
         <Select

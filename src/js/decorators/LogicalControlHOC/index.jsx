@@ -9,44 +9,75 @@ const logicalControlHOC = Component =>
       contentState: PropTypes.object
     };
 
-    onLogicalControl = (value) => {
-      // 逻辑质控
+    onLogicalControl = () => {
       const { entityKey, contentState } = this.props;
-      // 从实体中获取控制条件
-      const { logicalControl } = contentState.getEntity(entityKey).getData();
+      const {
+        defaultVal,
+        isLogicalControl,
+        logicalControl
+      } = contentState.getEntity(entityKey).getData();
+      const {
+        controlConditions,
+        targetKeys,
+        isShow
+      } = logicalControl;
+      if (!isLogicalControl) return;
+      const resultItems = controlConditions.map(item => {
+        let itselfVal;
+        let targetVal;
 
-      let result;
-      if (logicalControl) {
-        const { controlConditions, isShow, targetKeys } = logicalControl;
-        const expression = controlConditions.reduce((total, item, index, current) => {
-          // 只有一项控制条件或多个控制条件的最后一项不加逻辑运算符
-          if (current.length !== 1 && (index !== current.length - 1)) {
-            // 包含(in)
-            if (item.condition === 'in') return `${total} ${value.split(',').includes(item.judgeVal)} ${item.logicalOperater}`;
-            // 不包含(not in)
-            if (item.condition === 'notIn') return `${total} ${!value.split(',').includes(item.judgeVal)} ${item.logicalOperater}`;
-            const judgeVal = item.judgeVal === '' ? ' ' : item.judgeVal;
-            return `${total} '${value}' ${item.condition} '${judgeVal}' ${item.logicalOperater}`;
-          }
-          if (item.condition === 'in') return `${total} ${value.split(',').includes(item.judgeVal)}`;
-          if (item.condition === 'notIn') return `${total} ${value.split(',').includes(item.judgeVal)}`;
-          return `${total} '${value}' ${item.condition} '${item.judgeVal}'`;
-        }, '');
-
-        result = eval(expression); // eslint-disable-line
-        if (result) {
-          // 满足条件
-          targetKeys.forEach(key => {
-            this.onUpdateEntityData(key, isShow);
-            console.log(`conditionTrue: ${isShow}`);
-          });
-        } else {
-          const newDisplay = isShow === 'show' ? 'hidden' : 'show';
-          targetKeys.forEach(key => {
-            this.onUpdateEntityData(key, newDisplay);
-            console.log(`conditionFalse: ${newDisplay}`);
-          });
+        if (item.inputType === 'customVal') {
+          // 自定义值
+          targetVal = item.customVal;
         }
+        if (item.inputType === 'targetKey') {
+          // 目标控件值
+          targetVal = contentState.getEntity(item.targetEntityKey).getData().defaultVal;
+        }
+        if (item.inputType === 'dateVal') {
+          // 选择日期
+          targetVal = item.dateVal.valueOf();
+        }
+
+        if (item.itselfEntityKey && /^\d+$/.test(item.itselfEntityKey)) {
+          // 当值为数值时是实体key值
+          itselfVal = contentState.getEntity(item.itselfEntityKey).getData().defaultVal;
+        } else {
+          // 为空时默认为当前控件值, 反之为用户输入值
+          itselfVal = (item.itselfEntityKey === '' || item.itselfEntityKey === undefined) ?
+            defaultVal
+            :
+            item.itselfEntityKey;
+        }
+
+        const expression = `'${itselfVal}' ${item.condition} '${targetVal}'`;
+        console.log(expression);
+        const result = eval(expression); // eslint-disable-line
+        return {
+          result,
+          operator: item.logicalOperater // 逻辑操作符
+        };
+      });
+      const resultExpression = resultItems.reduce((total, item, index) => {
+        // 对每一项的逻辑进行合并
+        if (index === resultItems.length - 1) {
+          return `${total} (${item.result} === true)`;
+        }
+        return `${total} (${item.result} === true) ${item.operator}`;
+      }, '');
+      console.log(resultExpression);
+      const result = eval(resultExpression); // eslint-disable-line
+      if (result) {
+        targetKeys.forEach(itemKey => {
+          this.onUpdateEntityData(itemKey, isShow);
+          console.log(`isShow: ${isShow}`);
+        });
+      } else {
+        const newDisplay = isShow === 'show' ? 'hidden' : 'show';
+        targetKeys.forEach(key => {
+          this.onUpdateEntityData(key, newDisplay);
+          console.log(`newDisplay: ${newDisplay}`);
+        });
       }
     }
 
