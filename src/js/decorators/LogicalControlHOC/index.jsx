@@ -12,7 +12,6 @@ const logicalControlHOC = Component =>
     onLogicalControl = () => {
       const { entityKey, contentState } = this.props;
       const {
-        defaultVal,
         isLogicalControl,
         logicalControl
       } = contentState.getEntity(entityKey).getData();
@@ -25,7 +24,7 @@ const logicalControlHOC = Component =>
       const resultItems = controlConditions.map(item => {
         let itselfVal;
         let targetVal;
-        /* 获取目标实体值 */ 
+        /* 获取目标实体值 */
         if (item.inputType === 'customVal') {
           // 自定义值
           targetVal = item.customVal;
@@ -48,32 +47,61 @@ const logicalControlHOC = Component =>
           targetVal = item.dateVal.valueOf();
         }
 
-        /* 获取当前实体值 */ 
+        /* 获取当前实体值 */
         if (item.itselfEntityKey && /^\d+$/.test(item.itselfEntityKey)) {
           // 当值为数值时为目标实体key值
           const entityID = contentState.getEntity(item.itselfEntityKey).getData().controlID;
+
+          // 复选框实体值
           if (entityID === 'CheckBoxInput') {
-            // 复选框实体值
             itselfVal = contentState.getEntity(item.itselfEntityKey)
               .getData().selectTodos.selectedValues.join(',');
-          }
-          if (entityID === 'RadioBoxInput') {
+          } else if (entityID === 'RadioBoxInput') {
             // 单选框实体值
-            itselfVal = contentState.gettEntity(item.itselfEntityKey)
+            itselfVal = contentState.getEntity(item.itselfEntityKey)
               .getData().selectTodos.currentValue;
+          } else if (entityID === 'DateInput') {
+            // 日期输入框
+            itselfVal = contentState.getEntity(item.itselfEntityKey)
+              .getData().defaultVal.valueOf();
+          } else if (entityID === 'SelectionMultipleInput') {
+            // 下拉多选输入框
+            itselfVal = contentState.getEntity(item.itselfEntityKey)
+              .getData().defaultVal.split(',')
+              .filter(val => val !== '未知').join(',');
+          } else {
+            itselfVal = contentState.getEntity(item.itselfEntityKey)
+              .getData().defaultVal;
           }
-          itselfVal = contentState.getEntity(item.itselfEntityKey).getData().defaultVal;
-        } else {
+        } else if (item.itselfEntityKey === '' || item.itselfEntityKey === undefined) {
+          const entityID = contentState.getEntity(entityKey).getData().controlID;
           // 为空时默认为当前控件值, 反之为用户输入值
-          itselfVal = (item.itselfEntityKey === '' || item.itselfEntityKey === undefined)
-            ?
-            defaultVal
-            :
-            item.itselfEntityKey;
+          if (entityID === 'CheckBoxInput') {
+            // 复选框实体值
+            itselfVal = contentState.getEntity(entityKey)
+              .getData().selectTodos.selectedValues.join(',');
+          } else if (entityID === 'RadioBoxInput') {
+            // 单选框实体值
+            itselfVal = contentState.getEntity(entityKey)
+              .getData().selectTodos.currentValue;
+          } else if (entityID === 'DateInput') {
+            // 日期输入框
+            itselfVal = contentState.getEntity(entityKey).getData().defaultVal.valueOf();
+          } else if (entityID === 'SelectionMultipleInput') {
+            itselfVal = contentState.getEntity(entityKey).getData()
+              .defaultVal.split(',').filter(val => val !== '未知')
+              .join(',');
+          } else {
+            itselfVal = contentState.getEntity(entityKey).getData().defaultVal;
+          }
+        } else {
+          itselfVal = item.itselfEntityKey;
         }
 
-        /* 合并为判断表达式 */ 
+        /* 合并为判断表达式 */
         let expression;
+        console.log(itselfVal);
+        console.log(targetVal);
         if (item.condition === 'in') {
           // 包含
           expression = itselfVal.split(',').includes(targetVal);
@@ -83,7 +111,6 @@ const logicalControlHOC = Component =>
         } else {
           expression = `'${itselfVal}' ${item.condition} '${targetVal}'`;
         }
-        console.log(expression);
         const result = eval(expression); // eslint-disable-line
         return {
           result,

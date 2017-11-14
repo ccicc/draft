@@ -32,7 +32,7 @@ export default class ControlCondition extends React.Component {
       targetEntityKey: this.props.targetEntityKey,
       customVal: this.props.customVal,
       dateVal: this.props.dateVal,
-      inputType: this.props.inputType || 'targetKey'
+      inputType: this.props.inputType || 'customVal'
     };
   }
 
@@ -121,6 +121,7 @@ export default class ControlCondition extends React.Component {
     const targetKeyComponent = (
       <Select
         size="small"
+        mode="combobox"
         style={{ width: '30%' }}
         value={targetEntityKey}
         placeholder="目标控件,默认为空"
@@ -166,6 +167,7 @@ export default class ControlCondition extends React.Component {
         style={{ width: '30%' }}
         onChange={this.onCustomValChange}
         value={customVal}
+        placeholder="输入自定义值"
       />
     );
 
@@ -216,13 +218,13 @@ export default class ControlCondition extends React.Component {
     const itselfComponent = (
       <Select
         showSearch
-        allowClear
-        size="small"
         mode="combobox"
+        size="small"
         style={{ width: '30%' }}
         value={itselfEntityKey}
         placeholder="默认为当前控件值"
         onChange={this.onItselfKeyChange}
+        optionFilterProp="children"
       >
         {
           allEntitys.map((item, order) => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import WrapperInputForm from './InputForm';
 
@@ -48,15 +49,15 @@ export default class InputBoxForm extends React.Component {
         selectTabs: [],
         currentActiveKey: 'tab-0' // 当前选项卡
       },
-      logicalControl: {
-        controlConditions: [
+      logicalControl: { // 逻辑控制
+        controlConditions: [ // 控制条件
           {
             condition: '===',
             itselfEntityKey: '',
             targetEntityKey: '',
             logicalOperater: '&&',
             customVal: '',
-            dateVal: '',
+            dateVal: moment(),
             inputType: 'customVal'
           }
         ], // 控制条件
