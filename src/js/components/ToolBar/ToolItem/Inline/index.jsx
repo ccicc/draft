@@ -1,4 +1,5 @@
 import React from 'react';
+import { is } from 'immutable';
 import PropTypes from 'prop-types';
 import { Button } from 'antd';
 import classnames from 'classnames';
@@ -40,6 +41,31 @@ export default class InlineTool extends React.Component {
         currentStyles: this.changeKey(getSelectionInlineStyle(nextProps.editorState))
       });
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const thisProps = this.props || {};
+    const thisState = this.state || {};
+
+    if (
+      Object.keys(thisProps).length !== Object.keys(nextProps).length ||
+      Object.keys(thisState).length !== Object.keys(nextState).length
+    ) {
+      return true;
+    }
+
+    for (const key in nextProps) {
+      if (nextProps.hasOwnProperty(key) && !is(thisProps[key], nextProps[key])) {
+        return true;
+      }
+    }
+
+    for (const key in thisProps) {
+      if (nextState.hasOwnProperty(key) && !is(nextState[key], nextState[key])) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onAddInlineStyle = (style) => {

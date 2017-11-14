@@ -9,10 +9,17 @@ import {
 
 import eventProxy from './../../../../../customUtils/eventProxy';
 
+const getDisplayName = WrapperComponent => {
+  return WrapperComponent.displayName ||
+    WrapperComponent.name ||
+    'Component';
+};
+
 // 分离输入框控件创建,添加,删除实体的逻辑
 export default function inputBoxHOC(currInputBox) {
   return function (Component) {         // eslint-disable-line
     return class extends React.Component {
+      static displayName = `HOC-${getDisplayName(Component)}`;
       static propTypes = {
         config: PropTypes.object.isRequired,
         editorState: PropTypes.object.isRequired,

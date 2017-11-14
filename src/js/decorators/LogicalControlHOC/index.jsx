@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const getDisplayName = WrapperComponent => {
+  return WrapperComponent.displayName ||
+    WrapperComponent.name ||
+    'Component';
+};
+
 const logicalControlHOC = Component =>
   class extends React.Component {
+    static displayName = `HOC-${getDisplayName(Component)}`
     static propTypes = {
       entityKey: PropTypes.string,
       children: PropTypes.array,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { is } from 'immutable';
 import { Tag, Button } from 'antd';
 import styles from './index.less';
 
@@ -35,6 +36,31 @@ export default class ToothPosition extends React.Component {
         D: []
       }
     };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const thisState = this.state || {};
+    const thisProps = this.props || {};
+
+    if (
+      Object.keys(thisProps).length !== Object.keys(nextProps) ||
+      Object.keys(thisState).length !== Object.keys(nextState)
+    ) {
+      return true;
+    }
+
+    for (const key in nextProps) {
+      if (nextProps.hasOwnProperty(key) && !is(thisProps[key], nextProps[key])) {
+        return true;
+      }
+    }
+
+    for (const key in nextState) {
+      if (nextState.hasOwnProperty(key) && !is(thisState[key], nextState[key])) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onHandleUpperChange = (type, tag, checked) => {
