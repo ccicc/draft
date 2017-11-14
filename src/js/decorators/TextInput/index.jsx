@@ -34,6 +34,7 @@ class TextInput extends React.Component {
       isRequired,
       controlShow
     } = contentState.getEntity(entityKey).getData();
+
     this.setState({
       value: defaultVal,
       isRequired,

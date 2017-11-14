@@ -57,7 +57,7 @@ export default class InputBoxForm extends React.Component {
             logicalOperater: '&&',
             customVal: '',
             dateVal: '',
-            inputType: 'targetKey'
+            inputType: 'customVal'
           }
         ], // 控制条件
         isShow: 'show',

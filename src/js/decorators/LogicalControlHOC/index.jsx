@@ -17,40 +17,72 @@ const logicalControlHOC = Component =>
         logicalControl
       } = contentState.getEntity(entityKey).getData();
       const {
-        controlConditions,
-        targetKeys,
+        controlConditions, // 判断表达式集合
+        targetKeys, // 受控实体的key值集合
         isShow
       } = logicalControl;
       if (!isLogicalControl) return;
       const resultItems = controlConditions.map(item => {
         let itselfVal;
         let targetVal;
-
+        /* 获取目标实体值 */ 
         if (item.inputType === 'customVal') {
           // 自定义值
           targetVal = item.customVal;
         }
         if (item.inputType === 'targetKey') {
           // 目标控件值
-          targetVal = contentState.getEntity(item.targetEntityKey).getData().defaultVal;
+          const entityID = contentState.getEntity(item.targetEntityKey).getData().controlID;
+          if (entityID === 'CheckBoxInput') {
+            targetVal = contentState.getEntity(item.targetEntityKey).getData()
+              .selectTodos.selectedValues.join(',');
+          } else if (entityID === 'RadioBoxInput') {
+            targetVal = contentState.getEntity(item.targetEntityKey).getData()
+              .selectTodos.currentValue;
+          } else {
+            targetVal = contentState.getEntity(item.targetEntityKey).getData().defaultVal;
+          }
         }
         if (item.inputType === 'dateVal') {
           // 选择日期
           targetVal = item.dateVal.valueOf();
         }
 
+        /* 获取当前实体值 */ 
         if (item.itselfEntityKey && /^\d+$/.test(item.itselfEntityKey)) {
-          // 当值为数值时是实体key值
+          // 当值为数值时为目标实体key值
+          const entityID = contentState.getEntity(item.itselfEntityKey).getData().controlID;
+          if (entityID === 'CheckBoxInput') {
+            // 复选框实体值
+            itselfVal = contentState.getEntity(item.itselfEntityKey)
+              .getData().selectTodos.selectedValues.join(',');
+          }
+          if (entityID === 'RadioBoxInput') {
+            // 单选框实体值
+            itselfVal = contentState.gettEntity(item.itselfEntityKey)
+              .getData().selectTodos.currentValue;
+          }
           itselfVal = contentState.getEntity(item.itselfEntityKey).getData().defaultVal;
         } else {
           // 为空时默认为当前控件值, 反之为用户输入值
-          itselfVal = (item.itselfEntityKey === '' || item.itselfEntityKey === undefined) ?
+          itselfVal = (item.itselfEntityKey === '' || item.itselfEntityKey === undefined)
+            ?
             defaultVal
             :
             item.itselfEntityKey;
         }
 
-        const expression = `'${itselfVal}' ${item.condition} '${targetVal}'`;
+        /* 合并为判断表达式 */ 
+        let expression;
+        if (item.condition === 'in') {
+          // 包含
+          expression = itselfVal.split(',').includes(targetVal);
+        } else if (item.condition === 'not') {
+          // 不包含
+          expression = !itselfVal.split(',').includes(targetVal);
+        } else {
+          expression = `'${itselfVal}' ${item.condition} '${targetVal}'`;
+        }
         console.log(expression);
         const result = eval(expression); // eslint-disable-line
         return {

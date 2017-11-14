@@ -52,23 +52,14 @@
     "antd": "^2.13.2",
     "babel-runtime": "^6.26.0",
     "classnames": "^2.2.5",
-    "draft-js": "^0.10.2",
-    "draft-js-alignment-plugin": "^2.0.0-beta1",
-    "draft-js-buttons": "^2.0.0-beta6",
-    "draft-js-drag-n-drop-plugin": "^2.0.0-beta10",
-    "draft-js-emoji-plugin": "^2.0.0-rc2",
-    "draft-js-focus-plugin": "^2.0.0-beta1",
-    "draft-js-image-plugin": "^2.0.0-rc8",
-    "draft-js-plugins-editor": "^2.0.0-rc8",
-    "draft-js-resizeable-plugin": "^1.0.8",
-    "draft-js-static-toolbar-plugin": "^2.0.0-rc4",
+    "draft-js": "^0.10.4",
     "draftjs-utils": "^0.8.07",
     "immutable": "^3.8.2",
     "katex": "^0.9.0-alpha",
     "moment": "^2.19.1",
     "prop-types": "^15.6.0",
-    "react": "^15.6.1",
+    "react": "^16.1.1",
     "react-color": "^2.13.8",
-    "react-dom": "^15.6.1"
+    "react-dom": "^16.1.1"
   }
 }

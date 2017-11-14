@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { List } from 'immutable';
 import PropTypes from 'prop-types';
 import {
   Row,
@@ -62,9 +63,10 @@ export default class LogicalControl extends React.Component {
   onControlConditionChange = (item, index) => {
     // 控制条件变更的回调
     const { controlConditions } = this.state;
-    controlConditions[index] = item;
+    const $$controlConditions = List(controlConditions);
+    const newControlConditions = $$controlConditions.set(index, item).toJS();
     this.setState({
-      controlConditions
+      controlConditions: newControlConditions
     });
     setTimeout(() => this.props.onChange(this.state), 0);
   }
@@ -88,9 +90,10 @@ export default class LogicalControl extends React.Component {
   onRemoveCondition = () => {
     // 移除控制条件
     const { controlConditions } = this.state;
-    controlConditions.pop();
+    const $$controlConditions = List(controlConditions);
+    const newControlConditions = $$controlConditions.pop().toJS();
     this.setState({
-      controlConditions
+      controlConditions: newControlConditions
     });
   }
 
@@ -122,6 +125,33 @@ export default class LogicalControl extends React.Component {
     setTimeout(() => this.props.onChange(this.state), 0);
   }
 
+  getInputType = (type) => {
+    let inputType;
+    switch (type) {
+      case 'TextInput':
+        inputType = '文本输入框';
+        break;
+      case 'DateInput':
+        inputType = '日期输入框';
+        break;
+      case 'SelectionInput':
+        inputType = '下拉单选输入框';
+        break;
+      case 'SelectionMultipleInput':
+        inputType = '下拉多选输入框';
+        break;
+      case 'CheckBoxInput':
+        inputType = '复选框';
+        break;
+      case 'RadioBoxInput':
+        inputType = '单选框';
+        break;
+      default:
+        inputType = '';
+    }
+    return inputType;
+  }
+
   getAllEntityMap = () => {
     // 获取所有实体
     const { editorState } = this.props;
@@ -130,42 +160,36 @@ export default class LogicalControl extends React.Component {
       key: item.entityKey,
       type: item.entity.toJS().data.controlID,
       title: item.entity.toJS().data.controlName,
-      value: item.entity.toJS().data.defaultVal
+      value: item.entity.toJS().data.defaultVal,
+      radioVal: item.entity.toJS().data.selectTodos.currentValue,
+      checkboxVal: item.entity.toJS().data.selectTodos.selectedValues
     }));
     return allEntitys;
   }
 
   renderTransferItem = (item) => {
-    let type;
     let value = item.value;
-    switch (item.type) {
-      case 'TextInput':
-        type = '文本输入框';
-        break;
-      case 'DateInput':
-        type = '日期输入框';
-        value = moment(value).format('YYYY-MM-DD HH:mm');
-        break;
-      case 'SelectionInput':
-        type = '下拉菜单输入框';
-        break;
-      case 'SelectionMultipleInput':
-        type = '下拉多选输入框';
-        break;
-      case 'ChecBoxInput':
-        type = '复选框';
-        break;
-      case 'RadioBoxInput':
-        type = '单选框';
-        break;
-      default:
-        type = '';
+    if (moment.isMoment(value)) {
+      // 如果值为moment类型，则格式化
+      value = moment().format('YYYY-MM-DD HH-mm');
+    }
+    if (item.type === 'SelectionInput') {
+      value = item.value.split(',').filter(val => val !== '未知').join(',');
+    }
+    if (item.type === 'SelectionMultipleInput') {
+      value = item.value.split(',').filter(val => val !== '未知').join(',');
+    }
+    if (item.type === 'RadioBoxInput') {
+      value = item.radioVal;
+    }
+    if (item.type === 'CheckBoxInput') {
+      value = item.checkboxVal.join(',');
     }
     const customItem = (
       <span
-        title={`${type} 控件名:${item.title} - 控件值:${value}`}
+        title={`${this.getInputType(item.type)}: 控件名:${value}`}
       >
-        {item.title} - {value}
+        {this.getInputType(item.type)}:  {item.title}
       </span>
     );
 
@@ -206,11 +230,15 @@ export default class LogicalControl extends React.Component {
                 key={`condition-${index}`}
                 onChange={this.onControlConditionChange}
                 condition={item.condition}
+                customVal={item.customVal}
+                dateVal={item.dateVal}
+                inputType={item.inputType}
                 itselfEntityKey={item.itselfEntityKey}
                 targetEntityKey={item.targetEntityKey}
                 logicalOperater={item.logicalOperater}
                 controlConditions={controlConditions}
                 allEntitys={allEntitys}
+                getInputType={this.getInputType}
               />
             ))
           }

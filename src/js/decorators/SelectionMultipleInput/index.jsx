@@ -50,7 +50,7 @@ class SelectionMultipleInput extends React.Component {
 
   componentDidMount() {
     document.body.addEventListener('click', this.onBodyClick, false);
-    this.props.onLogicalControl(this.state.value);
+    this.props.onLogicalControl();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -63,7 +63,7 @@ class SelectionMultipleInput extends React.Component {
       value: defaultVal,
       controlShow: controlShow !== 'hidden'
     });
-    this.props.onLogicalControl(defaultVal);
+    this.props.onLogicalControl();
   }
 
   componentWillUnmount() {
@@ -71,7 +71,7 @@ class SelectionMultipleInput extends React.Component {
   }
 
   onBodyClick = (e) => {
-    if (e.target && (e.target.matches('li.ant-menu-item') || e.target.matches('span'))) {
+    if (e.target && e.target.matches('li.ant-menu-item')) {
       return;
     }
     this.setState({
@@ -106,7 +106,7 @@ class SelectionMultipleInput extends React.Component {
     this.setState({
       value: newDefaultVal
     });
-    this.props.onLogicalControl(newDefaultVal);
+    this.props.onLogicalControl();
   }
 
   onSelectedAllClick = () => {

@@ -88,9 +88,7 @@ class DateInput extends React.Component {
       entityColor
     } = contentState.getEntity(entityKey).getData();
 
-    const DateInput = ();
-
-    return (
+    const DateInputComponent = controlShow && (
       <span className={styles.root}>
         <span
           className={styles.controlVal}
@@ -116,6 +114,8 @@ class DateInput extends React.Component {
         </span>
       </span>
     );
+
+    return DateInputComponent;
   }
 }
 

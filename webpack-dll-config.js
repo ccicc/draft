@@ -23,12 +23,6 @@ module.exports = {
       'react-dom',
       'react-color',
       'draft-js',
-      'draft-js-plugins-editor',
-      'draft-js-focus-plugin',
-      'draft-js-image-plugin',
-      'draft-js-resizeable-plugin',
-      'draft-js-static-toolbar-plugin',
-      'draft-js-drag-n-drop-plugin',
       './src/style/Draft.css'
     ]
   },

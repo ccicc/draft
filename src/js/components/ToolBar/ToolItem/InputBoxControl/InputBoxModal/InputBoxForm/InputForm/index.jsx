@@ -515,7 +515,7 @@ class InputForm extends React.Component {
     // 下拉多选输入框
     const SelectionMultipleInput = (
       <Row gutter={20}>
-        <Col span={12}>
+        <Col span={24}>
           <Row gutter={10}>
             <Col span={12}>{ControlID}</Col>
             <Col span={12}>{ControlName}</Col>
@@ -523,15 +523,18 @@ class InputForm extends React.Component {
             <Col span={12}>{DescribeVal}</Col>
             <Col span={12}>{EntityColor}</Col>
             <Col span={12}>{DefaultVal}</Col>
-            <Col span={24}>{IsPrefix}</Col>
-            <Col span={24}> {isPrefix && PrefixSuffixs} </Col>
             <Col span={24}>{PullDownOptionGroups}</Col>
-            <Col span={12}>{IsRequired}</Col>
-            <Col span={12}>{IsReadOnly}</Col>
           </Row>
-        </Col>
-        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}>
-          {LogicalControls}
+          <Row gutter={10}>
+            <Col span={6}>{IsPrefix}</Col>
+            <Col span={6}>{IsRequired}</Col>
+            <Col span={6}>{IsReadOnly}</Col>
+            <Col span={6}>{IsLogicalControl}</Col>
+          </Row>
+          <Col span={24}> {isPrefix && PrefixSuffixs} </Col>
+          <Col span={24}>
+            {LogicalControls}
+          </Col>
         </Col>
       </Row>
     );
@@ -564,20 +567,23 @@ class InputForm extends React.Component {
     // 多选输入框
     const CheckBoxInput = (
       <Row gutter={20}>
-        <Col span={12}>
+        <Col span={24}>
           <Row gutter={10}>
             <Col span={12}>{ControlID}</Col>
             <Col span={12}>{ControlName}</Col>
             <Col span={12}>{Tags}</Col>
             <Col span={12}>{DescribeVal}</Col>
             <Col span={12}>{EntityColor}</Col>
-            <Col span={12}>{IsRequired}</Col>
-            <Col span={12}>{IsReadOnly}</Col>
             <Col span={24}>{SelectTodos}</Col>
           </Row>
-        </Col>
-        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}>
-          {LogicalControls}
+          <Row gutter={10}>
+            <Col span={8}>{IsRequired}</Col>
+            <Col span={8}>{IsReadOnly}</Col>
+            <Col span={8}>{IsLogicalControl}</Col>
+          </Row>
+          <Col span={24}>
+            {LogicalControls}
+          </Col>
         </Col>
       </Row>
     );
@@ -585,20 +591,23 @@ class InputForm extends React.Component {
     // 单选输入框
     const RadioBoxInput = (
       <Row gutter={20}>
-        <Col span={12}>
+        <Col span={24}>
           <Row gutter={10}>
             <Col span={12}>{ControlID}</Col>
             <Col span={12}>{ControlName}</Col>
             <Col span={12}>{Tags}</Col>
             <Col span={12}>{DescribeVal}</Col>
             <Col span={12}>{EntityColor}</Col>
-            <Col span={12}>{IsRequired}</Col>
-            <Col span={12}>{IsReadOnly}</Col>
             <Col span={24}>{SelectTodos}</Col>
           </Row>
-        </Col>
-        <Col span={12} style={{ borderLeft: '1px dashed #ccc' }}>
-          {LogicalControls}
+          <Row gutter={10}>
+            <Col span={8}>{IsRequired}</Col>
+            <Col span={8}>{IsReadOnly}</Col>
+            <Col span={8}>{IsLogicalControl}</Col>
+          </Row>
+          <Col span={24}>
+            {LogicalControls}
+          </Col>
         </Col>
       </Row>
     );

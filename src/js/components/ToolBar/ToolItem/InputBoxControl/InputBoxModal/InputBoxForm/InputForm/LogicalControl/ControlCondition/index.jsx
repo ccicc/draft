@@ -32,7 +32,7 @@ export default class ControlCondition extends React.Component {
       targetEntityKey: this.props.targetEntityKey,
       customVal: this.props.customVal,
       dateVal: this.props.dateVal,
-      inputType: 'targetKey'
+      inputType: this.props.inputType || 'targetKey'
     };
   }
 
@@ -131,15 +131,28 @@ export default class ControlCondition extends React.Component {
           allEntitys.map((item, order) => {
             let value = item.value;
             if (moment.isMoment(value)) {
+              // 如果值为moment类型，则格式化
               value = moment().format('YYYY-MM-DD HH-mm');
+            }
+            if (item.type === 'SelectionInput') {
+              value = item.value.split(',').filter(val => val !== '未知').join(',');
+            }
+            if (item.type === 'SelectionMultipleInput') {
+              value = item.value.split(',').filter(val => val !== '未知').join(',');
+            }
+            if (item.type === 'RadioBoxInput') {
+              value = item.radioVal;
+            }
+            if (item.type === 'CheckBoxInput') {
+              value = item.checkboxVal.join(',');
             }
             return (
               <Option
                 key={`entityKey-${order}`}
-                title={`控件名: ${item.title} - 控件值: ${value}`}
+                title={`控件名: ${item.title}: 控件值: ${value}`}
                 value={item.key}
               >
-                {item.title} - {value}
+                {this.props.getInputType(item.type)}: {item.title}
               </Option>
             );
           })
@@ -174,9 +187,29 @@ export default class ControlCondition extends React.Component {
         value={inputType}
         onChange={this.onSelectInputChange}
       >
-        <Option key="1" title="选择目标控件" value="targetKey">目标控件</Option>
-        <Option key="2" title="输入自定义值" value="customVal">自定义值</Option>
-        <Option key="3" title="选择日期" value="dateVal" disabled={controlID !== 'DateInput'}>选择日期</Option>
+        <Option
+          key="1"
+          title="输入自定义值"
+          value="customVal"
+        >
+          自定义值
+        </Option>
+        <Option
+          key="2"
+          title="选择目标控件"
+          value="targetKey"
+          disabled={allEntitys.length === 0}
+        >
+          目标控件
+        </Option>
+        <Option
+          key="3"
+          title="选择日期"
+          value="dateVal"
+          disabled={controlID !== 'DateInput'}
+        >
+          选择日期
+        </Option>
       </Select>
     );
 
@@ -192,15 +225,34 @@ export default class ControlCondition extends React.Component {
         onChange={this.onItselfKeyChange}
       >
         {
-          allEntitys.map((item, order) => (
-            <Option
-              key={`entityKey-${order}`}
-              title={`控件名: ${item.title} - 控件值: ${item.value}`}
-              value={item.key}
-            >
-              {item.title} - {item.value}
-            </Option>
-          ))
+          allEntitys.map((item, order) => {
+            let value = item.value;
+            if (moment.isMoment(value)) {
+              // 如果值为moment类型，则格式化
+              value = moment().format('YYYY-MM-DD HH-mm');
+            }
+            if (item.type === 'SelectionInput') {
+              value = item.value.split(',').filter(val => val !== '未知').join(',');
+            }
+            if (item.type === 'SelectionMultipleInput') {
+              value = item.value.split(',').filter(val => val !== '未知').join(',');
+            }
+            if (item.type === 'RadioBoxInput') {
+              value = item.radioVal;
+            }
+            if (item.type === 'CheckBoxInput') {
+              value = item.checkboxVal.join(',');
+            }
+            return (
+              <Option
+                key={`entityKey-${order}`}
+                title={`控件名: ${item.title}: 控件值: ${value}`}
+                value={item.key}
+              >
+                {this.props.getInputType(item.type)} - {item.title}
+              </Option>
+            );
+          })
         }
       </Select>
     );
@@ -222,26 +274,10 @@ export default class ControlCondition extends React.Component {
             <Option value="!==">不等于</Option>
             <Option value="in">包含</Option>
             <Option value="not">不包含</Option>
-            <Option
-              value=">"
-            >
-              大于
-            </Option>
-            <Option
-              value="<"
-            >
-              小于
-            </Option>
-            <Option
-              value=">="
-            >
-              大于等于
-            </Option>
-            <Option
-              value="<="
-            >
-              小于等于
-            </Option>
+            <Option value=">">大于</Option>
+            <Option value="<">小于</Option>
+            <Option value=">=">大于等于</Option>
+            <Option value="<=">小于等于</Option>
           </Select>
           {inputType === 'targetKey' && targetKeyComponent}
           {inputType === 'customVal' && customValComponent}
