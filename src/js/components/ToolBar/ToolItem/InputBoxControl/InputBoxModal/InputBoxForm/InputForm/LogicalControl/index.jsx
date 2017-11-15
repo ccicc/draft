@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { List } from 'immutable';
+import { is, List } from 'immutable';
 import PropTypes from 'prop-types';
 import {
   Row,
@@ -58,6 +58,29 @@ export default class LogicalControl extends React.Component {
     // 获取所有实体
     const allEntitys = this.getAllEntityMap();
     this.setState({ allEntitys }); //eslint-disable-line
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const thisProps = this.props || {};
+    const thisState = this.state || {};
+
+    if (
+      Object.keys(thisProps).length !== Object.keys(nextProps).length ||
+      Object.keys(thisState).length !== Object.keys(nextState).length
+    ) {
+      return true;
+    }
+    for (const key in nextProps) {
+      if (nextProps.hasOwnProperty(key) && !is(thisProps[key], nextProps[key])) {
+        return true;
+      }
+    }
+    for (const key in nextState) {
+      if (nextState.hasOwnProperty(key) && !is(thisState[key], nextState[key])) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onControlConditionChange = (item, index) => {
