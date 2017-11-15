@@ -1,4 +1,5 @@
 import React from 'react';
+import { is } from 'immutable';
 import {
   Popover,
   Button
@@ -22,6 +23,29 @@ export default class ImageComponent extends React.Component {
       isVisible: false,
       imageAlign: undefined
     };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const thisState = this.state || {};
+    const thisProps = this.props || {};
+
+    if (
+      Object.keys(thisProps).length !== Object.keys(nextProps).length ||
+      Object.keys(thisState).length !== Object.keys(nextState).length
+    ) {
+      return true;
+    }
+    for (const key in nextProps) {
+      if (nextProps.hasOwnProperty(key) && !is(thisProps[key], nextProps[key])) {
+        return true;
+      }
+    }
+    for (const key in nextState) {
+      if (nextState.hasOwnProperty(key) && !is(thisState[key], nextState[key])) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onHandleClick = () => {

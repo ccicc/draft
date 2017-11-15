@@ -78,7 +78,7 @@ export default class FontFamily extends React.Component {
     }
 
     for (const key in nextProps) {
-      if (nextProps.hasOwnProperty(key) && !is(thisProps[key], nextProps(key))) {
+      if (nextProps.hasOwnProperty(key) && !is(thisProps[key], nextProps[key])) {
         return true;
       }
     }
