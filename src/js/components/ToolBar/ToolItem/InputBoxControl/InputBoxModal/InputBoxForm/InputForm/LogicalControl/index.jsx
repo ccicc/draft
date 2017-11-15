@@ -26,11 +26,12 @@ export default class LogicalControl extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      controlConditions: [], // 控制条件组
+      conditionGroup: [], // 控制条件组
+      controlConditions: [], // 控制条件项
       isShow: true, // 目标控件显示
       allEntitys: [], // 所有实体
       targetKeys: [], // 受控实体Key值
-      selectedKeys: [] // 已选中的项
+      selectedKeys: [], // 已选中的项，
     };
   }
 
@@ -84,34 +85,46 @@ export default class LogicalControl extends React.Component {
   }
 
   onControlConditionChange = (item, index) => {
-    // 控制条件变更的回调
+    // 控制条件项变更的回调
     const { controlConditions } = this.state;
     const $$controlConditions = List(controlConditions);
     const newControlConditions = $$controlConditions.set(index, item).toJS();
     this.setState({
       controlConditions: newControlConditions
     });
-    setTimeout(() => this.props.onChange(this.state), 0);
   }
 
   onAddCondition = () => {
-    // 添加控制条件
+    // 添加控制条件项
     const { controlConditions } = this.state;
-    this.setState({
-      controlConditions: [
-        ...controlConditions,
+    const $$controlConditions = List(controlConditions);
+    const newControlConditions =
+      $$controlConditions.push(
         {
           targetEntityKey: '', // 目标实体key
           itselfEntitykey: '', // 当前实体key
           condition: '===', // 控制条件
           logicalOperater: '&&' // 逻辑条件
         }
-      ]
+      ).toJS();
+    this.setState({
+      controlConditions: newControlConditions
     });
   }
 
+  onAddConditionGroup = () => {
+    // 添加控制条件组
+    const { controlConditions, conditionGroup } = this.state;
+    const newConditionGroup = List(conditionGroup).push(controlConditions).toJS();
+    this.setState({
+      conditionGroup: newConditionGroup,
+      controlConditions: []
+    });
+    console.log(newConditionGroup);
+  }
+
   onRemoveCondition = () => {
-    // 移除控制条件
+    // 移除控制条件项
     const { controlConditions } = this.state;
     const $$controlConditions = List(controlConditions);
     const newControlConditions = $$controlConditions.pop().toJS();
@@ -121,13 +134,13 @@ export default class LogicalControl extends React.Component {
   }
 
   onRadioChange = (e) => {
-    // 显示隐藏
+    // 受控控件的显示隐藏
     this.setState({ isShow: e.target.value });
     setTimeout(() => this.props.onChange(this.state), 0);
   }
 
   onReload = () => {
-    // 重置选项
+    // 重置是否受控
     const newEntities = this.getAllEntityMap();
     this.setState({
       allEntitys: newEntities,
@@ -149,6 +162,7 @@ export default class LogicalControl extends React.Component {
   }
 
   getInputType = (type) => {
+    // 获取控件类型
     let inputType;
     switch (type) {
       case 'TextInput':
@@ -188,6 +202,20 @@ export default class LogicalControl extends React.Component {
       checkboxVal: item.entity.toJS().data.selectTodos.selectedValues
     }));
     return allEntitys;
+  }
+
+  getEntityVal = (entityKey) => {
+    // 通过entityKey获取指定实体值
+    const { allEntitys } = this.state;
+    const activeEntity = List(allEntitys).find(entity => entity.key === entityKey);
+    let entityVal = activeEntity.defaultVal;
+    if (activeEntity.type === 'CheckBoxInput') {
+      entityVal = activeEntity.checkboxVal;
+    }
+    if (activeEntity.type === 'RadioBoxInput') {
+      entityVal = activeEntity.radioVal;
+    }
+    return entityVal;
   }
 
   renderTransferItem = (item) => {
@@ -240,8 +268,16 @@ export default class LogicalControl extends React.Component {
       allEntitys,
       targetKeys,
       selectedKeys,
-      controlConditions
+      controlConditions,
+      // conditionGroup
     } = this.state;
+
+    const conditionGroupContent = (
+      <div>
+        test
+      </div>
+    );
+
     return (
       <Row gutter={10}>
         <Col span={24}>
@@ -283,6 +319,18 @@ export default class LogicalControl extends React.Component {
               disabled={controlConditions.length === 1}
             />
           </Button.Group>
+          <Button
+            size="small"
+            type="primary"
+            title="添加一组控制条件"
+            style={{ marginLeft: 10 }}
+            onClick={this.onAddConditionGroup}
+          >
+            确认
+          </Button>
+        </Col>
+        <Col span={24}>
+          {conditionGroupContent}
         </Col>
         <Col span={24}>
           <span style={{ marginRight: 20, color: '#333' }}>操作: </span>

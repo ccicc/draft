@@ -144,11 +144,10 @@ export default class ControlCondition extends React.Component {
     const targetKeyComponent = (
       <Select
         size="small"
-        mode="combobox"
         style={{ width: '30%' }}
         value={targetEntityKey}
         placeholder="目标控件,默认为空"
-        notFoundContent="没有其他控件"
+        notFoundContent="默认为空"
         onChange={this.onTargetKeyChange}
       >
         {
@@ -240,12 +239,11 @@ export default class ControlCondition extends React.Component {
 
     const itselfComponent = (
       <Select
-        showSearch
-        mode="combobox"
         size="small"
         style={{ width: '30%' }}
         value={itselfEntityKey}
         placeholder="默认为当前控件值"
+        notFoundContent="默认为当前控件值"
         onChange={this.onItselfKeyChange}
         optionFilterProp="children"
       >
@@ -274,7 +272,7 @@ export default class ControlCondition extends React.Component {
                 title={`控件名: ${item.title}: 控件值: ${value}`}
                 value={item.key}
               >
-                {this.props.getInputType(item.type)} - {item.title}
+                {this.props.getInputType(item.type)}: {item.title}
               </Option>
             );
           })
