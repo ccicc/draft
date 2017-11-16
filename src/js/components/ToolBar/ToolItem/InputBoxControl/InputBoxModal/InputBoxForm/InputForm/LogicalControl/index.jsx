@@ -7,12 +7,13 @@ import {
   Col,
   Radio,
   Transfer,
-  Button
+  Button,
 } from 'antd';
 // 控制条件
 import ControlCondition from './ControlCondition';
 // 获取所有实体
 import getEntities from './../../../../../../../../customUtils/getEntities';
+import styles from './index.less';
 
 const RadioGroup = Radio.Group;
 
@@ -38,15 +39,14 @@ export default class LogicalControl extends React.Component {
   componentWillMount() {
     if (this.props.logicalControl) {
       const {
-        controlConditions,
+        conditionGroup,
         isShow,
         allEntitys,
         targetKeys,
         selectedKeys
       } = this.props.logicalControl;
-
       this.setState({
-        controlConditions,
+        conditionGroup,
         isShow,
         allEntitys,
         targetKeys,
@@ -112,17 +112,6 @@ export default class LogicalControl extends React.Component {
     });
   }
 
-  onAddConditionGroup = () => {
-    // 添加控制条件组
-    const { controlConditions, conditionGroup } = this.state;
-    const newConditionGroup = List(conditionGroup).push(controlConditions).toJS();
-    this.setState({
-      conditionGroup: newConditionGroup,
-      controlConditions: []
-    });
-    console.log(newConditionGroup);
-  }
-
   onRemoveCondition = () => {
     // 移除控制条件项
     const { controlConditions } = this.state;
@@ -130,6 +119,33 @@ export default class LogicalControl extends React.Component {
     const newControlConditions = $$controlConditions.pop().toJS();
     this.setState({
       controlConditions: newControlConditions
+    });
+  }
+
+  onAddConditionGroup = () => {
+    // 添加控制条件组
+    const { controlConditions, conditionGroup } = this.state;
+    if (controlConditions.length === 0) return;
+    const newConditionGroup = List(conditionGroup).push(controlConditions).toJS();
+    this.setState({
+      conditionGroup: newConditionGroup,
+      controlConditions: []
+    });
+    this.props.onChange({
+      isShow: this.state.isShow,
+      targetKeys: this.state.targetKeys,
+      conditionGroup: newConditionGroup
+    });
+    console.log(newConditionGroup);
+  }
+
+  onRemoveConditionGroup = (itemIndex) => {
+    // 移除控制条件组
+    const { conditionGroup } = this.state;
+    const $$newConditionGroup = List(conditionGroup);
+    const newConditionGroup = $$newConditionGroup.delete(itemIndex);
+    this.setState({
+      conditionGroup: newConditionGroup
     });
   }
 
@@ -207,15 +223,39 @@ export default class LogicalControl extends React.Component {
   getEntityVal = (entityKey) => {
     // 通过entityKey获取指定实体值
     const { allEntitys } = this.state;
+    if (entityKey == undefined || entityKey === '') {  // eslint-disable-line
+      return '当前控件值';
+    }
     const activeEntity = List(allEntitys).find(entity => entity.key === entityKey);
-    let entityVal = activeEntity.defaultVal;
+    let entityVal = activeEntity.value;
+    if (activeEntity.type === 'SelectionMultipleInput') {
+      entityVal = activeEntity.value.split(',').filter(val => val !== '未知').join(',');
+    }
     if (activeEntity.type === 'CheckBoxInput') {
       entityVal = activeEntity.checkboxVal;
     }
     if (activeEntity.type === 'RadioBoxInput') {
       entityVal = activeEntity.radioVal;
     }
+    if (moment.isMoment(activeEntity.defaultVal) || activeEntity.type === 'DateInput') {
+      entityVal = moment(activeEntity.defaultVal).format('YYYY-MM-DD HH:mm');
+    }
     return entityVal;
+  }
+
+  getTargetEntityVal = (item) => {
+    // 获取目标实体值
+    let targetVal = '';
+    if (item.inputType === 'customVal') {
+      targetVal = item.customVal || '';
+    }
+    if (item.inputType === 'dateVal') {
+      targetVal = moment(item.dateVal).format('YYYY-MM-DD HH:mm');
+    }
+    if (item.inputType === 'targetKey') {
+      targetVal = this.getEntityVal(item.targetEntityKey);
+    }
+    return targetVal;
   }
 
   renderTransferItem = (item) => {
@@ -269,12 +309,49 @@ export default class LogicalControl extends React.Component {
       targetKeys,
       selectedKeys,
       controlConditions,
-      // conditionGroup
+      conditionGroup
     } = this.state;
 
     const conditionGroupContent = (
       <div>
-        test
+        {
+          conditionGroup.map((conditionItem, itemIndex) => {
+            const newItem = conditionItem.reduce((total, item, index, current) => {
+              let itselfVal = this.getEntityVal(item.itselfEntityKey);
+              let targetVal = this.getTargetEntityVal(item);
+              targetVal = /^\d+$/.test(targetVal) ? targetVal : `'${targetVal}'`;
+              itselfVal = (/^\d+$/.test(itselfVal) || itselfVal === '当前控件值') ? itselfVal : `'${itselfVal}'`;
+              let operater = item.logicalOperater;
+              if (current.length === 1 || (index === current.length - 1)) {
+                operater = '';
+              }
+              return (
+                <code className={styles.code}>
+                  {total}({itselfVal} {item.condition} {targetVal})
+                  <span className={styles.operater}> {operater} </span>
+                </code>
+              );
+            }, '');
+            return (
+              <div key={`item-${itemIndex}`}>
+                <p>
+                  条件组{itemIndex + 1}:
+                  <Button
+                    size="small"
+                    style={{ float: 'right' }}
+                    type="danger"
+                    title="删除"
+                    icon="delete"
+                    onClick={() => this.onRemoveConditionGroup(itemIndex)}
+                  />
+                </p>
+                <pre className={styles.conditionItem}>
+                  {newItem}
+                </pre>
+              </div>
+            );
+          })
+        }
       </div>
     );
 
@@ -325,6 +402,7 @@ export default class LogicalControl extends React.Component {
             title="添加一组控制条件"
             style={{ marginLeft: 10 }}
             onClick={this.onAddConditionGroup}
+            disabled={controlConditions.length === 0}
           >
             确认
           </Button>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { is } from 'immutable';
-import moment from 'moment';
+// import moment from 'moment';
 import PropTypes from 'prop-types';
 import WrapperInputForm from './InputForm';
 
@@ -51,17 +51,16 @@ export default class InputBoxForm extends React.Component {
         currentActiveKey: 'tab-0' // 当前选项卡
       },
       logicalControl: { // 逻辑控制
-        controlConditions: [ // 控制条件
-          {
-            condition: '===',
-            itselfEntityKey: '',
-            targetEntityKey: '',
-            logicalOperater: '&&',
-            customVal: '',
-            dateVal: moment(),
-            inputType: 'customVal'
-          }
-        ], // 控制条件
+        conditionGroup: [], // 控制条件组
+        // { // 控制条件项
+        //   condition: '===',
+        //   itselfEntityKey: '', // 选中实体key值
+        //   targetEntityKey: '', // 目标实体key值
+        //   logicalOperater: '&&', // 逻辑操作符
+        //   customVal: '', // 自定义值
+        //   dateVal: moment(), // 日期值
+        //   inputType: 'customVal' // 判断值类型
+        // }
         isShow: 'show',
         allEntitys: [], // 所有实体
         targetKeys: [], // 受控实体

@@ -247,6 +247,13 @@ export default class ControlCondition extends React.Component {
         onChange={this.onItselfKeyChange}
         optionFilterProp="children"
       >
+        <Option
+          key="default"
+          title="当前控件值"
+          value=""
+        >
+          当前控件值
+        </Option>
         {
           allEntitys.map((item, order) => {
             let value = item.value;

@@ -54,7 +54,7 @@ class CheckboxInput extends React.Component {
     const thisState = this.state || {};
     if (
       Object.keys(nextProps).length !== Object.keys(thisProps).length ||
-      Object.jeys(nextState).length !== Object.keys(thisState).length
+      Object.keys(nextState).length !== Object.keys(thisState).length
     ) {
       return true;
     }

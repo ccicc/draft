@@ -22,12 +22,32 @@ const logicalControlHOC = Component =>
         isLogicalControl,
         logicalControl
       } = contentState.getEntity(entityKey).getData();
-      const {
-        controlConditions, // 判断表达式集合
-        targetKeys, // 受控实体的key值集合
-        isShow
-      } = logicalControl;
       if (!isLogicalControl) return;
+      const {
+        conditionGroup, // 判断条件组
+        isShow, // 是否展示
+        targetKeys // 目标key值集合
+      } = logicalControl;
+
+      const result = conditionGroup.some(controlConditions => {
+        return this.onConditionJudgment(controlConditions, contentState, entityKey);
+      });
+      console.log(`root result: ${result}`);
+      if (result) {
+        targetKeys.forEach(itemKey => {
+          this.onUpdateEntityData(itemKey, isShow);
+          console.log(`isShow: ${isShow}`);
+        });
+      } else {
+        const newDisplay = isShow === 'show' ? 'hidden' : 'show';
+        targetKeys.forEach(key => {
+          this.onUpdateEntityData(key, newDisplay);
+          console.log(`newDisplay: ${newDisplay}`);
+        });
+      }
+    }
+
+    onConditionJudgment = (controlConditions, contentState, entityKey) => {
       const resultItems = controlConditions.map(item => {
         let itselfVal;
         let targetVal;
@@ -133,18 +153,7 @@ const logicalControlHOC = Component =>
       }, '');
       console.log(resultExpression);
       const result = eval(resultExpression); // eslint-disable-line
-      if (result) {
-        targetKeys.forEach(itemKey => {
-          this.onUpdateEntityData(itemKey, isShow);
-          console.log(`isShow: ${isShow}`);
-        });
-      } else {
-        const newDisplay = isShow === 'show' ? 'hidden' : 'show';
-        targetKeys.forEach(key => {
-          this.onUpdateEntityData(key, newDisplay);
-          console.log(`newDisplay: ${newDisplay}`);
-        });
-      }
+      return result;
     }
 
     onUpdateEntityData = (entityKey, isShow) => {
