@@ -1,5 +1,5 @@
 import React from 'react';
-import { is } from 'immutable';
+import { is, Map, List } from 'immutable';
 import PropTypes from 'prop-types';
 import logicalControlHOC from './../LogicalControlHOC';
 import styles from './index.less';
@@ -75,27 +75,22 @@ class CheckboxInput extends React.Component {
     const { checked, value } = e.target;
     const { entityKey, contentState } = this.props;
     const entityData = contentState.getEntity(entityKey).getData();
-    let { selectedValues } = entityData.selectTodos;
+    let selectedValues = entityData.selectTodos.selectedValues;
     if (checked && selectedValues.indexOf(value) === -1) {
-      selectedValues.push(value);
+      selectedValues = List(selectedValues).push(value).toJS();
     } else {
-      selectedValues = selectedValues.filter(item => item !== value);
+      selectedValues = List(selectedValues).filter(item => item !== value).toJS();
     }
+    const newEntityData = Map(entityData)
+      .update('selectTodos', (val) => Map(val).set('selectedValues', selectedValues).toJS())
+      .toJS();
     contentState.replaceEntityData(
       entityKey,
-      {
-        ...entityData,
-        selectTodos: {
-          ...entityData.selectTodos,
-          selectedValues
-        }
-      }
+      newEntityData
     );
-
     this.setState({
       selectedValues
-    });
-    this.props.onLogicalControl(selectedValues.join(','));
+    }, () => this.props.onLogicalControl(selectedValues.join(',')));
   }
 
   render() {

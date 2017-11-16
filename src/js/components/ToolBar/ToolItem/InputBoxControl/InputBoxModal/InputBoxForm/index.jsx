@@ -51,11 +51,6 @@ export default class InputBoxForm extends React.Component {
         currentActiveKey: 'tab-0' // 当前选项卡
       },
       logicalControl: { // 逻辑控制
-        allEntitys: [], // 所有实体
-        selectedKeys: [], // 选中实体
-        isShow: 'show', // 是否显示受控控件 
-        targetKeys: [], // 目标实体key值
-        controlConditions: [], // 控制条件
         logicalControlGroup: [] // 逻辑控制组
       },
       selectTodos: {

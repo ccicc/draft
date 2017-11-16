@@ -33,25 +33,23 @@ export default class LogicalControl extends React.Component {
       targetKeys: [], // 受控实体Key值
       selectedKeys: [], // 已选中的项
       logicalControlGroup: [], // 控制条件组
-      isShowEntityPanel: true, // 是否显示选择实体面板
+      isShowEntityPanel: false, // 是否显示选择实体面板
       isEditor: false // 是否编辑
     };
   }
 
+  // logicalControlGroup : [
+  //   {
+  //     controlConditions: [],
+  //     isShow: 'show',
+  //     targetKeys: []
+  //   }
+  // ]
+
   componentWillMount() {
     if (this.props.logicalControl) {
-      const {
-        isShow,
-        allEntitys,
-        targetKeys,
-        selectedKeys,
-        logicalControlGroup
-      } = this.props.logicalControl;
+      const logicalControlGroup = this.props.logicalControl.logicalControlGroup;
       this.setState({
-        isShow,
-        allEntitys,
-        targetKeys,
-        selectedKeys,
         logicalControlGroup
       });
     }
@@ -105,7 +103,9 @@ export default class LogicalControl extends React.Component {
           targetEntityKey: '', // 目标实体key
           itselfEntitykey: '', // 当前实体key
           condition: '===', // 控制条件
-          logicalOperater: '&&' // 逻辑条件
+          logicalOperater: '&&', // 逻辑条件
+          inputType: 'customVal',
+          customVal: ''
         }
       ).toJS();
     this.setState({
@@ -132,6 +132,7 @@ export default class LogicalControl extends React.Component {
       targetKeys,
       logicalControlGroup
     } = this.state;
+    console.log(isShow);
     const newLogicalControlGroup = List(logicalControlGroup).push({
       isShow,
       controlConditions,
@@ -158,15 +159,19 @@ export default class LogicalControl extends React.Component {
       logicalControlGroup: newLogicalControlGroup,
       isShowEntityPanel: false
     });
+    this.props.onChange({
+      logicalControlGroup: newLogicalControlGroup
+    });
   }
 
   onEditorLogicalGroup = (index) => {
     // 编辑控制条件组
     const { logicalControlGroup } = this.state;
-    const { targetKeys, controlConditions } = logicalControlGroup[index];
+    const { targetKeys, controlConditions, isShow } = List(logicalControlGroup).get(index);
     this.setState({
       controlConditions,
       targetKeys,
+      isShow,
       isShowEntityPanel: true,
       isEditor: true,
       currentIndex: index // 当前所修改的条件组索引
@@ -174,6 +179,7 @@ export default class LogicalControl extends React.Component {
   }
 
   onConfirmAlter = () => {
+    // 修改确认
     const {
       isShow,
       currentIndex,
@@ -193,6 +199,9 @@ export default class LogicalControl extends React.Component {
       controlConditions: [],
       isShowEntityPanel: false,
       isEditor: false
+    });
+    this.props.onChange({
+      logicalControlGroup: newLogicalControlGroup
     });
   }
 
@@ -270,7 +279,7 @@ export default class LogicalControl extends React.Component {
       return '当前控件值';
     }
     const activeEntity = List(allEntitys).find(entity => entity.key === entityKey);
-    let entityVal = activeEntity.value;
+    let entityVal = activeEntity && activeEntity.value;
     if (activeEntity.type === 'SelectionMultipleInput') {
       entityVal = activeEntity.value.split(',').filter(val => val !== '未知').join(',');
     }
@@ -280,8 +289,8 @@ export default class LogicalControl extends React.Component {
     if (activeEntity.type === 'RadioBoxInput') {
       entityVal = activeEntity.radioVal;
     }
-    if (moment.isMoment(activeEntity.defaultVal) || activeEntity.type === 'DateInput') {
-      entityVal = moment(activeEntity.defaultVal).format('YYYY-MM-DD HH:mm');
+    if (moment.isMoment(entityVal) || activeEntity.type === 'DateInput') {
+      entityVal = moment(entityVal).format('YYYY-MM-DD HH:mm');
     }
     return entityVal;
   }
@@ -305,7 +314,7 @@ export default class LogicalControl extends React.Component {
     let value = item.value;
     if (moment.isMoment(value)) {
       // 如果值为moment类型，则格式化
-      value = moment().format('YYYY-MM-DD HH-mm');
+      value = moment(value).format('YYYY-MM-DD HH-mm');
     }
     if (item.type === 'SelectionInput') {
       value = item.value.split(',').filter(val => val !== '未知').join(',');
@@ -390,6 +399,7 @@ export default class LogicalControl extends React.Component {
                       title="编辑"
                       style={{ marginRight: 10 }}
                       onClick={() => this.onEditorLogicalGroup(itemIndex)}
+                      disabled={isEditor}
                     />
                     <Button
                       size="small"
@@ -397,6 +407,7 @@ export default class LogicalControl extends React.Component {
                       type="danger"
                       title="删除"
                       onClick={() => this.onRemoveLogicalGroup(itemIndex)}
+                      disabled={isEditor}
                     />
                   </span>
                 </p>
@@ -407,11 +418,7 @@ export default class LogicalControl extends React.Component {
                   </p>
                   <p>
                     <span className={styles.conditionTitle}>是否显示: </span>
-                    {logicalItem.isShow ? '显示' : '隐藏'}
-                  </p>
-                  <p>
-                    <span className={styles.conditionTitle}>受控实体: </span>
-                    <a onClick={() => this.onEditorLogicalGroup(itemIndex)}>查 看</a>
+                    {logicalItem.isShow === 'show' ? '显示' : '隐藏'}
                   </p>
                 </div>
               </div>

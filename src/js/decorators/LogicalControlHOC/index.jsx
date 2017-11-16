@@ -20,25 +20,24 @@ const logicalControlHOC = Component =>
       const { entityKey, contentState } = this.props;
       const {
         isLogicalControl,
-        logicalControlGroup
+        logicalControl
       } = contentState.getEntity(entityKey).getData();
       if (!isLogicalControl) return;
-      logicalControlGroup.forEach( conditionItem => {
-
+      logicalControl.logicalControlGroup.forEach(logicalControlItem => {
+        this.onLogicalControlItem(logicalControlItem);
       });
     }
 
     onLogicalControlItem = (logicalControlItem) => {
       // 控制条件组中的单独一组的处理
+      const { contentState, entityKey } = this.props;
       const {
-        conditionControls, // 判断条件组
+        controlConditions, // 判断条件组
         isShow, // 是否展示
         targetKeys // 目标key值集合
       } = logicalControlItem;
 
-      const result = conditionGroup.some(controlConditions => {
-        return this.onConditionJudgment(controlConditions, contentState, entityKey);
-      });
+      const result = this.onConditionJudgment(controlConditions, contentState, entityKey);
       console.log(`root result: ${result}`);
       if (result) {
         targetKeys.forEach(itemKey => {

@@ -37,6 +37,27 @@ export default class ControlCondition extends React.Component {
     };
   }
 
+  componentWillMount() {
+    const {
+      condition,
+      logicalOperater,
+      itselfEntityKey,
+      targetEntityKey,
+      customVal,
+      dateVal,
+      inputType
+    } = this.props;
+    this.setState({
+      condition,
+      logicalOperater,
+      itselfEntityKey,
+      targetEntityKey,
+      customVal,
+      dateVal,
+      inputType
+    });
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const thisProps = this.props || {};
     const thisState = this.state || {};
@@ -140,7 +161,7 @@ export default class ControlCondition extends React.Component {
         </RadioGroup>
       );
     }
-
+    console.log(customVal);
     const targetKeyComponent = (
       <Select
         size="small"
@@ -155,7 +176,7 @@ export default class ControlCondition extends React.Component {
             let value = item.value;
             if (moment.isMoment(value)) {
               // 如果值为moment类型，则格式化
-              value = moment().format('YYYY-MM-DD HH-mm');
+              value = moment(value).format('YYYY-MM-DD HH-mm');
             }
             if (item.type === 'SelectionInput') {
               value = item.value.split(',').filter(val => val !== '未知').join(',');
@@ -259,7 +280,7 @@ export default class ControlCondition extends React.Component {
             let value = item.value;
             if (moment.isMoment(value)) {
               // 如果值为moment类型，则格式化
-              value = moment().format('YYYY-MM-DD HH-mm');
+              value = moment(value).format('YYYY-MM-DD HH-mm');
             }
             if (item.type === 'SelectionInput') {
               value = item.value.split(',').filter(val => val !== '未知').join(',');
