@@ -108,7 +108,7 @@ export default class InputBoxModal extends React.Component {
           value={currentInputBox}
           optionFilterProp="children"
           onChange={this.onSelectChange}
-          style={{ width: '49%' }}
+          style={{ width: '50%' }}
         >
           <Option value="TextInput">文本输入框</Option>
           <Option value="DateInput">日期输入框</Option>

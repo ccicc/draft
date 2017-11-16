@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { is, List } from 'immutable';
+import { is, List, Map } from 'immutable';
 import PropTypes from 'prop-types';
 import {
   Row,
@@ -27,30 +27,32 @@ export default class LogicalControl extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      conditionGroup: [], // 控制条件组
       controlConditions: [], // 控制条件项
-      isShow: true, // 目标控件显示
       allEntitys: [], // 所有实体
+      isShow: 'show', // 目标控件显示
       targetKeys: [], // 受控实体Key值
-      selectedKeys: [], // 已选中的项，
+      selectedKeys: [], // 已选中的项
+      logicalControlGroup: [], // 控制条件组
+      isShowEntityPanel: true, // 是否显示选择实体面板
+      isEditor: false // 是否编辑
     };
   }
 
   componentWillMount() {
     if (this.props.logicalControl) {
       const {
-        conditionGroup,
         isShow,
         allEntitys,
         targetKeys,
-        selectedKeys
+        selectedKeys,
+        logicalControlGroup
       } = this.props.logicalControl;
       this.setState({
-        conditionGroup,
         isShow,
         allEntitys,
         targetKeys,
-        selectedKeys
+        selectedKeys,
+        logicalControlGroup
       });
     }
   }
@@ -64,7 +66,6 @@ export default class LogicalControl extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     const thisProps = this.props || {};
     const thisState = this.state || {};
-
     if (
       Object.keys(thisProps).length !== Object.keys(nextProps).length ||
       Object.keys(thisState).length !== Object.keys(nextState).length
@@ -108,7 +109,8 @@ export default class LogicalControl extends React.Component {
         }
       ).toJS();
     this.setState({
-      controlConditions: newControlConditions
+      controlConditions: newControlConditions,
+      isShowEntityPanel: true
     });
   }
 
@@ -122,37 +124,81 @@ export default class LogicalControl extends React.Component {
     });
   }
 
-  onAddConditionGroup = () => {
+  onAddLogicalGroup = () => {
     // 添加控制条件组
-    const { controlConditions, conditionGroup } = this.state;
-    if (controlConditions.length === 0) return;
-    const newConditionGroup = List(conditionGroup).push(controlConditions).toJS();
+    const {
+      isShow,
+      controlConditions,
+      targetKeys,
+      logicalControlGroup
+    } = this.state;
+    const newLogicalControlGroup = List(logicalControlGroup).push({
+      isShow,
+      controlConditions,
+      targetKeys
+    }).toJS();
     this.setState({
-      conditionGroup: newConditionGroup,
-      controlConditions: []
+      logicalControlGroup: newLogicalControlGroup,
+      targetKeys: [],
+      controlConditions: [],
+      isShowEntityPanel: false
     });
+    // 将值传递给form表单父组件
     this.props.onChange({
-      isShow: this.state.isShow,
-      targetKeys: this.state.targetKeys,
-      conditionGroup: newConditionGroup
+      logicalControlGroup: newLogicalControlGroup
     });
-    console.log(newConditionGroup);
+    console.log(newLogicalControlGroup);
   }
 
-  onRemoveConditionGroup = (itemIndex) => {
-    // 移除控制条件组
-    const { conditionGroup } = this.state;
-    const $$newConditionGroup = List(conditionGroup);
-    const newConditionGroup = $$newConditionGroup.delete(itemIndex);
+  onRemoveLogicalGroup = (index) => {
+    // 删除控制条件组
+    const { logicalControlGroup } = this.state;
+    const newLogicalControlGroup = List(logicalControlGroup).delete(index).toJS();
     this.setState({
-      conditionGroup: newConditionGroup
+      logicalControlGroup: newLogicalControlGroup,
+      isShowEntityPanel: false
+    });
+  }
+
+  onEditorLogicalGroup = (index) => {
+    // 编辑控制条件组
+    const { logicalControlGroup } = this.state;
+    const { targetKeys, controlConditions } = logicalControlGroup[index];
+    this.setState({
+      controlConditions,
+      targetKeys,
+      isShowEntityPanel: true,
+      isEditor: true,
+      currentIndex: index // 当前所修改的条件组索引
+    });
+  }
+
+  onConfirmAlter = () => {
+    const {
+      isShow,
+      currentIndex,
+      targetKeys,
+      controlConditions,
+      logicalControlGroup
+    } = this.state;
+    const newLogicalControlGroup =
+      List(logicalControlGroup).update(currentIndex, item => Map(item).merge({
+        isShow,
+        controlConditions,
+        targetKeys,
+      })).toJS();
+    this.setState({
+      logicalControlGroup: newLogicalControlGroup,
+      targetKeys: [],
+      controlConditions: [],
+      isShowEntityPanel: false,
+      isEditor: false
     });
   }
 
   onRadioChange = (e) => {
     // 受控控件的显示隐藏
     this.setState({ isShow: e.target.value });
-    setTimeout(() => this.props.onChange(this.state), 0);
   }
 
   onReload = () => {
@@ -162,19 +208,16 @@ export default class LogicalControl extends React.Component {
       allEntitys: newEntities,
       targetKeys: []
     });
-    setTimeout(() => this.props.onChange(this.state), 0);
   }
 
   onSelectedChange = (sourceKeys, targetKeys) => {
     // 选中项改变时的回调
     this.setState({ selectedKeys: [...sourceKeys, ...targetKeys] });
-    setTimeout(() => this.props.onChange(this.state), 0);
   }
 
   onTransferChange = (targetKeys) => {
     // 切换时的回调
     this.setState({ targetKeys });
-    setTimeout(() => this.props.onChange(this.state), 0);
   }
 
   getInputType = (type) => {
@@ -305,49 +348,72 @@ export default class LogicalControl extends React.Component {
   render() {
     const {
       isShow,
+      isEditor,
       allEntitys,
       targetKeys,
       selectedKeys,
       controlConditions,
-      conditionGroup
+      logicalControlGroup,
+      isShowEntityPanel
     } = this.state;
 
-    const conditionGroupContent = (
+    const logicalGroupContent = (
       <div>
         {
-          conditionGroup.map((conditionItem, itemIndex) => {
-            const newItem = conditionItem.reduce((total, item, index, current) => {
-              let itselfVal = this.getEntityVal(item.itselfEntityKey);
-              let targetVal = this.getTargetEntityVal(item);
-              targetVal = /^\d+$/.test(targetVal) ? targetVal : `'${targetVal}'`;
-              itselfVal = (/^\d+$/.test(itselfVal) || itselfVal === '当前控件值') ? itselfVal : `'${itselfVal}'`;
-              let operater = item.logicalOperater;
-              if (current.length === 1 || (index === current.length - 1)) {
-                operater = '';
-              }
-              return (
-                <code className={styles.code}>
-                  {total}({itselfVal} {item.condition} {targetVal})
-                  <span className={styles.operater}> {operater} </span>
-                </code>
-              );
-            }, '');
+          logicalControlGroup.map((logicalItem, itemIndex) => {
+            // 获取并合并控制条件
+            const conditionItem = logicalItem
+              .controlConditions
+              .reduce((total, item, index, current) => {
+                let itselfVal = this.getEntityVal(item.itselfEntityKey);
+                let targetVal = this.getTargetEntityVal(item);
+                targetVal = /^\d+$/.test(targetVal) ? targetVal : `'${targetVal}'`;
+                itselfVal = (/^\d+$/.test(itselfVal) || itselfVal === '当前控件值') ? itselfVal : `'${itselfVal}'`;
+                let operater = item.logicalOperater;
+                if (current.length === 1 || (index === current.length - 1)) { operater = ''; }
+                return (
+                  <code className={styles.code}>
+                    {total}({itselfVal} {item.condition} {targetVal})
+                    <span className={styles.operater}> {operater} </span>
+                  </code>
+                );
+              }, '');
             return (
               <div key={`item-${itemIndex}`}>
                 <p>
                   条件组{itemIndex + 1}:
-                  <Button
-                    size="small"
-                    style={{ float: 'right' }}
-                    type="danger"
-                    title="删除"
-                    icon="delete"
-                    onClick={() => this.onRemoveConditionGroup(itemIndex)}
-                  />
+                  <span className={styles.conditionBtns}>
+                    <Button
+                      size="small"
+                      icon="edit"
+                      type="primary"
+                      title="编辑"
+                      style={{ marginRight: 10 }}
+                      onClick={() => this.onEditorLogicalGroup(itemIndex)}
+                    />
+                    <Button
+                      size="small"
+                      icon="delete"
+                      type="danger"
+                      title="删除"
+                      onClick={() => this.onRemoveLogicalGroup(itemIndex)}
+                    />
+                  </span>
                 </p>
-                <pre className={styles.conditionItem}>
-                  {newItem}
-                </pre>
+                <div className={styles.conditionItem}>
+                  <p>
+                    <span className={styles.conditionTitle}>控制条件: </span>
+                    {conditionItem}
+                  </p>
+                  <p>
+                    <span className={styles.conditionTitle}>是否显示: </span>
+                    {logicalItem.isShow ? '显示' : '隐藏'}
+                  </p>
+                  <p>
+                    <span className={styles.conditionTitle}>受控实体: </span>
+                    <a onClick={() => this.onEditorLogicalGroup(itemIndex)}>查 看</a>
+                  </p>
+                </div>
               </div>
             );
           })
@@ -396,48 +462,73 @@ export default class LogicalControl extends React.Component {
               disabled={controlConditions.length === 1}
             />
           </Button.Group>
-          <Button
-            size="small"
-            type="primary"
-            title="添加一组控制条件"
-            style={{ marginLeft: 10 }}
-            onClick={this.onAddConditionGroup}
-            disabled={controlConditions.length === 0}
-          >
-            确认
-          </Button>
+        </Col>
+        {
+          isShowEntityPanel &&
+          (
+            <Col span={24}>
+              <span style={{ marginRight: 20, color: '#333' }}>操作: </span>
+              <RadioGroup
+                value={isShow}
+                onChange={this.onRadioChange}
+              >
+                <Radio value="show">显示</Radio>
+                <Radio value="hidden">隐藏</Radio>
+              </RadioGroup>
+            </Col>
+          )
+        }
+        {
+          isShowEntityPanel &&
+          <Col span={24}>
+            <Transfer
+              showSearch
+              dataSource={allEntitys}
+              targetKeys={targetKeys}
+              selectedKeys={selectedKeys}
+              titles={['全部控件', '受控控件']}
+              notFoundContent="列表为空"
+              onChange={this.onTransferChange}
+              onSelectChange={this.onSelectedChange}
+              render={this.renderTransferItem}
+              searchPlaceholder="查找控件"
+              footer={this.renderTransferFooter}
+              listStyle={{
+                width: '45%',
+                height: 200
+              }}
+            />
+          </Col>
+        }
+        <Col span={24}>
+          {logicalGroupContent}
         </Col>
         <Col span={24}>
-          {conditionGroupContent}
-        </Col>
-        <Col span={24}>
-          <span style={{ marginRight: 20, color: '#333' }}>操作: </span>
-          <RadioGroup
-            value={isShow}
-            onChange={this.onRadioChange}
-          >
-            <Radio value="show">显示</Radio>
-            <Radio value="hidden">隐藏</Radio>
-          </RadioGroup>
-        </Col>
-        <Col span={24}>
-          <Transfer
-            showSearch
-            dataSource={allEntitys}
-            targetKeys={targetKeys}
-            selectedKeys={selectedKeys}
-            titles={['全部控件', '受控控件']}
-            notFoundContent="列表为空"
-            onChange={this.onTransferChange}
-            onSelectChange={this.onSelectedChange}
-            render={this.renderTransferItem}
-            searchPlaceholder="查找控件"
-            footer={this.renderTransferFooter}
-            listStyle={{
-              width: '45%',
-              height: 250
-            }}
-          />
+          {
+            isShowEntityPanel &&
+            <Button
+              size="default"
+              type="primary"
+              title="添加控制条件组"
+              style={{ width: '40%' }}
+              onClick={this.onAddLogicalGroup}
+              disabled={controlConditions.length === 0 || isEditor}
+            >
+              添加控制条件组
+            </Button>
+          }
+          {
+            isEditor &&
+            <Button
+              size="default"
+              type="primary"
+              title="确认修改"
+              style={{ marginLeft: 10 }}
+              onClick={this.onConfirmAlter}
+            >
+              确认修改
+            </Button>
+          }
         </Col>
       </Row>
     );

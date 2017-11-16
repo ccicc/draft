@@ -20,14 +20,21 @@ const logicalControlHOC = Component =>
       const { entityKey, contentState } = this.props;
       const {
         isLogicalControl,
-        logicalControl
+        logicalControlGroup
       } = contentState.getEntity(entityKey).getData();
       if (!isLogicalControl) return;
+      logicalControlGroup.forEach( conditionItem => {
+
+      });
+    }
+
+    onLogicalControlItem = (logicalControlItem) => {
+      // 控制条件组中的单独一组的处理
       const {
-        conditionGroup, // 判断条件组
+        conditionControls, // 判断条件组
         isShow, // 是否展示
         targetKeys // 目标key值集合
-      } = logicalControl;
+      } = logicalControlItem;
 
       const result = conditionGroup.some(controlConditions => {
         return this.onConditionJudgment(controlConditions, contentState, entityKey);
@@ -48,6 +55,7 @@ const logicalControlHOC = Component =>
     }
 
     onConditionJudgment = (controlConditions, contentState, entityKey) => {
+      // 控制条件实现
       const resultItems = controlConditions.map(item => {
         let itselfVal;
         let targetVal;
@@ -153,7 +161,7 @@ const logicalControlHOC = Component =>
       }, '');
       console.log(resultExpression);
       const result = eval(resultExpression); // eslint-disable-line
-      return result;
+      return result; // 返回结果 bool
     }
 
     onUpdateEntityData = (entityKey, isShow) => {
