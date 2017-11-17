@@ -16,7 +16,7 @@ class SelectionInput extends React.Component {
     contentState: PropTypes.object,
     children: PropTypes.array,
     onLogicalControl: PropTypes.func.isRequired,
-    onReadOnlyChange: PropTypes.func.isRequired
+    handleReadOnly: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -92,7 +92,7 @@ class SelectionInput extends React.Component {
     this.setState({
       isEditor: true
     });
-    this.props.onReadOnlyChange(true);
+    this.props.handleReadOnly(true);
     this.input && this.input.focus();
   }
 
@@ -112,7 +112,7 @@ class SelectionInput extends React.Component {
       value: e.target.value || '未知'
     });
     this.props.onLogicalControl(e.target.value);
-    this.props.onReadOnlyChange(false);
+    this.props.handleReadOnly(false);
   }
 
   onSelectValueChange = (props) => {
